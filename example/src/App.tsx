@@ -5,13 +5,13 @@ import { multiply } from 'react-native-audio-context';
 
 const result = multiply(3, 7);
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
-  );
-}
+const App: React.FC = () => (
+  <View style={styles.container}>
+    <Text>Result: {result}</Text>
+  </View>
+);
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
