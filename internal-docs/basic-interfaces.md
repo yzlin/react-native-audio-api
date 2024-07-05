@@ -10,10 +10,12 @@ The document introduces the basic interfaces that we want to recreate.
 
 1. [AudioContext](#audiocontext)
 2. [AudioNode](#audionode)
-3. [AudioParam](#audioparam)
-4. [OscillatorNode](#oscillatornode)
-5. [GainNode](#gainnode)
-6. [StereoPannerNode](#stereopannernode)
+3. [AudioScheduledSourceNode](#audioscheduledsourcenode)
+4. [AudioDestinationNode](#audiodestinationnode)
+5. [AudioParam](#audioparam)
+6. [OscillatorNode](#oscillatornode)
+7. [GainNode](#gainnode)
+8. [StereoPannerNode](#stereopannernode)
 
 ### AudioContext
 
@@ -21,6 +23,7 @@ The `AudioContext` interface is the underlying audio context that manages the st
 
 #### Attributes
 
+- **`currentTime`**: Representing an ever-increasing hardware time in seconds. It starts at 0.
 - **`destination`**: Output node that is typically connected to speakers.
 - **`sampleRate`**: Audio sampling rate in hertz.
 
@@ -35,11 +38,29 @@ The `AudioContext` interface is the underlying audio context that manages the st
 
 The `AudioNode` interface is the base interface for all audio nodes in the audio processing graph.
 
+#### Attributes
+
+- **`context`**: Context associated with AudioNode.
+- **`numberOfInputs`**: Number of inputs feeding the node. Source nodes are defined as nodes having value 0 for this attribute
+- **`numberOfOutputs`**: Number of outputs coming out of the node. Destination nodes are defined as nodes having value 0 for this attribute
+
 #### Methods
 
 - **`connect(destination, output, input)`**: Connects the current audio node to another audio node or parameter.
 - **`disconnect(destination, output, input)`**: Disconnects the current audio node from another audio node or parameter.
-- **`process()`**: process node base on setup attributes.
+
+### AudioScheduledSourceNode
+
+The `AudioScheduledSourceNode` is an interface representing several types of audio source node. Inherits from `AudioNode`.
+
+#### Methods
+
+- **`start(time)`**: Schedules the node to begin playback at specified time. If no time is given, starts immediately.
+- **`stop(time)`**: Schedules the node to stop playing at specified time. If no time is given, stops immediately.
+
+### AudioDestinationNode
+
+The `AudioDestinationNode` is an interface representing end destination of audio graph. Inherits from `AudioNode`.
 
 ### AudioParam
 
@@ -57,7 +78,7 @@ The `AudioParam` interface represents audio parameters that can be time-modulate
 
 ### OscillatorNode
 
-The `OscillatorNode` interface represents an oscillator node that generates sounds at a specific frequency and waveform.
+The `OscillatorNode` interface represents an oscillator node that generates sounds at a specific frequency and waveform. Inherits from `AudioScheduledSourceNode`.
 
 #### Attributes
 
@@ -67,7 +88,7 @@ The `OscillatorNode` interface represents an oscillator node that generates soun
 
 ### GainNode
 
-The `GainNode` interface represents a gain node that allows you to control the volume of the audio signal.
+The `GainNode` interface represents a gain node that allows you to control the volume of the audio signal. Inherits from `AudioNode`.
 
 #### Attributes
 
@@ -75,7 +96,7 @@ The `GainNode` interface represents a gain node that allows you to control the v
 
 ### StereoPannerNode
 
-The `StereoPannerNode` interface represents a stereo panning node that allows you to control the position of sound in stereo space.
+The `StereoPannerNode` interface represents a stereo panning node that allows you to control the position of sound in stereo space. Inherits from `AudioNode`.
 
 #### Attributes
 
