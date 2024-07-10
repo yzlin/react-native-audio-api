@@ -1,10 +1,11 @@
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { JSIExample } from '../../src/JSIExample';
 
-export default function App() {
+const App: React.FC = () => {
   const sayHello = () => {
     //JSIExample.helloWorld = 'Hello World';
-    return JSIExample.helloWorld();
+    return JSIExample.helloWorld(2, 3);
   };
 
   return (
@@ -12,7 +13,9 @@ export default function App() {
       <Text>{sayHello()}</Text>
     </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {

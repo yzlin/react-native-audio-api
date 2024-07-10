@@ -1,7 +1,7 @@
 import { NativeModules, Platform } from 'react-native';
 
 export interface JSIExampleWrapper {
-  helloWorld(): string;
+  helloWorld(num1: number, num2: number): string;
 }
 
 // global func declaration for JSI functions
