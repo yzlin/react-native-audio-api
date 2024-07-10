@@ -7,20 +7,20 @@ namespace example {
   std::vector<jsi::PropNameID> JSIExampleHostObject::getPropertyNames(jsi::Runtime &runtime)
   {
     std::vector<jsi::PropNameID> propertyNames;
-    propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "helloWorld"));
+    propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "multiply"));
     return propertyNames;
   }
 
   jsi::Value JSIExampleHostObject::get(jsi::Runtime &runtime, const jsi::PropNameID &propNameId) {
     auto propName = propNameId.utf8(runtime);
 
-    if (propName == "helloWorld") {
+    if (propName == "multiply") {
       return jsi::Function::createFromHostFunction(runtime, propNameId, 2,
         [this](jsi::Runtime &rt, const jsi::Value &, const jsi::Value *args, size_t count) {
           if (count != 2) {
-            throw std::invalid_argument("helloWorld expects exactly two arguments");
+            throw std::invalid_argument("multiply expects exactly two arguments");
           }
-          return this->helloWorld(rt, args[0], args[1]);
+          return this->multiply(rt, args[0], args[1]);
         });
     }
 
@@ -30,7 +30,7 @@ namespace example {
   void JSIExampleHostObject::set(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value)
   {
     auto propName = propNameId.utf8(runtime);
-    if (propName == "helloWorld")
+    if (propName == "multiply")
     {
       // Do nothing
       return;
@@ -38,7 +38,7 @@ namespace example {
     throw std::runtime_error("Not yet implemented!");
   }
 
-  jsi::Value JSIExampleHostObject::helloWorld(jsi::Runtime &runtime, const jsi::Value &value, const jsi::Value &value2) {
+  jsi::Value JSIExampleHostObject::multiply(jsi::Runtime &runtime, const jsi::Value &value, const jsi::Value &value2) {
     if (value.isNumber() && value2.isNumber()) {
       // Extract numbers and add them
       double result = value.asNumber() + value2.asNumber();
