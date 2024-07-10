@@ -6,8 +6,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
 
-@ReactModule(name = JSIExampleModule.NAME)
-class JSIExampleModule(reactContext: ReactApplicationContext?) :
+@ReactModule(name = AudioContextModule.NAME)
+class AudioContextModule(reactContext: ReactApplicationContext?) :
   ReactContextBaseJavaModule(reactContext) {
   override fun getName(): String {
     return NAME
@@ -29,7 +29,7 @@ class JSIExampleModule(reactContext: ReactApplicationContext?) :
   }
 
   companion object {
-    const val NAME: String = "JSIExample"
+    const val NAME: String = "AudioContext"
 
     private external fun nativeInstall(jsiPtr: Long)
   }

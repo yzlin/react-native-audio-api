@@ -17,9 +17,11 @@ include_directories(
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)
+find_package(fbjni REQUIRED CONFIG)
 
 target_link_libraries(
   react-native-audio-context
   ReactAndroid::jsi
+  fbjni::fbjni
   android
 )

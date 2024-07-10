@@ -1,15 +1,62 @@
+/* eslint-disable react/react-in-jsx-scope */
+import { useState, useRef } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { JSIExample } from '../../src/JSIExample';
+import { Button } from 'react-native';
+import Slider from '@react-native-community/slider';
+
+import { AudioContext, Oscillator, GainNode } from 'react-native-audio-context';
 
 export default function App() {
-  const sayHello = () => {
-    //JSIExample.helloWorld = 'Hello World';
-    return JSIExample.helloWorld();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gain, setGain] = useState<number>(1.0);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<Oscillator | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
+
+  const createAudioContext = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    gainRef.current = audioContextRef.current.createGain();
+    oscillatorRef.current = audioContextRef.current.createOscillator();
+    oscillatorRef.current.connect();
+  };
+
+  const handlePress = () => {
+    if (!audioContextRef.current) {
+      createAudioContext();
+    }
+
+    if (!isPlaying) {
+      oscillatorRef.current?.start();
+    } else {
+      oscillatorRef.current?.stop();
+    }
+
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleGainChange = (value: number) => {
+    setGain(value);
+    gainRef.current?.setGain(value);
   };
 
   return (
     <View style={styles.container}>
-      <Text>{sayHello()}</Text>
+      <Button title={!isPlaying ? 'Play' : 'Pause'} onPress={handlePress} />
+      <Text>Gain: {gain.toFixed(2)}</Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={0.0}
+        maximumValue={1.0}
+        step={0.01}
+        value={gain}
+        onValueChange={handleGainChange}
+        minimumTrackTintColor="#1FB28A"
+        maximumTrackTintColor="#d3d3d3"
+        thumbTintColor="#1FB28A"
+      />
     </View>
   );
 }
@@ -17,29 +64,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
   },
-  keys: {
-    fontSize: 14,
-    color: 'grey',
-  },
-  title: {
-    fontSize: 16,
-    color: 'black',
-    marginRight: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textInput: {
-    flex: 1,
-    marginVertical: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'black',
-    borderRadius: 5,
-    padding: 10,
+  slider: {
+    width: 200,
+    height: 40,
   },
 });
