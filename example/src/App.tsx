@@ -1,27 +1,75 @@
-import * as React from 'react';
-
+/* eslint-disable react/react-in-jsx-scope */
+import { useState, useRef } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-audio-context';
+import { Button } from 'react-native';
+import Slider from '@react-native-community/slider';
 
-const result = multiply(3, 7);
+import { AudioContext, Oscillator, GainNode } from 'react-native-audio-context';
 
-const App: React.FC = () => (
-  <View style={styles.container}>
-    <Text>Result: {result}</Text>
-  </View>
-);
+export default function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gain, setGain] = useState<number>(1.0);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<Oscillator | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
 
-export default App;
+  const createAudioContext = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    gainRef.current = audioContextRef.current.createGain();
+    oscillatorRef.current = audioContextRef.current.createOscillator();
+    oscillatorRef.current.connect();
+  };
+
+  const handlePress = () => {
+    if (!audioContextRef.current) {
+      createAudioContext();
+    }
+
+    if (!isPlaying) {
+      oscillatorRef.current?.start();
+    } else {
+      oscillatorRef.current?.stop();
+    }
+
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleGainChange = (value: number) => {
+    setGain(value);
+    gainRef.current?.setGain(value);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title={!isPlaying ? 'Play' : 'Pause'} onPress={handlePress} />
+      <Text>Gain: {gain.toFixed(2)}</Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={0.0}
+        maximumValue={1.0}
+        step={0.01}
+        value={gain}
+        onValueChange={handleGainChange}
+        minimumTrackTintColor="#1FB28A"
+        maximumTrackTintColor="#d3d3d3"
+        thumbTintColor="#1FB28A"
+      />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  slider: {
+    width: 200,
+    height: 40,
   },
 });
