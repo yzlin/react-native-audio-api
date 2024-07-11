@@ -1,45 +1,37 @@
-import { StyleSheet, View, Text } from 'react-native';
-import JSIExample from '../../src/JSIExample/JSIExample';
+/* eslint-disable react/react-in-jsx-scope */
+import { Button, StyleSheet, Text, View } from 'react-native';
+//import { Oscillator } from '../../src/jsiOscillator';
 
-export default function App() {
-  const sayHello = () => {
-    //JSIExample.helloWorld = 'Hello World';
-    return JSIExample.helloWorld();
+const App = () => {
+  const startOscillator = () => {
+    //Oscillator.start();
+  };
+
+  const stopOscillator = () => {
+    //Oscillator.stop();
   };
 
   return (
     <View style={styles.container}>
-      <Text>{sayHello()}</Text>
+      <Text style={styles.title}>React Native Oscillator</Text>
+      <Button title="Start Oscillator" onPress={startOscillator} />
+      <Button title="Stop Oscillator" onPress={stopOscillator} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  keys: {
-    fontSize: 14,
-    color: 'grey',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   title: {
-    fontSize: 16,
-    color: 'black',
-    marginRight: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textInput: {
-    flex: 1,
-    marginVertical: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'black',
-    borderRadius: 5,
-    padding: 10,
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
 });
+
+export default App;
