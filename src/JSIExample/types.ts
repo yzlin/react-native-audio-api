@@ -1,5 +1,5 @@
 export interface JSIExampleWrapper {
-  helloWorld(): string;
+  multiply(a: number, b: number): number;
 }
 
 // global func declaration for JSI functions

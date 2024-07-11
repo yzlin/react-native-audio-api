@@ -17,7 +17,7 @@ namespace example
       jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;
       void set(jsi::Runtime &, const jsi::PropNameID &name, const jsi::Value &value) override;
       std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
-      static jsi::Value helloWorld(jsi::Runtime &);
+      static jsi::Value multiply(jsi::Runtime &, const jsi::Value &value, const jsi::Value &value2);
   };
 
 } // namespace margelo

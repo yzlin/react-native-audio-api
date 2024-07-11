@@ -1,18 +1,20 @@
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import JSIExample from '../../src/JSIExample/JSIExample';
 
-export default function App() {
-  const sayHello = () => {
-    //JSIExample.helloWorld = 'Hello World';
-    return JSIExample.helloWorld();
+const App: React.FC = () => {
+  const multiply = () => {
+    return JSIExample.multiply(2, 3);
   };
 
   return (
     <View style={styles.container}>
-      <Text>{sayHello()}</Text>
+      <Text>{multiply()}</Text>
     </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
