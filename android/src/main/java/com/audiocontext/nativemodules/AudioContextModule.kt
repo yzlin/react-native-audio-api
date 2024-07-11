@@ -11,7 +11,7 @@ class AudioContextModule(private val reactContext: ReactApplicationContext) : Re
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  fun createOscillatorNode() {
+  fun createOscillator() {
     Oscillator(reactContext)
   }
 }

@@ -15,15 +15,15 @@ namespace audiocontext {
     public:
         static auto constexpr kJavaDescriptor = "Lcom/audiocontext/Oscillator;";
 
-        static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis, jlong jsContext)
+        static jni::local_ref<Oscillator::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis, jlong jsContext)
         {
           return makeCxxInstance(jThis, jsContext);
         }
 
         static void registerNatives() {
-            javaClassStatic()->registerNatives({
-                   makeNativeMethod("initHybrid", Oscillator::initHybrid),
-           });
+            registerHybrid({
+                makeNativeMethod("initHybrid", Oscillator::initHybrid),
+            });
         }
 
         void start();
@@ -34,7 +34,7 @@ namespace audiocontext {
 
         global_ref<Oscillator::javaobject> javaObject_;
 
-        explicit Oscillator(const jni::alias_ref<Oscillator::jhybridobject>& jThis, jlong jsContext);
+        explicit Oscillator(jni::alias_ref<Oscillator::jhybridobject>& jThis, jlong jsContext);
     };
 
 } // namespace audiocontext

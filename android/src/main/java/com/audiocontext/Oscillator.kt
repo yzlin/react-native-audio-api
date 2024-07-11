@@ -24,6 +24,12 @@ class Oscillator(reactContext: ReactApplicationContext) {
 
   private val mHybridData: HybridData?;
 
+  companion object {
+    init {
+      System.loadLibrary("react-native-audio-context")
+    }
+  }
+
   init {
     mHybridData = initHybrid(reactContext.javaScriptContextHolder!!.get())
 

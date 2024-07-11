@@ -6,7 +6,7 @@ namespace audiocontext {
 
     using namespace facebook::jni;
 
-    Oscillator::Oscillator(const jni::alias_ref<Oscillator::jhybridobject> &jThis,
+    Oscillator::Oscillator(jni::alias_ref<Oscillator::jhybridobject> &jThis,
                                     jlong jsContext): javaObject_(make_global(jThis)) {
         auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
         auto hostObject = std::make_shared<OscillatorHostObject>(this);
