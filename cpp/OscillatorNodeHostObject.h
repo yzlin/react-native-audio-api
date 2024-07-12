@@ -3,19 +3,19 @@
 #include <jsi/jsi.h>
 #include <fbjni/fbjni.h>
 #include <fbjni/detail/Hybrid.h>
-#include "Oscillator.h"
+#include "OscillatorNode.h"
 
 namespace audiocontext {
     using namespace facebook;
 
-    class Oscillator;
+    class OscillatorNode;
 
-    class OscillatorHostObject : public jsi::HostObject {
+    class OscillatorNodeHostObject : public jsi::HostObject {
     private:
-        Oscillator* oscillator_;
+        OscillatorNode* oscillator_;
 
     public:
-        explicit OscillatorHostObject(Oscillator* oscillator) : oscillator_(oscillator) {}
+        explicit OscillatorNodeHostObject(OscillatorNode* oscillator) : oscillator_(oscillator) {}
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& name) override;
         void set(jsi::Runtime& runtime, const jsi::PropNameID& name, const jsi::Value& value) override;

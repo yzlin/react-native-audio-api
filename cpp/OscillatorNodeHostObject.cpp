@@ -1,16 +1,16 @@
-#include "OscillatorHostObject.h"
+#include "OscillatorNodeHostObject.h"
 
 namespace audiocontext {
     using namespace facebook;
 
-    std::vector<jsi::PropNameID> OscillatorHostObject::getPropertyNames(jsi::Runtime& runtime) {
+    std::vector<jsi::PropNameID> OscillatorNodeHostObject::getPropertyNames(jsi::Runtime& runtime) {
         std::vector<jsi::PropNameID> propertyNames;
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "start"));
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "stop"));
         return propertyNames;
     }
 
-    jsi::Value OscillatorHostObject::get(jsi::Runtime& runtime, const jsi::PropNameID& propNameId) {
+    jsi::Value OscillatorNodeHostObject::get(jsi::Runtime& runtime, const jsi::PropNameID& propNameId) {
         auto propName = propNameId.utf8(runtime);
 
         if (propName == "start") {
@@ -30,7 +30,7 @@ namespace audiocontext {
         throw std::runtime_error("Prop not yet implemented!");
     }
 
-    void OscillatorHostObject::set(jsi::Runtime& runtime, const jsi::PropNameID& propNameId, const jsi::Value& value) {
+    void OscillatorNodeHostObject::set(jsi::Runtime& runtime, const jsi::PropNameID& propNameId, const jsi::Value& value) {
         auto propName = propNameId.utf8(runtime);
 
         throw std::runtime_error("Not yet implemented!");

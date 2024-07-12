@@ -5,7 +5,7 @@ export interface OscillatorWrapper {
 
 declare global {
   function nativeCallSyncHook(): unknown;
-  var __OscillatorProxy: OscillatorWrapper | undefined;
+  var __OscillatorNodeProxy: OscillatorWrapper | undefined;
 }
 
-export const Oscillator = global.__OscillatorProxy as OscillatorWrapper;
+export const Oscillator = global.__OscillatorNodeProxy as OscillatorWrapper;

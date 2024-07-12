@@ -5,7 +5,7 @@ import type { OscillatorWrapper } from 'react-native-audio-context';
 
 const App = () => {
   AudioContext.createOscillator();
-  const oscillator = global.__OscillatorProxy as OscillatorWrapper;
+  const oscillator = global.__OscillatorNodeProxy as OscillatorWrapper;
 
   const startOscillator = () => {
     oscillator.start();
