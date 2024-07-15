@@ -45,6 +45,10 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
   external fun initHybrid(l: Long): HybridData?
 
+  fun getHybridData(): HybridData? {
+    return mHybridData
+  }
+
   override fun start() {
     if(isPlaying) return
     isPlaying = true

@@ -17,8 +17,8 @@ include_directories(
 
 add_library(react-native-audio-context SHARED
         src/main/cpp/OnLoad.cpp
-        src/main/cpp/OscillatorNode
-        ../cpp/OscillatorNodeHostObject
+        src/main/cpp
+        ../cpp/AudioContextHostObject
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)
