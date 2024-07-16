@@ -42,4 +42,9 @@ namespace audiocontext {
         static const auto method = javaClassStatic()->getMethod<jdouble()>("getDetune");
         return method(javaObject_.get());
     }
+
+    void OscillatorNode::connect(const AudioDestinationNode &destination) {
+        const auto method = javaClassLocal()->getMethod<void(AudioDestinationNode::javaobject)>("connect");
+        method(javaObject_.get(), destination.javaObject_.get());
+    }
 } // namespace audiocontext
