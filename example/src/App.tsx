@@ -22,11 +22,11 @@ const App = () => {
 
   const startOscillator = () => {
     oscillatorRef.current?.start();
-    //secondaryOscillatorRef.current?.start();
+    secondaryOscillatorRef.current?.start();
   };
   const stopOscillator = () => {
     oscillatorRef.current?.stop();
-    //secondaryOscillatorRef.current?.stop();
+    secondaryOscillatorRef.current?.stop();
   };
 
   return (

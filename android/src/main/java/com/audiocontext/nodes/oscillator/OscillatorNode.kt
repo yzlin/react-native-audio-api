@@ -97,8 +97,7 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
         }
         wavePhase += phaseChange
       }
-
-      context.dispatchAudio(buffer, audioTrack)
+      process(buffer, audioTrack)
     }
     audioTrack.flush()
   }

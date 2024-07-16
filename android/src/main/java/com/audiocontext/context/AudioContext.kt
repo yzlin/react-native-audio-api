@@ -37,14 +37,4 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
     addNode(oscillator)
     return oscillator
   }
-
-  override fun dispatchAudio(buffer: ShortArray, audioTrack: AudioTrack) {
-    val currentBuffer = buffer.clone()
-
-    synchronized(sources) {
-      sources.forEach { source ->
-        source.process(currentBuffer, audioTrack)
-      }
-    }
-  }
 }
