@@ -1,11 +1,10 @@
 import { NativeModules } from 'react-native';
-import type { Float } from 'react-native/Libraries/Types/CodegenTypes';
 const { AudioContextModule } = NativeModules;
 
 interface Oscillator {
-  frequency: Float;
+  frequency: number;
   wave: 'sine' | 'square' | 'sawtooth' | 'triangle';
-  detune: Float;
+  detune: number;
   start: () => void;
   stop: () => void;
 }

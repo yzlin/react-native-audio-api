@@ -7,7 +7,6 @@ const App = () => {
 
   const oscillator = audioContext.createOscillator();
   const oscillator2 = audioContext.createOscillator();
-
   oscillator.frequency = 200;
 
   const startOscillator = () => {

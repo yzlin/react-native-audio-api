@@ -45,20 +45,12 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
   external fun initHybrid(l: Long): HybridData?
 
-  fun getWaveType(): WaveType {
-    return waveType
-  }
-
   fun getFrequency(): Double {
     return frequency
   }
 
   fun getDetune(): Double {
     return detune
-  }
-
-  fun setWaveType(waveType: String) {
-    this.waveType = WaveType.switchWaveType(waveType)
   }
 
   fun setFrequency(frequency: Double) {

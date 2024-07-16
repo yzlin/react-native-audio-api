@@ -30,7 +30,6 @@ namespace audiocontext {
         void stop();
         void setFrequency(jdouble frequency);
         void setDetune(jdouble detune);
-        jni::local_ref<JString> getWaveType();
         jdouble getFrequency();
         jdouble getDetune();
 

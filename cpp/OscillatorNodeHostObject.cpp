@@ -28,25 +28,17 @@ namespace audiocontext {
             });
         }
 
-        if (propName == "wave") {
-            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-                auto waveTypeJString = oscillator_->getWaveType();
-                std::string waveTypeStr = waveTypeJString->toStdString();
-                return jsi::String::createFromUtf8(rt, waveTypeStr);
-            });
-        }
-
         if (propName == "frequency") {
             return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
                 auto frequency = oscillator_->getFrequency();
-                return {frequency};
+                return jsi::Value(frequency);
             });
         }
 
         if (propName == "detune") {
             return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
                 auto detune = oscillator_->getDetune();
-                return {detune};
+                return jsi::Value(detune);
             });
         }
 

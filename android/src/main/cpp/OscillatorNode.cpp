@@ -36,11 +36,6 @@ namespace audiocontext {
         method(javaObject_.get(), detune);
     }
 
-    jni::local_ref<JString> OscillatorNode::getWaveType() {
-        static const auto method = javaClassStatic()->getMethod<jni::local_ref<JString>()>("getWaveType");
-        return method(javaObject_.get());
-    }
-
     jdouble OscillatorNode::getFrequency() {
         static const auto method = javaClassLocal()->getMethod<jdouble()>("getFrequency");
         return method(javaObject_.get());
