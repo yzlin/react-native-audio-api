@@ -15,6 +15,10 @@ const App = () => {
     secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
     secondaryOscillatorRef.current.frequency = 300;
 
+    const destination = audioContextRef.current.destination();
+    oscillatorRef.current.connect(destination);
+    secondaryOscillatorRef.current.connect(destination);
+
     return () => {
       //TODO
     };

@@ -34,7 +34,6 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
 
   override fun createOscillator(): OscillatorNode {
     val oscillator = OscillatorNode(this, reactContext)
-    oscillator.connect(destination)
     addNode(oscillator)
     return oscillator
   }

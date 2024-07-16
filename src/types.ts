@@ -5,7 +5,7 @@ export interface BaseAudioContext {
 
 export interface AudioNode {
   context: BaseAudioContext;
-  connect: (destination: AudioNode) => void;
+  connect: (destination: AudioDestinationNode) => void;
   disconnect: () => void;
 }
 

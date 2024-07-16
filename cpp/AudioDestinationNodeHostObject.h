@@ -4,6 +4,7 @@
 #include <fbjni/fbjni.h>
 #include <fbjni/detail/Hybrid.h>
 #include "AudioDestinationNode.h"
+#include "OscillatorNodeHostObject.h"
 
 namespace audiocontext {
     using namespace facebook;
@@ -13,6 +14,8 @@ namespace audiocontext {
     class AudioDestinationNodeHostObject : public jsi::HostObject {
 
     private:
+        friend class OscillatorNodeHostObject;
+
         AudioDestinationNode* destination_;
 
     public:

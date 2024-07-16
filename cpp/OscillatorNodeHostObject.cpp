@@ -8,6 +8,8 @@ namespace audiocontext {
         std::vector<jsi::PropNameID> propertyNames;
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "start"));
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "stop"));
+        propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "frequency"));
+        propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "detune"));
         return propertyNames;
     }
 
@@ -28,6 +30,10 @@ namespace audiocontext {
 
         if (propName == "detune") {
             return detune(runtime, propNameId);
+        }
+
+        if (propName == "connect") {
+            return connect(runtime, propNameId);
         }
 
         throw std::runtime_error("Prop not yet implemented!");
@@ -79,6 +85,15 @@ namespace audiocontext {
         return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
             auto detune = oscillator_->getDetune();
             return jsi::Value(detune);
+        });
+    }
+
+    jsi::Value OscillatorNodeHostObject::connect(jsi::Runtime &runtime,
+                                                 const jsi::PropNameID &propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 1, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+            auto destination = args[0].asObject(rt).asHostObject<AudioDestinationNodeHostObject>(rt);
+            oscillator_->connect(*destination->destination_);
+            return jsi::Value::undefined();
         });
     }
 }
