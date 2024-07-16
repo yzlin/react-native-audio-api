@@ -10,7 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudioContext {
   override var sampleRate: Int = 44100
-  override val destination: AudioDestinationNode = AudioDestinationNode(this)
+  override val destination: AudioDestinationNode = AudioDestinationNode(this, reactContext)
+    get() = field
   override val sources = CopyOnWriteArrayList<AudioNode>()
 
   private val mHybridData: HybridData?;

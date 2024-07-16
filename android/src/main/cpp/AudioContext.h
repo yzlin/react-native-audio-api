@@ -6,6 +6,7 @@
 #include <react/jni/JMessageQueueThread.h>
 #include "AudioContextHostObject.h"
 #include "OscillatorNode.h"
+#include "AudioDestinationNode.h"
 
 namespace audiocontext {
 
@@ -28,12 +29,13 @@ namespace audiocontext {
         }
 
         jsi::Object createOscillator();
+        jsi::Object getDestination();
 
     private:
         friend HybridBase;
 
         global_ref<AudioContext::javaobject> javaObject_;
-        std::shared_ptr<jsi::Runtime> runtime_;
+        jlong jsContext_;
 
         explicit AudioContext(jni::alias_ref<AudioContext::jhybridobject>& jThis, jlong jsContext);
     };

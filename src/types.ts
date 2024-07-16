@@ -1,5 +1,6 @@
 export interface BaseAudioContext {
   createOscillator(): Oscillator;
+  destination(): AudioDestinationNode;
 }
 
 export interface AudioNode {
@@ -7,6 +8,8 @@ export interface AudioNode {
   connect: (destination: AudioNode) => void;
   disconnect: () => void;
 }
+
+export interface AudioDestinationNode extends AudioNode {}
 
 export interface AudioScheduledSourceNode extends AudioNode {
   start: () => void;

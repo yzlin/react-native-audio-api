@@ -39,7 +39,7 @@ namespace audiocontext {
         friend HybridBase;
 
         global_ref<OscillatorNode::javaobject> javaObject_;
-        jlong jsContext;
+        jlong jsContext_;
 
         explicit OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject>& jThis, jlong jsContext);
     };
