@@ -1,15 +1,13 @@
 import { NativeModules } from 'react-native';
 const { AudioContextModule } = NativeModules;
+import type { Oscillator, BaseAudioContext } from './types';
 
-interface Oscillator {
-  frequency: number;
-  wave: 'sine' | 'square' | 'sawtooth' | 'triangle';
-  detune: number;
-  start: () => void;
-  stop: () => void;
+declare global {
+  function nativeCallSyncHook(): unknown;
+  var __AudioContextProxy: BaseAudioContext;
 }
 
-export class AudioContext {
+export class AudioContext implements BaseAudioContext {
   constructor() {
     AudioContextModule.initAudioContext();
   }
@@ -18,3 +16,5 @@ export class AudioContext {
     return global.__AudioContextProxy.createOscillator();
   }
 }
+
+export type { Oscillator };

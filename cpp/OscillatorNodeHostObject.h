@@ -20,5 +20,10 @@ namespace audiocontext {
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& name) override;
         void set(jsi::Runtime& runtime, const jsi::PropNameID& name, const jsi::Value& value) override;
         std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime& rt) override;
+
+        jsi::Value start(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
+        jsi::Value stop(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
+        jsi::Value frequency(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
+        jsi::Value detune(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
     };
 } // namespace audiocontext

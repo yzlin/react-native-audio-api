@@ -7,7 +7,7 @@ enum class WaveType {
   TRIANGLE;
 
   companion object {
-    fun switchWaveType(type: String): WaveType {
+    fun fromString(type: String): WaveType {
       return when (type.uppercase()) {
         "SINE" -> SINE
         "SQUARE" -> SQUARE

@@ -11,5 +11,6 @@ interface BaseAudioContext {
   val destination: AudioDestinationNode
   val sources: List<AudioNode>
 
+  abstract fun createOscillator(): OscillatorNode
   abstract fun dispatchAudio(buffer: ShortArray, audioTrack: AudioTrack)
 }

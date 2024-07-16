@@ -1,22 +1,32 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { AudioContext } from 'react-native-audio-context';
+import { useRef, useEffect } from 'react';
+
+import { AudioContext, type Oscillator } from 'react-native-audio-context';
 
 const App = () => {
-  const audioContext = new AudioContext();
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<Oscillator | null>(null);
+  const secondaryOscillatorRef = useRef<Oscillator | null>(null);
 
-  const oscillator = audioContext.createOscillator();
-  const oscillator2 = audioContext.createOscillator();
-  oscillator.frequency = 200;
+  useEffect(() => {
+    audioContextRef.current = new AudioContext();
+    oscillatorRef.current = audioContextRef.current.createOscillator();
+    secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
+    secondaryOscillatorRef.current.frequency = 300;
+
+    return () => {
+      //TODO
+    };
+  }, []);
 
   const startOscillator = () => {
-    oscillator.start();
-    oscillator2.start();
+    oscillatorRef.current?.start();
+    //secondaryOscillatorRef.current?.start();
   };
-
   const stopOscillator = () => {
-    oscillator.stop();
-    oscillator2.stop();
+    oscillatorRef.current?.stop();
+    //secondaryOscillatorRef.current?.stop();
   };
 
   return (

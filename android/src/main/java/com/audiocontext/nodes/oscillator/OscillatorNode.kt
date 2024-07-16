@@ -90,10 +90,10 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
       for(i in buffer.indices) {
         buffer[i] = when(waveType) {
-          WaveType.SINE -> (sin(wavePhase) * Short.MAX_VALUE).toInt().toShort()
-          WaveType.SQUARE -> ((if (sin(wavePhase) >= 0) 1 else -1) * Short.MAX_VALUE).toShort()
-          WaveType.SAWTOOTH -> ((2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) * Short.MAX_VALUE).toInt().toShort()
-          WaveType.TRIANGLE -> ((2 * abs(2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) - 1) * Short.MAX_VALUE).toInt().toShort()
+          WaveType.SINE -> sineWaveBuffer(wavePhase)
+          WaveType.SQUARE -> squareWaveBuffer(wavePhase)
+          WaveType.SAWTOOTH -> sawtoothWaveBuffer(wavePhase)
+          WaveType.TRIANGLE -> triangleWaveBuffer(wavePhase)
         }
         wavePhase += phaseChange
       }
@@ -101,5 +101,21 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
       context.dispatchAudio(buffer, audioTrack)
     }
     audioTrack.flush()
+  }
+
+  private fun sineWaveBuffer(wavePhase: Double): Short {
+    return (sin(wavePhase) * Short.MAX_VALUE).toInt().toShort()
+  }
+
+  private fun squareWaveBuffer(wavePhase: Double): Short {
+    return ((if (sin(wavePhase) >= 0) 1 else -1) * Short.MAX_VALUE).toShort()
+  }
+
+  private fun sawtoothWaveBuffer(wavePhase: Double): Short {
+    return ((2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) * Short.MAX_VALUE).toInt().toShort()
+  }
+
+  private fun triangleWaveBuffer(wavePhase: Double): Short {
+    return ((2 * abs(2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) - 1) * Short.MAX_VALUE).toInt().toShort()
   }
 }

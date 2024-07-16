@@ -15,31 +15,19 @@ namespace audiocontext {
         auto propName = propNameId.utf8(runtime);
 
         if (propName == "start") {
-            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-                oscillator_->start();
-                return jsi::Value::undefined();
-            });
+            return start(runtime, propNameId);
         }
 
         if (propName == "stop") {
-            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-                oscillator_->stop();
-                return jsi::Value::undefined();
-            });
+            return stop(runtime, propNameId);
         }
 
         if (propName == "frequency") {
-            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-                auto frequency = oscillator_->getFrequency();
-                return jsi::Value(frequency);
-            });
+            return frequency(runtime, propNameId);
         }
 
         if (propName == "detune") {
-            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-                auto detune = oscillator_->getDetune();
-                return jsi::Value(detune);
-            });
+            return detune(runtime, propNameId);
         }
 
         throw std::runtime_error("Prop not yet implemented!");
@@ -61,5 +49,36 @@ namespace audiocontext {
         }
 
         throw std::runtime_error("Not yet implemented!");
+    }
+
+    jsi::Value OscillatorNodeHostObject::start(jsi::Runtime& runtime, const jsi::PropNameID& propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+            oscillator_->start();
+            return jsi::Value::undefined();
+        });
+    }
+
+    jsi::Value OscillatorNodeHostObject::stop(jsi::Runtime &runtime,
+                                              const jsi::PropNameID &propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+            oscillator_->stop();
+            return jsi::Value::undefined();
+        });
+    }
+
+    jsi::Value OscillatorNodeHostObject::frequency(jsi::Runtime &runtime,
+                                                   const jsi::PropNameID &propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+            auto frequency = oscillator_->getFrequency();
+            return jsi::Value(frequency);
+        });
+    }
+
+    jsi::Value OscillatorNodeHostObject::detune(jsi::Runtime &runtime,
+                                                const jsi::PropNameID &propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& rt, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+            auto detune = oscillator_->getDetune();
+            return jsi::Value(detune);
+        });
     }
 }
