@@ -14,7 +14,7 @@ namespace audiocontext {
 
     class AudioContext : public jni::HybridClass<AudioContext> {
     public:
-        static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/context/AudioContext;";
+        static auto constexpr kJavaDescriptor = "Lcom/audiocontext/context/AudioContext;";
 
         static jni::local_ref<AudioContext::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis, jlong jsContext)
         {
@@ -27,8 +27,7 @@ namespace audiocontext {
            });
         }
 
-        jni::local_ref<OscillatorNode::jhybriddata> createOscillator();
-        jsi::Value jsiCreateOscillator(jsi::Runtime &runtime);
+        jsi::Object createOscillator();
 
     private:
         friend HybridBase;

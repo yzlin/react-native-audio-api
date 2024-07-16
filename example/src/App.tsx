@@ -1,18 +1,23 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { AudioContext } from 'react-native-audio-context';
-import type { OscillatorWrapper } from 'react-native-audio-context';
 
 const App = () => {
-  AudioContext.createOscillator();
-  const oscillator = global.__OscillatorNodeProxy as OscillatorWrapper;
+  const audioContext = new AudioContext();
+
+  const oscillator = audioContext.createOscillator();
+  const oscillator2 = audioContext.createOscillator();
+
+  oscillator.frequency = 200;
 
   const startOscillator = () => {
     oscillator.start();
+    oscillator2.start();
   };
 
   const stopOscillator = () => {
     oscillator.stop();
+    oscillator2.stop();
   };
 
   return (

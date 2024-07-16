@@ -3,6 +3,7 @@ package com.audiocontext.nodes.oscillator
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
+import android.util.Log
 import com.audiocontext.context.BaseAudioContext
 import com.audiocontext.nodes.AudioScheduledSourceNode
 import com.facebook.jni.HybridData
@@ -33,7 +34,6 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
   init {
     mHybridData = initHybrid(reactContext.javaScriptContextHolder!!.get())
-
     val bufferSize = AudioTrack.getMinBufferSize(
       context.sampleRate,
       AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
@@ -45,19 +45,45 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
   external fun initHybrid(l: Long): HybridData?
 
-  fun getHybridData(): HybridData? {
-    return mHybridData
+  fun getWaveType(): WaveType {
+    return waveType
+  }
+
+  fun getFrequency(): Double {
+    return frequency
+  }
+
+  fun getDetune(): Double {
+    return detune
+  }
+
+  fun setWaveType(waveType: String) {
+    this.waveType = WaveType.switchWaveType(waveType)
+  }
+
+  fun setFrequency(frequency: Double) {
+    this.frequency = frequency
+  }
+
+  fun setDetune(detune: Double) {
+    this.detune = detune
   }
 
   override fun start() {
-    if(isPlaying) return
+    if(isPlaying) {
+      return
+    }
+
     isPlaying = true
     audioTrack.play()
     playbackThread = Thread { generateSound() }.apply{ start()}
   }
 
   override fun stop() {
-    if(!isPlaying) return
+    if(!isPlaying) {
+      return
+    }
+
     isPlaying = false
     audioTrack.stop()
     playbackThread?.join()

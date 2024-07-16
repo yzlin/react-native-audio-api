@@ -20,8 +20,6 @@ namespace audiocontext {
           return makeCxxInstance(jThis, jsContext);
         }
 
-        jsi::Object createOscillatorNodeHostObject();
-
         static void registerNatives() {
             registerHybrid({
                 makeNativeMethod("initHybrid", OscillatorNode::initHybrid),
@@ -30,6 +28,13 @@ namespace audiocontext {
 
         void start();
         void stop();
+        void setFrequency(jdouble frequency);
+        void setDetune(jdouble detune);
+        jni::local_ref<JString> getWaveType();
+        jdouble getFrequency();
+        jdouble getDetune();
+
+        jsi::Object createOscillatorNodeHostObject();
 
     private:
         friend HybridBase;

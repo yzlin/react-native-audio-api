@@ -31,10 +31,11 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
     sources.add(node)
   }
 
-  fun createOscillator(): HybridData? {
+  fun createOscillator(): OscillatorNode {
     val oscillator = OscillatorNode(this, reactContext)
+    oscillator.connect(destination)
     addNode(oscillator)
-    return oscillator.getHybridData()
+    return oscillator
   }
 
   override fun dispatchAudio(buffer: ShortArray, audioTrack: AudioTrack) {
