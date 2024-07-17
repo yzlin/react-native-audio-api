@@ -1,47 +1,55 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import JSIExample from '../../src/JSIExample/JSIExample';
+/* eslint-disable react/react-in-jsx-scope */
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { useRef, useEffect } from 'react';
 
-const App: React.FC = () => {
-  const multiply = () => {
-    return JSIExample.multiply(2, 3);
+import { AudioContext, type Oscillator } from 'react-native-audio-context';
+
+const App = () => {
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<Oscillator | null>(null);
+  const secondaryOscillatorRef = useRef<Oscillator | null>(null);
+
+  useEffect(() => {
+    audioContextRef.current = new AudioContext();
+    oscillatorRef.current = audioContextRef.current.createOscillator();
+    secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
+    secondaryOscillatorRef.current.frequency = 300;
+
+    return () => {
+      //TODO
+    };
+  }, []);
+
+  const startOscillator = () => {
+    oscillatorRef.current?.start();
+    secondaryOscillatorRef.current?.start();
+  };
+  const stopOscillator = () => {
+    oscillatorRef.current?.stop();
+    secondaryOscillatorRef.current?.stop();
   };
 
   return (
     <View style={styles.container}>
-      <Text>{multiply()}</Text>
+      <Text style={styles.title}>React Native Oscillator</Text>
+      <Button title="Start Oscillator" onPress={startOscillator} />
+      <Button title="Stop Oscillator" onPress={stopOscillator} />
     </View>
   );
 };
 
-export default App;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  keys: {
-    fontSize: 14,
-    color: 'grey',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   title: {
-    fontSize: 16,
-    color: 'black',
-    marginRight: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textInput: {
-    flex: 1,
-    marginVertical: 20,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'black',
-    borderRadius: 5,
-    padding: 10,
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
 });
+
+export default App;
