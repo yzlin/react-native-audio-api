@@ -9,9 +9,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 import java.util.concurrent.CopyOnWriteArrayList
 
 class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudioContext {
-  override var sampleRate: Int = 44100
-  override val destination: AudioDestinationNode = AudioDestinationNode(this)
-  override val sources = CopyOnWriteArrayList<AudioNode>()
+  override val sampleRate: Int = 44100
+  override val destination: AudioDestinationNode = AudioDestinationNode(this, reactContext)
+    get() = field
 
   private val mHybridData: HybridData?;
 
@@ -27,14 +27,7 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
 
   external fun initHybrid(l: Long): HybridData?
 
-  private fun addNode(node: AudioNode) {
-    sources.add(node)
-  }
-
   override fun createOscillator(): OscillatorNode {
-    val oscillator = OscillatorNode(this, reactContext)
-    oscillator.connect(destination)
-    addNode(oscillator)
-    return oscillator
+    return OscillatorNode(this, reactContext)
   }
 }

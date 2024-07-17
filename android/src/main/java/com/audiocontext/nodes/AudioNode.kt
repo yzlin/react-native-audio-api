@@ -9,7 +9,7 @@ abstract class AudioNode(val context: BaseAudioContext) {
   abstract val numberOfOutputs: Int;
   private val connectedNodes = mutableListOf<AudioNode>()
 
-  fun connect(destination: AudioNode) {
+  fun connect(destination: AudioDestinationNode) {
     if(this.numberOfOutputs > 0) {
       connectedNodes.add(destination)
     }

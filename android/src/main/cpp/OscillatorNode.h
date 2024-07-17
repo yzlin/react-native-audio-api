@@ -5,11 +5,14 @@
 #include <react/jni/CxxModuleWrapper.h>
 #include <react/jni/JMessageQueueThread.h>
 #include "OscillatorNodeHostObject.h"
+#include "AudioDestinationNode.h"
 
 namespace audiocontext {
 
     using namespace facebook;
     using namespace facebook::jni;
+
+    class AudioDestinationNode;
 
     class OscillatorNode : public jni::HybridClass<OscillatorNode> {
     public:
@@ -32,6 +35,7 @@ namespace audiocontext {
         void setDetune(jdouble detune);
         jdouble getFrequency();
         jdouble getDetune();
+        void connect(const AudioDestinationNode &destination);
 
         jsi::Object createOscillatorNodeHostObject();
 
@@ -39,7 +43,7 @@ namespace audiocontext {
         friend HybridBase;
 
         global_ref<OscillatorNode::javaobject> javaObject_;
-        jlong jsContext;
+        jlong jsContext_;
 
         explicit OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject>& jThis, jlong jsContext);
     };

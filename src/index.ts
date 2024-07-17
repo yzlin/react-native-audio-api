@@ -1,6 +1,10 @@
 import { NativeModules } from 'react-native';
 const { AudioContextModule } = NativeModules;
-import type { Oscillator, BaseAudioContext } from './types';
+import type {
+  Oscillator,
+  BaseAudioContext,
+  AudioDestinationNode,
+} from './types';
 
 declare global {
   function nativeCallSyncHook(): unknown;
@@ -14,6 +18,10 @@ export class AudioContext implements BaseAudioContext {
 
   createOscillator(): Oscillator {
     return global.__AudioContextProxy.createOscillator();
+  }
+
+  destination(): AudioDestinationNode {
+    return global.__AudioContextProxy.destination();
   }
 }
 

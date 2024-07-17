@@ -1,17 +1,14 @@
 #include "OscillatorNode.h"
-#include <fbjni/fbjni.h>
-#include <jsi/jsi.h>
-#include <android/log.h>
 
 namespace audiocontext {
 
     using namespace facebook::jni;
 
     OscillatorNode::OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject> &jThis, jlong jsContext)
-            : javaObject_(make_global(jThis)), jsContext(jsContext){}
+            : javaObject_(make_global(jThis)), jsContext_(jsContext){}
 
     jsi::Object OscillatorNode::createOscillatorNodeHostObject() {
-        auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
+        auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext_);
         auto hostObject = std::make_shared<OscillatorNodeHostObject>(this);
         return jsi::Object::createFromHostObject(*runtime, hostObject);
     }
@@ -44,5 +41,10 @@ namespace audiocontext {
     jdouble OscillatorNode::getDetune() {
         static const auto method = javaClassStatic()->getMethod<jdouble()>("getDetune");
         return method(javaObject_.get());
+    }
+
+    void OscillatorNode::connect(const AudioDestinationNode &destination) {
+        const auto method = javaClassLocal()->getMethod<void(AudioDestinationNode::javaobject)>("connect");
+        method(javaObject_.get(), destination.javaObject_.get());
     }
 } // namespace audiocontext

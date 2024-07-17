@@ -6,6 +6,7 @@ namespace audiocontext {
     std::vector<jsi::PropNameID> AudioContextHostObject::getPropertyNames(jsi::Runtime& runtime) {
         std::vector<jsi::PropNameID> propertyNames;
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createOscillator"));
+        propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "destination"));
         return propertyNames;
     }
 
@@ -14,6 +15,10 @@ namespace audiocontext {
 
         if(propName == "createOscillator") {
             return createOscillator(runtime, propNameId);
+        }
+
+        if(propName == "destination") {
+            return getDestination(runtime, propNameId);
         }
 
         throw std::runtime_error("Not yet implemented!");
@@ -32,4 +37,9 @@ namespace audiocontext {
         });
     }
 
+    jsi::Value AudioContextHostObject::getDestination(jsi::Runtime &runtime, const jsi::PropNameID &propNameId) {
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
+            return audiocontext_->getDestination();
+        });
+    }
 }
