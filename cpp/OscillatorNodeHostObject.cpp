@@ -12,6 +12,7 @@ namespace audiocontext
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "stop"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "frequency"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "detune"));
+    propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "type"));
     return propertyNames;
   }
 
@@ -39,6 +40,11 @@ namespace audiocontext
       return detune(runtime, propNameId);
     }
 
+    if (propName == "type")
+    {
+      return waveType(runtime, propNameId);
+    }
+
     if (propName == "connect")
     {
       return connect(runtime, propNameId);
@@ -62,6 +68,13 @@ namespace audiocontext
     {
       auto detune = value.asNumber();
       oscillator_->setDetune(detune);
+      return;
+    }
+
+    if (propName == "type")
+    {
+      auto waveType = value.asString(runtime).utf8(runtime);
+      oscillator_->setWaveType(waveType);
       return;
     }
 
@@ -101,6 +114,15 @@ namespace audiocontext
                                                  {
             auto detune = oscillator_->getDetune();
             return jsi::Value(detune); });
+  }
+
+  jsi::Value
+  OscillatorNodeHostObject::waveType(jsi::Runtime &runtime, const jsi::PropNameID &propNameId)
+  {
+    return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
+                                                 {
+            auto waveType = oscillator_->getWaveType();
+            return jsi::String::createFromUtf8(rt, waveType); });
   }
 
   jsi::Value OscillatorNodeHostObject::connect(jsi::Runtime &runtime,

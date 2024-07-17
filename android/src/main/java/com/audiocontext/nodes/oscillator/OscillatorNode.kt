@@ -53,6 +53,14 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
 
   external fun initHybrid(l: Long): HybridData?
 
+  fun getWaveType(): String {
+    return WaveType.toString(waveType)
+  }
+
+  fun setWaveType(type: String) {
+    waveType = WaveType.fromString(type)
+  }
+
   override fun start() {
     if(isPlaying) {
       return

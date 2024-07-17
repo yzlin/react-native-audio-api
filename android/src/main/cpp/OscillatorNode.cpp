@@ -1,4 +1,5 @@
 #include "OscillatorNode.h"
+#include "android/log.h"
 
 namespace audiocontext {
 
@@ -14,33 +15,44 @@ namespace audiocontext {
     }
 
     void OscillatorNode::start() {
-        static const auto method = javaClassStatic()->getMethod<void()>("start");
+        static const auto method = javaClassLocal()->getMethod<void()>("start");
         method(javaObject_.get());
     }
 
     void OscillatorNode::stop() {
-        static const auto method = javaClassStatic()->getMethod<void()>("stop");
+        static const auto method = javaClassLocal()->getMethod<void()>("stop");
         method(javaObject_.get());
     }
 
-    void OscillatorNode::setFrequency(jdouble frequency) {
-        static const auto method = javaClassStatic()->getMethod<void(jdouble)>("setFrequency");
-        method(javaObject_.get(), frequency);
-    }
-
-    void OscillatorNode::setDetune(jdouble detune) {
-        static const auto method = javaClassStatic()->getMethod<void(jdouble)>("setDetune");
-        method(javaObject_.get(), detune);
-    }
-
-    jdouble OscillatorNode::getFrequency() {
+    double OscillatorNode::getFrequency() {
         static const auto method = javaClassLocal()->getMethod<jdouble()>("getFrequency");
         return method(javaObject_.get());
     }
 
-    jdouble OscillatorNode::getDetune() {
-        static const auto method = javaClassStatic()->getMethod<jdouble()>("getDetune");
+    double OscillatorNode::getDetune() {
+        static const auto method = javaClassLocal()->getMethod<jdouble()>("getDetune");
         return method(javaObject_.get());
+    }
+
+    std::string OscillatorNode::getWaveType() {
+        static const auto method = javaClassLocal()->getMethod<JString()>("getWaveType");
+        return method(javaObject_.get())->toStdString();
+    }
+
+    void OscillatorNode::setFrequency(double frequency) {
+        static const auto method = javaClassLocal()->getMethod<void(jdouble)>("setFrequency");
+        method(javaObject_.get(), frequency);
+    }
+
+    void OscillatorNode::setDetune(double detune) {
+        static const auto method = javaClassLocal()->getMethod<void(jdouble)>("setDetune");
+        method(javaObject_.get(), detune);
+    }
+
+    void OscillatorNode::setWaveType(const std::string& waveType) {
+        static const auto method = javaClassLocal()->getMethod<void(JString)>("setWaveType");
+        method(javaObject_.get(), *make_jstring(waveType));
+
     }
 
     void OscillatorNode::connect(const AudioDestinationNode &destination) {
