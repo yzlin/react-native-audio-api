@@ -16,7 +16,15 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
   override val numberOfInputs: Int = 0
   override val numberOfOutputs: Int = 1
   private var frequency: Double = 440.0
+    get() = field
+    set(value) {
+      field = value
+    }
   private var detune: Double = 0.0
+    get() = field
+    set(value) {
+      field = value
+    }
   private var waveType: WaveType = WaveType.SINE
 
   private val audioTrack: AudioTrack
@@ -44,22 +52,6 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
   }
 
   external fun initHybrid(l: Long): HybridData?
-
-  fun getFrequency(): Double {
-    return frequency
-  }
-
-  fun getDetune(): Double {
-    return detune
-  }
-
-  fun setFrequency(frequency: Double) {
-    this.frequency = frequency
-  }
-
-  fun setDetune(detune: Double) {
-    this.detune = detune
-  }
 
   override fun start() {
     if(isPlaying) {
@@ -89,32 +81,11 @@ class OscillatorNode(context: BaseAudioContext, reactContext: ReactApplicationCo
       phaseChange = 2 * Math.PI * (frequency + detune) / context.sampleRate
 
       for(i in buffer.indices) {
-        buffer[i] = when(waveType) {
-          WaveType.SINE -> sineWaveBuffer(wavePhase)
-          WaveType.SQUARE -> squareWaveBuffer(wavePhase)
-          WaveType.SAWTOOTH -> sawtoothWaveBuffer(wavePhase)
-          WaveType.TRIANGLE -> triangleWaveBuffer(wavePhase)
-        }
+        buffer[i] = WaveType.getWaveBufferElement(wavePhase, waveType)
         wavePhase += phaseChange
       }
       process(buffer, audioTrack)
     }
     audioTrack.flush()
-  }
-
-  private fun sineWaveBuffer(wavePhase: Double): Short {
-    return (sin(wavePhase) * Short.MAX_VALUE).toInt().toShort()
-  }
-
-  private fun squareWaveBuffer(wavePhase: Double): Short {
-    return ((if (sin(wavePhase) >= 0) 1 else -1) * Short.MAX_VALUE).toShort()
-  }
-
-  private fun sawtoothWaveBuffer(wavePhase: Double): Short {
-    return ((2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) * Short.MAX_VALUE).toInt().toShort()
-  }
-
-  private fun triangleWaveBuffer(wavePhase: Double): Short {
-    return ((2 * abs(2 * (wavePhase / (2 * Math.PI) - floor(wavePhase / (2 * Math.PI) + 0.5))) - 1) * Short.MAX_VALUE).toInt().toShort()
   }
 }

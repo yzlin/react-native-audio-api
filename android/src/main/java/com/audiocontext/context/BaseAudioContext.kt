@@ -9,7 +9,6 @@ import com.facebook.jni.HybridData
 interface BaseAudioContext {
   val sampleRate: Int
   val destination: AudioDestinationNode
-  val sources: List<AudioNode>
 
   abstract fun createOscillator(): OscillatorNode
 }
