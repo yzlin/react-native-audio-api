@@ -25,6 +25,7 @@ namespace audiocontext {
         jsi::Value stop(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
         jsi::Value frequency(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
         jsi::Value detune(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
+        jsi::Value waveType(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
         jsi::Value connect(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
     };
 } // namespace audiocontext

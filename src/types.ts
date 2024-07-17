@@ -20,6 +20,6 @@ type WaveType = 'sine' | 'square' | 'sawtooth' | 'triangle';
 
 export interface Oscillator extends AudioScheduledSourceNode {
   frequency: number;
-  wave: WaveType;
+  type: WaveType;
   detune: number;
 }

@@ -31,10 +31,12 @@ namespace audiocontext {
 
         void start();
         void stop();
-        void setFrequency(jdouble frequency);
-        void setDetune(jdouble detune);
-        jdouble getFrequency();
-        jdouble getDetune();
+        double getFrequency();
+        double getDetune();
+        std::string getWaveType();
+        void setFrequency(double frequency);
+        void setDetune(double detune);
+        void setWaveType(const std::string& waveType);
         void connect(const AudioDestinationNode &destination);
 
         jsi::Object createOscillatorNodeHostObject();

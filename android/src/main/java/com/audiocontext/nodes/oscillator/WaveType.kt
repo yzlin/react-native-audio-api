@@ -37,12 +37,21 @@ enum class WaveType {
 
   companion object {
     fun fromString(type: String): WaveType {
-      return when (type.uppercase()) {
-        "SINE" -> SINE
-        "SQUARE" -> SQUARE
-        "SAWTOOTH" -> SAWTOOTH
-        "TRIANGLE" -> TRIANGLE
+      return when (type.lowercase()) {
+        "sine" -> SINE
+        "square" -> SQUARE
+        "sawtooth" -> SAWTOOTH
+        "triangle" -> TRIANGLE
         else -> throw IllegalArgumentException("Unknown wave type: $type")
+      }
+    }
+
+    fun toString(type: WaveType): String {
+      return when (type) {
+        SINE -> "sine"
+        SQUARE -> "square"
+        SAWTOOTH -> "sawtooth"
+        TRIANGLE -> "triangle"
       }
     }
 
