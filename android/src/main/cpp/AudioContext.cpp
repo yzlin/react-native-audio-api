@@ -17,7 +17,7 @@ namespace audiocontext
     runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
   }
 
-  jsi::Object AudioContext::createOscillator()
+  std::shared_ptr<OscillatorNodeHostObject> AudioContext::createOscillator()
   {
     static const auto method = javaClassLocal()->getMethod<OscillatorNode()>("createOscillator");
     auto oscillator = method(javaObject_.get());
@@ -26,7 +26,7 @@ namespace audiocontext
     return oscillatorCppInstance->createOscillatorNodeHostObject();
   }
 
-  jsi::Object AudioContext::getDestination()
+    std::shared_ptr<AudioDestinationNodeHostObject> AudioContext::getDestination()
   {
     static const auto method = javaClassLocal()->getMethod<AudioDestinationNode()>("getDestination");
     auto destination = method(javaObject_.get());

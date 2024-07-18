@@ -13,6 +13,7 @@ namespace audiocontext {
     using namespace facebook::jni;
 
     class AudioDestinationNode;
+    class OscillatorNodeHostObject;
 
     class OscillatorNode : public jni::HybridClass<OscillatorNode> {
     public:
@@ -39,7 +40,7 @@ namespace audiocontext {
         void setWaveType(const std::string& waveType);
         void connect(const AudioDestinationNode &destination);
 
-        jsi::Object createOscillatorNodeHostObject();
+        std::shared_ptr<OscillatorNodeHostObject> createOscillatorNodeHostObject();
 
     private:
         friend HybridBase;

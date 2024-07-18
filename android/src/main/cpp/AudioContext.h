@@ -32,8 +32,8 @@ namespace audiocontext
       });
     }
 
-    jsi::Object createOscillator();
-    jsi::Object getDestination();
+    std::shared_ptr<OscillatorNodeHostObject> createOscillator();
+    std::shared_ptr<AudioDestinationNodeHostObject> getDestination();
 
   private:
     friend HybridBase;
