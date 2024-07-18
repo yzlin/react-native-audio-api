@@ -4,6 +4,10 @@ project(react-native-audio-context)
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 14)
 
+if(ANDROID)
+  add_definitions(-DANDROID)
+endif()
+
 include(../node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake)
 add_compile_options(${folly_FLAGS})
 
