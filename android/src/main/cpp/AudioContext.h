@@ -4,6 +4,7 @@
 #include <jsi/jsi.h>
 #include <react/jni/CxxModuleWrapper.h>
 #include <react/jni/JMessageQueueThread.h>
+#include <memory>
 #include "AudioContextHostObject.h"
 #include "OscillatorNode.h"
 #include "AudioDestinationNode.h"
