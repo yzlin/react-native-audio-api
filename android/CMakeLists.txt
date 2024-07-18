@@ -9,6 +9,9 @@ add_compile_options(${folly_FLAGS})
 
 include_directories(
         ../cpp
+        ../cpp/AudioContext
+        ../cpp/AudioDestinationNode
+        ../cpp/OscillatorNode
         src/main/cpp
         ../node_modules/react-native/ReactCommon/jsi
         ../node_modules/react-native/ReactAndroid/src/main/jni/react/jni
@@ -20,9 +23,18 @@ add_library(react-native-audio-context SHARED
         src/main/cpp/AudioContext
         src/main/cpp/OscillatorNode
         src/main/cpp/AudioDestinationNode
-        ../cpp/AudioContextHostObject
-        ../cpp/OscillatorNodeHostObject
-        ../cpp/AudioDestinationNodeHostObject
+
+        ../cpp/AudioContext/AudioContextHostObject
+        ../cpp/AudioContext/AudioContextWrapper.h
+        ../cpp/AudioContext/android/AudioContextWrapper.cpp
+
+        ../cpp/AudioDestinationNode/AudioDestinationNodeHostObject
+        ../cpp/AudioDestinationNode/AudioDestinationNodeWrapper.h
+        ../cpp/AudioDestinationNode/android/AudioDestinationNodeWrapper.cpp
+
+        ../cpp/OscillatorNode/OscillatorNodeHostObject
+        ../cpp/OscillatorNode/OscillatorNodeWrapper.h
+        ../cpp/OscillatorNode/android/OscillatorNodeWrapper.cpp
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)

@@ -9,8 +9,9 @@ namespace audiocontext {
             : javaObject_(make_global(jThis)), jsContext_(jsContext){}
 
     jsi::Object OscillatorNode::createOscillatorNodeHostObject() {
+        auto oscillatorNodeWrapper = std::make_shared<OscillatorNodeWrapper>(std::shared_ptr<OscillatorNode>(this));
         auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext_);
-        auto hostObject = std::make_shared<OscillatorNodeHostObject>(this);
+        auto hostObject = std::make_shared<OscillatorNodeHostObject>(oscillatorNodeWrapper);
         return jsi::Object::createFromHostObject(*runtime, hostObject);
     }
 

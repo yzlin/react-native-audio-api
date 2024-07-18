@@ -7,6 +7,7 @@
 #include "AudioContextHostObject.h"
 #include "OscillatorNode.h"
 #include "AudioDestinationNode.h"
+#include "AudioContextWrapper.h"
 
 namespace audiocontext
 {

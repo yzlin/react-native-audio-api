@@ -1,4 +1,5 @@
 #include "AudioContext.h"
+#include "android/log.h"
 
 namespace audiocontext
 {
@@ -8,8 +9,10 @@ namespace audiocontext
   AudioContext::AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis,
                              jlong jsContext) : javaObject_(make_global(jThis)), jsContext_(jsContext)
   {
+    auto audioContextWrapper = std::make_shared<AudioContextWrapper>(std::shared_ptr<AudioContext>(this));
     auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
-    auto hostObject = std::make_shared<AudioContextHostObject>(this);
+    auto hostObject = std::make_shared<AudioContextHostObject>(audioContextWrapper);
+
     auto object = jsi::Object::createFromHostObject(*runtime, hostObject);
     runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
   }

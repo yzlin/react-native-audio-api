@@ -14,11 +14,11 @@ namespace audiocontext {
         auto propName = propNameId.utf8(runtime);
 
         if(propName == "createOscillator") {
-            return createOscillator(runtime, propNameId);
+            return wrapper_->createOscillator(runtime, propNameId);
         }
 
         if(propName == "destination") {
-            return getDestination(runtime, propNameId);
+            return wrapper_->getDestination(runtime, propNameId);
         }
 
         throw std::runtime_error("Not yet implemented!");
@@ -28,18 +28,5 @@ namespace audiocontext {
         auto propName = propNameId.utf8(runtime);
 
         throw std::runtime_error("Not yet implemented!");
-    }
-
-    jsi::Value AudioContextHostObject::createOscillator(jsi::Runtime &runtime,
-                                                        const jsi::PropNameID &propNameId) {
-        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
-            return audiocontext_->createOscillator();
-        });
-    }
-
-    jsi::Value AudioContextHostObject::getDestination(jsi::Runtime &runtime, const jsi::PropNameID &propNameId) {
-        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
-            return audiocontext_->getDestination();
-        });
     }
 }
