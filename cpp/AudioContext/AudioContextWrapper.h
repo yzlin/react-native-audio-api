@@ -1,6 +1,5 @@
 #pragma once
 
-#include <jsi/jsi.h>
 #include <memory>
 #include "OscillatorNodeWrapper.h"
 #include "AudioDestinationNodeWrapper.h"

@@ -75,8 +75,6 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
         Log.e("OscillatorNode", "Thread sleep error: ${e.message}")
       }
 
-      Log.e("OscillatorNode", "Start playing")
-
       isPlaying = true
       audioTrack.play()
       generateSound()
@@ -94,8 +92,6 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
       } catch (e: InterruptedException) {
         Log.e("OscillatorNode", "Thread sleep error: ${e.message}")
       }
-
-      Log.e("OscillatorNode", "Stop playing")
 
       isPlaying = false
       audioTrack.stop()

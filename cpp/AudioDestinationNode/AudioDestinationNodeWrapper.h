@@ -1,6 +1,5 @@
 #pragma once
 
-#include <jsi/jsi.h>
 #include <memory>
 
 #ifdef ANDROID
