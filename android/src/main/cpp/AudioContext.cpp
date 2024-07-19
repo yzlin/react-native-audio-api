@@ -6,16 +6,18 @@ namespace audiocontext
 
   using namespace facebook::jni;
 
-  AudioContext::AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis,
-                             jlong jsContext) : javaObject_(make_global(jThis)), jsContext_(jsContext)
-  {
-    auto audioContextWrapper = std::make_shared<AudioContextWrapper>(std::shared_ptr<AudioContext>(this));
-    auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
-    auto hostObject = AudioContextHostObject::createFromWrapper(audioContextWrapper);
+    AudioContext::AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis,
+                             jlong jsContext) : javaObject_(make_global(jThis)), jsContext_(jsContext) {}
 
-    auto object = jsi::Object::createFromHostObject(*runtime, hostObject);
-    runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
-  }
+    void AudioContext::install()
+    {
+        auto audioContextWrapper = std::make_shared<AudioContextWrapper>(std::shared_ptr<AudioContext>(this));
+        auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext_);
+        auto hostObject = AudioContextHostObject::createFromWrapper(audioContextWrapper);
+
+        auto object = jsi::Object::createFromHostObject(*runtime, hostObject);
+        runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
+    }
 
   std::shared_ptr<OscillatorNode> AudioContext::createOscillator()
   {

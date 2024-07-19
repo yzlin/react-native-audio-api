@@ -31,10 +31,16 @@ namespace audiocontext
       registerHybrid({
           makeNativeMethod("initHybrid", AudioContext::initHybrid),
       });
+
+      javaClassLocal()->registerNatives({
+          makeNativeMethod("install", AudioContext::install),
+      });
     }
 
     std::shared_ptr<OscillatorNode> createOscillator();
     std::shared_ptr<AudioDestinationNode> getDestination();
+
+    void install();
 
   private:
     friend HybridBase;

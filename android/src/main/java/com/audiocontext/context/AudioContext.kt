@@ -1,14 +1,11 @@
 package com.audiocontext.context
 
-import android.media.AudioTrack
 import com.audiocontext.nodes.AudioDestinationNode
-import com.audiocontext.nodes.AudioNode
 import com.audiocontext.nodes.oscillator.OscillatorNode
 import com.facebook.jni.HybridData
 import com.facebook.react.bridge.ReactApplicationContext
-import java.util.concurrent.CopyOnWriteArrayList
 
-class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudioContext {
+class AudioContext(reactContext: ReactApplicationContext) : BaseAudioContext {
   override val sampleRate: Int = 44100
   override val destination: AudioDestinationNode = AudioDestinationNode(this)
     get() = field
@@ -26,6 +23,8 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
   }
 
   external fun initHybrid(l: Long): HybridData?
+
+  external fun install()
 
   override fun createOscillator(): OscillatorNode {
     return OscillatorNode(this)
