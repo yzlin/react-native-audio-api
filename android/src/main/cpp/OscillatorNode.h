@@ -20,9 +20,9 @@ namespace audiocontext {
     public:
         static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/oscillator/OscillatorNode;";
 
-        static jni::local_ref<OscillatorNode::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis, jlong jsContext)
+        static jni::local_ref<OscillatorNode::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis)
         {
-          return makeCxxInstance(jThis, jsContext);
+          return makeCxxInstance(jThis);
         }
 
         static void registerNatives() {
@@ -31,8 +31,8 @@ namespace audiocontext {
             });
         }
 
-        void start();
-        void stop();
+        void start(double time);
+        void stop(double time);
         double getFrequency();
         double getDetune();
         std::string getWaveType();
@@ -47,9 +47,8 @@ namespace audiocontext {
         friend HybridBase;
 
         global_ref<OscillatorNode::javaobject> javaObject_;
-        jlong jsContext_;
 
-        explicit OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject>& jThis, jlong jsContext);
+        explicit OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject>& jThis);
     };
 
 } // namespace audiocontext

@@ -28,7 +28,8 @@ namespace audiocontext {
     jsi::Value OscillatorNodeWrapper::start(jsi::Runtime &runtime, const jsi::PropNameID &propNameId) {
         return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
         {
-            oscillator_->start();
+            auto time = args[0].getNumber();
+            oscillator_->start(time);
             return jsi::Value::undefined();
         });
     }
@@ -36,7 +37,8 @@ namespace audiocontext {
     jsi::Value OscillatorNodeWrapper::stop(jsi::Runtime &runtime, const jsi::PropNameID &propNameId) {
         return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
         {
-            oscillator_->stop();
+            auto time = args[0].getNumber();
+            oscillator_->stop(time);
             return jsi::Value::undefined();
         });
     }
