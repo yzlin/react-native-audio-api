@@ -11,7 +11,7 @@ namespace audiocontext
   {
     auto audioContextWrapper = std::make_shared<AudioContextWrapper>(std::shared_ptr<AudioContext>(this));
     auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
-    auto hostObject = std::make_shared<AudioContextHostObject>(audioContextWrapper);
+    auto hostObject = AudioContextHostObject::createFromWrapper(audioContextWrapper);
 
     auto object = jsi::Object::createFromHostObject(*runtime, hostObject);
     runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
