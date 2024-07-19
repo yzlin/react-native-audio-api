@@ -2,6 +2,8 @@
 
 #include <jsi/jsi.h>
 #include <memory>
+#include "OscillatorNodeWrapper.h"
+#include "AudioDestinationNodeWrapper.h"
 
 #ifdef ANDROID
 #include "AudioContext.h"
@@ -9,6 +11,9 @@
 
 namespace audiocontext {
     using namespace facebook;
+
+    class OscillatorNodeWrapper;
+    class AudioDestinationNodeWrapper;
 
 #ifdef ANDROID
     class AudioContext;
@@ -27,8 +32,7 @@ namespace audiocontext {
 #else
         explicit AudioContextWrapper() {}
 #endif
-
-        jsi::Value createOscillator(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
-        jsi::Value getDestination(jsi::Runtime& runtime, const jsi::PropNameID& propNameId);
+        std::shared_ptr<OscillatorNodeWrapper> createOscillator();
+        std::shared_ptr<AudioDestinationNodeWrapper> getDestination();
     };
 } // namespace audiocontext

@@ -2,6 +2,7 @@
 
 #include <jsi/jsi.h>
 #include <memory>
+#include "AudioDestinationNodeWrapper.h"
 
 #ifdef ANDROID
 #include "OscillatorNode.h"
@@ -9,6 +10,8 @@
 
 namespace audiocontext {
     using namespace facebook;
+
+    class AudioDestinationNodeWrapper;
 
 #ifdef ANDROID
     class OscillatorNode;
@@ -26,17 +29,16 @@ namespace audiocontext {
 #else
         explicit OscillatorNodeWrapper() {}
 #endif
+        double getFrequency();
+        double getDetune();
+        std::string getType();
+        void start(double time);
+        void stop(double time);
+        void connect(std::shared_ptr<AudioDestinationNodeWrapper> destination);
 
-        jsi::Value getFrequency(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value getDetune(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value getType(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value start(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value stop(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value connect(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-
-        void setFrequency(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
-        void setDetune(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
-        void setType(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
+        void setFrequency(double frequency);
+        void setDetune(double detune);
+        void setType(std::string type);
 
     };
 } // namespace audiocontext

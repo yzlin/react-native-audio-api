@@ -41,8 +41,6 @@ namespace audiocontext {
         void setWaveType(const std::string& waveType);
         void connect(const AudioDestinationNode &destination);
 
-        std::shared_ptr<OscillatorNodeHostObject> createOscillatorNodeHostObject();
-
     private:
         friend HybridBase;
 

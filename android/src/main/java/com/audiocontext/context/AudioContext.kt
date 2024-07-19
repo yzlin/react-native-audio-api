@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudioContext {
   override val sampleRate: Int = 44100
-  override val destination: AudioDestinationNode = AudioDestinationNode(this, reactContext)
+  override val destination: AudioDestinationNode = AudioDestinationNode(this)
     get() = field
 
   private val mHybridData: HybridData?;
@@ -28,6 +28,6 @@ class AudioContext(private val reactContext: ReactApplicationContext) : BaseAudi
   external fun initHybrid(l: Long): HybridData?
 
   override fun createOscillator(): OscillatorNode {
-    return OscillatorNode(this, reactContext)
+    return OscillatorNode(this)
   }
 }

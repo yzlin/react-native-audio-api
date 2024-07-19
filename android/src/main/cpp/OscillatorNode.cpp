@@ -8,11 +8,6 @@ namespace audiocontext {
     OscillatorNode::OscillatorNode(jni::alias_ref<OscillatorNode::jhybridobject> &jThis)
             : javaObject_(make_global(jThis)){}
 
-    std::shared_ptr<OscillatorNodeHostObject> OscillatorNode::createOscillatorNodeHostObject() {
-        auto oscillatorNodeWrapper = std::make_shared<OscillatorNodeWrapper>(std::shared_ptr<OscillatorNode>(this));
-        return std::make_shared<OscillatorNodeHostObject>(oscillatorNodeWrapper);
-    }
-
     void OscillatorNode::start(double time) {
         static const auto method = javaClassLocal()->getMethod<void(jdouble)>("start");
         method(javaObject_.get(), time);

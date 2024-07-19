@@ -32,15 +32,15 @@ const App = () => {
       setUp();
     }
 
-    oscillatorRef.current?.start(1);
+    oscillatorRef.current?.start(0);
     secondaryOscillatorRef.current?.start(0);
   };
   const stopOscillator = () => {
     if (!audioContextRef.current) {
       setUp();
     }
-    oscillatorRef.current?.stop(3);
-    secondaryOscillatorRef.current?.stop(2);
+    oscillatorRef.current?.stop(0);
+    secondaryOscillatorRef.current?.stop(0);
   };
 
   return (

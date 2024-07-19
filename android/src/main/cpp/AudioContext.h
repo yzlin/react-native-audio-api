@@ -33,8 +33,8 @@ namespace audiocontext
       });
     }
 
-    std::shared_ptr<OscillatorNodeHostObject> createOscillator();
-    std::shared_ptr<AudioDestinationNodeHostObject> getDestination();
+    std::shared_ptr<OscillatorNode> createOscillator();
+    std::shared_ptr<AudioDestinationNode> getDestination();
 
   private:
     friend HybridBase;
