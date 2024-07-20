@@ -13,9 +13,10 @@ class AudioContextModule(private val reactContext: ReactApplicationContext) : Re
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  fun initAudioContext() {
-    val audioContext = AudioContext(reactContext)
-    audioContext.install()
+  fun installAudioContext() {
+    val audioContext = AudioContext()
+    val jsContext = reactContext.javaScriptContextHolder!!.get()
+    audioContext.install(jsContext)
   }
 
   companion object {

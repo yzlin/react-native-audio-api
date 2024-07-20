@@ -5,7 +5,7 @@ import com.audiocontext.nodes.oscillator.OscillatorNode
 import com.facebook.jni.HybridData
 import com.facebook.react.bridge.ReactApplicationContext
 
-class AudioContext(reactContext: ReactApplicationContext) : BaseAudioContext {
+class AudioContext() : BaseAudioContext {
   override val sampleRate: Int = 44100
   override val destination: AudioDestinationNode = AudioDestinationNode(this)
     get() = field
@@ -19,12 +19,11 @@ class AudioContext(reactContext: ReactApplicationContext) : BaseAudioContext {
   }
 
   init {
-    mHybridData = initHybrid(reactContext.javaScriptContextHolder!!.get())
+    mHybridData = initHybrid()
   }
 
-  external fun initHybrid(l: Long): HybridData?
-
-  external fun install()
+  external fun initHybrid(): HybridData?
+  external fun install(jsContext: Long)
 
   override fun createOscillator(): OscillatorNode {
     return OscillatorNode(this)

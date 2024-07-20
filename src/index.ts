@@ -13,7 +13,7 @@ declare global {
 
 export class AudioContext implements BaseAudioContext {
   constructor() {
-    AudioContextModule.initAudioContext();
+    AudioContextModule.installAudioContext();
   }
 
   createOscillator(): Oscillator {
