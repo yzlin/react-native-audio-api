@@ -1,11 +1,9 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include <jsi/jsi.h>
 #include <react/jni/CxxModuleWrapper.h>
 #include <react/jni/JMessageQueueThread.h>
 #include <memory>
-#include "OscillatorNodeHostObject.h"
 #include "AudioDestinationNode.h"
 
 namespace audiocontext {
@@ -14,7 +12,6 @@ namespace audiocontext {
     using namespace facebook::jni;
 
     class AudioDestinationNode;
-    class OscillatorNodeHostObject;
 
     class OscillatorNode : public jni::HybridClass<OscillatorNode> {
     public:

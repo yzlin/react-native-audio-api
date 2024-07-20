@@ -1,5 +1,4 @@
 #include "AudioContext.h"
-#include "android/log.h"
 
 namespace audiocontext
 {

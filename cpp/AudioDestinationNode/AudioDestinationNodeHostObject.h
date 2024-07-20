@@ -1,7 +1,7 @@
 #pragma once
 
 #include <jsi/jsi.h>
-#include "AudioDestinationNodeHostObject.h"
+#include "AudioDestinationNodeWrapper.h"
 #include "OscillatorNodeWrapper.h"
 
 namespace audiocontext {

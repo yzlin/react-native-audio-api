@@ -2,6 +2,8 @@
 
 #include <jsi/jsi.h>
 #include "AudioContextWrapper.h"
+#include "OscillatorNodeHostObject.h"
+#include "AudioDestinationNodeHostObject.h"
 
 namespace audiocontext
 {

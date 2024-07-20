@@ -1,7 +1,6 @@
 package com.audiocontext.nativemodules
 
 import com.audiocontext.context.AudioContext
-import com.facebook.jni.HybridData
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod

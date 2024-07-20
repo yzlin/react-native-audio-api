@@ -1,5 +1,4 @@
 #include "OscillatorNode.h"
-#include "android/log.h"
 
 namespace audiocontext {
 
