@@ -33,7 +33,7 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
   private var stopThread: Thread? = null
   private var buffer: ShortArray = ShortArray(1024)
 
-  private val mHybridData: HybridData?;
+  private val mHybridData: HybridData? = initHybrid();
 
   companion object {
     init {
@@ -42,7 +42,6 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
   }
 
   init {
-    mHybridData = initHybrid()
     val bufferSize = AudioTrack.getMinBufferSize(
       context.sampleRate,
       AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
@@ -51,8 +50,6 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
       AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM
     )
   }
-
-  external fun initHybrid(): HybridData?
 
   fun getWaveType(): String {
     return WaveType.toString(waveType)
