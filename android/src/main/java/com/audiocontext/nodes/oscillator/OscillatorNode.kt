@@ -67,7 +67,6 @@ class OscillatorNode(context: BaseAudioContext) : AudioScheduledSourceNode(conte
       return
     }
 
-    audioTrack.play()
     playbackThread = Thread {
       try {
         Thread.sleep((time * 1000).toLong())

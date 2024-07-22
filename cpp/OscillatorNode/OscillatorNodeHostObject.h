@@ -24,16 +24,5 @@ namespace audiocontext {
         static std::shared_ptr<OscillatorNodeHostObject> createFromWrapper(std::shared_ptr<OscillatorNodeWrapper> wrapper) {
             return std::make_shared<OscillatorNodeHostObject>(wrapper);
         }
-
-        jsi::Value getFrequency(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value getDetune(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value getType(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value start(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value stop(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-        jsi::Value connect(jsi::Runtime &runtime, const jsi::PropNameID &propNameId);
-
-        void setFrequency(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
-        void setDetune(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
-        void setType(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value);
     };
 } // namespace audiocontext

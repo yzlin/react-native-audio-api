@@ -1,6 +1,6 @@
 export interface BaseAudioContext {
+  destination: AudioDestinationNode;
   createOscillator(): Oscillator;
-  destination(): AudioDestinationNode;
 }
 
 export interface AudioNode {

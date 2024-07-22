@@ -12,16 +12,15 @@ declare global {
 }
 
 export class AudioContext implements BaseAudioContext {
+  destination: AudioDestinationNode;
+
   constructor() {
     AudioContextModule.installAudioContext();
+    this.destination = global.__AudioContextProxy.destination;
   }
 
   createOscillator(): Oscillator {
     return global.__AudioContextProxy.createOscillator();
-  }
-
-  destination(): AudioDestinationNode {
-    return global.__AudioContextProxy.destination();
   }
 }
 
