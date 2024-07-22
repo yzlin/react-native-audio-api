@@ -22,7 +22,7 @@ namespace audiocontext
 
     if (propName == "start")
     {
-        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 1, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
         {
             auto time = args[0].getNumber();
             wrapper_->start(time);
@@ -32,7 +32,7 @@ namespace audiocontext
 
     if (propName == "stop")
     {
-        return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
+        return jsi::Function::createFromHostFunction(runtime, propNameId, 1, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
         {
             auto time = args[0].getNumber();
             wrapper_->stop(time);
