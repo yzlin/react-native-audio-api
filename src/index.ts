@@ -8,7 +8,7 @@ import type {
 
 declare global {
   function nativeCallSyncHook(): unknown;
-  var __AudioContextProxy: BaseAudioContext;
+  var __AudioContext: BaseAudioContext;
 }
 
 export class AudioContext implements BaseAudioContext {
@@ -16,11 +16,11 @@ export class AudioContext implements BaseAudioContext {
 
   constructor() {
     AudioContextModule.installAudioContext();
-    this.destination = global.__AudioContextProxy.destination;
+    this.destination = global.__AudioContext.destination;
   }
 
   createOscillator(): Oscillator {
-    return global.__AudioContextProxy.createOscillator();
+    return global.__AudioContext.createOscillator();
   }
 }
 

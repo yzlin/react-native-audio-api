@@ -23,7 +23,7 @@ namespace audiocontext
             auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
             auto hostObject = std::make_shared<AudioContextHostObject>(wrapper);
             auto object = jsi::Object::createFromHostObject(*runtime, hostObject);
-            runtime->global().setProperty(*runtime, "__AudioContextProxy", std::move(object));
+            runtime->global().setProperty(*runtime, "__AudioContext", std::move(object));
         }
 
         jsi::Value get(jsi::Runtime &runtime, const jsi::PropNameID &name) override;
