@@ -4,9 +4,11 @@
 #include <jsi/jsi.h>
 #include <react/jni/CxxModuleWrapper.h>
 #include <react/jni/JMessageQueueThread.h>
+#include <memory>
 #include "AudioContextHostObject.h"
 #include "OscillatorNode.h"
 #include "AudioDestinationNode.h"
+#include "AudioContextWrapper.h"
 
 namespace audiocontext
 {
@@ -19,9 +21,9 @@ namespace audiocontext
   public:
     static auto constexpr kJavaDescriptor = "Lcom/audiocontext/context/AudioContext;";
 
-    static jni::local_ref<AudioContext::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis, jlong jsContext)
+    static jni::local_ref<AudioContext::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis)
     {
-      return makeCxxInstance(jThis, jsContext);
+      return makeCxxInstance(jThis);
     }
 
     static void registerNatives()
@@ -29,18 +31,23 @@ namespace audiocontext
       registerHybrid({
           makeNativeMethod("initHybrid", AudioContext::initHybrid),
       });
+
+      javaClassLocal()->registerNatives({
+          makeNativeMethod("install", AudioContext::install),
+      });
     }
 
-    jsi::Object createOscillator();
-    jsi::Object getDestination();
+    std::shared_ptr<OscillatorNode> createOscillator();
+    std::shared_ptr<AudioDestinationNode> getDestination();
+
+    void install(jlong jsContext);
 
   private:
     friend HybridBase;
 
     global_ref<AudioContext::javaobject> javaObject_;
-    jlong jsContext_;
 
-    explicit AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis, jlong jsContext);
+    explicit AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis);
   };
 
 } // namespace audiocontext

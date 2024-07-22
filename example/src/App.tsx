@@ -9,29 +9,38 @@ const App = () => {
   const oscillatorRef = useRef<Oscillator | null>(null);
   const secondaryOscillatorRef = useRef<Oscillator | null>(null);
 
-  useEffect(() => {
+  const setUp = () => {
     audioContextRef.current = new AudioContext();
     oscillatorRef.current = audioContextRef.current.createOscillator();
     secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
     secondaryOscillatorRef.current.frequency = 300;
     secondaryOscillatorRef.current.type = 'square';
 
-    const destination = audioContextRef.current.destination();
+    const destination = audioContextRef.current.destination;
     oscillatorRef.current.connect(destination);
     secondaryOscillatorRef.current.connect(destination);
+  };
 
+  useEffect(() => {
     return () => {
       //TODO
     };
   }, []);
 
   const startOscillator = () => {
-    oscillatorRef.current?.start();
-    secondaryOscillatorRef.current?.start();
+    if (!audioContextRef.current) {
+      setUp();
+    }
+
+    oscillatorRef.current?.start(0);
+    secondaryOscillatorRef.current?.start(0);
   };
   const stopOscillator = () => {
-    oscillatorRef.current?.stop();
-    secondaryOscillatorRef.current?.stop();
+    if (!audioContextRef.current) {
+      setUp();
+    }
+    oscillatorRef.current?.stop(0);
+    secondaryOscillatorRef.current?.stop(0);
   };
 
   return (

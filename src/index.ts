@@ -8,20 +8,19 @@ import type {
 
 declare global {
   function nativeCallSyncHook(): unknown;
-  var __AudioContextProxy: BaseAudioContext;
+  var __AudioContext: BaseAudioContext;
 }
 
 export class AudioContext implements BaseAudioContext {
+  destination: AudioDestinationNode;
+
   constructor() {
-    AudioContextModule.initAudioContext();
+    AudioContextModule.installAudioContext();
+    this.destination = global.__AudioContext.destination;
   }
 
   createOscillator(): Oscillator {
-    return global.__AudioContextProxy.createOscillator();
-  }
-
-  destination(): AudioDestinationNode {
-    return global.__AudioContextProxy.destination();
+    return global.__AudioContext.createOscillator();
   }
 }
 
