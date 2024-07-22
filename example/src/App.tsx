@@ -12,6 +12,8 @@ const App = () => {
   const setUp = () => {
     audioContextRef.current = new AudioContext();
     oscillatorRef.current = audioContextRef.current.createOscillator();
+    oscillatorRef.current.frequency = 800;
+
     secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
     secondaryOscillatorRef.current.frequency = 300;
     secondaryOscillatorRef.current.type = 'square';
@@ -32,7 +34,7 @@ const App = () => {
       setUp();
     }
 
-    oscillatorRef.current?.start(0);
+    oscillatorRef.current?.start(1);
     secondaryOscillatorRef.current?.start(0);
   };
   const stopOscillator = () => {
