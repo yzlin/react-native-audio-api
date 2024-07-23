@@ -1,3 +1,4 @@
+#ifdef ANDROID
 #include "AudioContextWrapper.h"
 
 namespace audiocontext {
@@ -12,3 +13,4 @@ namespace audiocontext {
         return std::make_shared<AudioDestinationNodeWrapper>(destination);
     }
 } // namespace audiocontext
+#endif

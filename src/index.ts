@@ -1,27 +1,6 @@
-import { NativeModules } from 'react-native';
-const { AudioContextModule } = NativeModules;
-import type {
-  Oscillator,
-  BaseAudioContext,
-  AudioDestinationNode,
-} from './types';
+import { installACModule } from './utils/install';
 
-declare global {
-  function nativeCallSyncHook(): unknown;
-  var __AudioContext: BaseAudioContext;
-}
+installACModule();
 
-export class AudioContext implements BaseAudioContext {
-  destination: AudioDestinationNode;
-
-  constructor() {
-    AudioContextModule.installAudioContext();
-    this.destination = global.__AudioContext.destination;
-  }
-
-  createOscillator(): Oscillator {
-    return global.__AudioContext.createOscillator();
-  }
-}
-
-export type { Oscillator };
+export * from './types';
+export * from './AudioContext';

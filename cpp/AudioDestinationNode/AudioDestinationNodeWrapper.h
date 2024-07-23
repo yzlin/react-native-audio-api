@@ -7,8 +7,9 @@
 #include "OscillatorNodeWrapper.h"
 #endif
 
+#include "AudioNodeWrapper.h"
+
 namespace audiocontext {
-    using namespace facebook;
 
 #ifdef ANDROID
     class AudioDestinationNode;

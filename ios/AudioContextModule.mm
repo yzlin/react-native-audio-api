@@ -1,14 +1,15 @@
-#import "JSIExampleModule.h"
+#import "AudioContextModule.h"
 
 #import <React/RCTBridge+Private.h>
 #import <React/RCTUtils.h>
 #import <jsi/jsi.h>
 
-#import "../cpp/JSIExampleHostObject.h"
+#import "../cpp/AudioContext/AudioContextHostObject.h"
+#import "../cpp/AudioContext/AudioContextWrapper.h"
 
-@implementation JSIExampleModule
+@implementation AudioContextModule
 
-RCT_EXPORT_MODULE(JSIExample)
+RCT_EXPORT_MODULE(AudioContextModule)
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install)
 {
@@ -27,9 +28,10 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install)
     }
     auto& runtime = *jsiRuntime;
 
-    auto hostObject = std::make_shared<example::JSIExampleHostObject>();
+    auto wrapper = std::make_shared<audiocontext::AudioContextWrapper>();
+    auto hostObject = std::make_shared<audiocontext::AudioContextHostObject>(wrapper);
     auto object = jsi::Object::createFromHostObject(runtime, hostObject);
-    runtime.global().setProperty(runtime, "__JSIExampleProxy", std::move(object));
+    runtime.global().setProperty(runtime, "__AudioContext", std::move(object));
 
     NSLog(@"Successfully installed JSI bindings for react-native-audio-context!");
     return @true;

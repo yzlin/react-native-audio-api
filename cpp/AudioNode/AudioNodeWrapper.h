@@ -7,8 +7,6 @@
 #endif
 
 namespace audiocontext {
-    using namespace facebook;
-
     class AudioNodeWrapper {
     public:
 #ifdef ANDROID

@@ -1,46 +1,43 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 import { useRef, useEffect } from 'react';
 
 import { AudioContext, type Oscillator } from 'react-native-audio-context';
 
-const App = () => {
+const App: React.FC = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
   const secondaryOscillatorRef = useRef<Oscillator | null>(null);
 
-  const setUp = () => {
-    audioContextRef.current = new AudioContext();
-    oscillatorRef.current = audioContextRef.current.createOscillator();
-    oscillatorRef.current.frequency = 800;
-
-    secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
-    secondaryOscillatorRef.current.frequency = 300;
-    secondaryOscillatorRef.current.type = 'square';
-
-    const destination = audioContextRef.current.destination;
-    oscillatorRef.current.connect(destination);
-    secondaryOscillatorRef.current.connect(destination);
-  };
-
   useEffect(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+
+      oscillatorRef.current = audioContextRef.current.createOscillator();
+
+      secondaryOscillatorRef.current =
+        audioContextRef.current.createOscillator();
+      secondaryOscillatorRef.current.frequency = 840;
+      secondaryOscillatorRef.current.type = 'square';
+
+      // Destination is not implemented on IOS yet
+      if (Platform.OS === 'android') {
+        const destination = audioContextRef.current.destination;
+        oscillatorRef.current.connect(destination!);
+        secondaryOscillatorRef.current.connect(destination!);
+      }
+    }
+
     return () => {
       //TODO
     };
   }, []);
 
   const startOscillator = () => {
-    if (!audioContextRef.current) {
-      setUp();
-    }
-
-    oscillatorRef.current?.start(1);
+    oscillatorRef.current?.start(0);
     secondaryOscillatorRef.current?.start(0);
   };
   const stopOscillator = () => {
-    if (!audioContextRef.current) {
-      setUp();
-    }
     oscillatorRef.current?.stop(0);
     secondaryOscillatorRef.current?.stop(0);
   };

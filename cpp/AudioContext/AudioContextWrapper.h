@@ -7,6 +7,8 @@
 
 #ifdef ANDROID
 #include "AudioContext.h"
+#else
+#include "OscillatorNodeHostObject.h"
 #endif
 
 namespace audiocontext {
