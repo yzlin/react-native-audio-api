@@ -1,10 +1,8 @@
 package com.audiocontext.nodes
 
 import android.media.AudioTrack
-import android.util.Log
 import com.audiocontext.context.BaseAudioContext
 import com.facebook.jni.HybridData
-import com.facebook.react.bridge.ReactApplicationContext
 
 
 class AudioDestinationNode(context: BaseAudioContext): AudioNode(context) {

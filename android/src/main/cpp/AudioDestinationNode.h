@@ -4,14 +4,12 @@
 #include <react/jni/CxxModuleWrapper.h>
 #include <react/jni/JMessageQueueThread.h>
 #include <memory>
-#include "OscillatorNode.h"
+#include "AudioNode.h"
 
 namespace audiocontext {
 
     using namespace facebook;
     using namespace facebook::jni;
-
-    class OscillatorNode;
 
     class AudioDestinationNode : public jni::HybridClass<AudioDestinationNode, AudioNode> {
     public:
