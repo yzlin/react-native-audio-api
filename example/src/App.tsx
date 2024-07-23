@@ -1,26 +1,33 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useRef, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
-import { AudioContext, type Oscillator } from 'react-native-audio-context';
+import {
+  AudioContext,
+  type Oscillator,
+  type Gain,
+} from 'react-native-audio-context';
 
 const App = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
-  const secondaryOscillatorRef = useRef<Oscillator | null>(null);
+  const gainRef = useRef<Gain | null>(null);
 
   const setUp = () => {
     audioContextRef.current = new AudioContext();
+
     oscillatorRef.current = audioContextRef.current.createOscillator();
     oscillatorRef.current.frequency = 800;
+    oscillatorRef.current.type = 'sine';
 
-    secondaryOscillatorRef.current = audioContextRef.current.createOscillator();
-    secondaryOscillatorRef.current.frequency = 300;
-    secondaryOscillatorRef.current.type = 'square';
+    gainRef.current = audioContextRef.current.createGain();
+    gainRef.current.gain = 1.0;
 
     const destination = audioContextRef.current.destination;
-    oscillatorRef.current.connect(destination);
-    secondaryOscillatorRef.current.connect(destination);
+    oscillatorRef.current.connect(gainRef.current);
+    gainRef.current.connect(destination);
   };
 
   useEffect(() => {
@@ -29,27 +36,24 @@ const App = () => {
     };
   }, []);
 
-  const startOscillator = () => {
+  const handlePlayPause = () => {
     if (!audioContextRef.current) {
       setUp();
     }
 
-    oscillatorRef.current?.start(1);
-    secondaryOscillatorRef.current?.start(0);
-  };
-  const stopOscillator = () => {
-    if (!audioContextRef.current) {
-      setUp();
+    if (isPlaying) {
+      oscillatorRef.current?.stop(0);
+    } else {
+      oscillatorRef.current?.start(0);
     }
-    oscillatorRef.current?.stop(0);
-    secondaryOscillatorRef.current?.stop(0);
+
+    setIsPlaying(!isPlaying);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>React Native Oscillator</Text>
-      <Button title="Start Oscillator" onPress={startOscillator} />
-      <Button title="Stop Oscillator" onPress={stopOscillator} />
+      <Button title={isPlaying ? 'Pause' : 'Play'} onPress={handlePlayPause} />
     </View>
   );
 };

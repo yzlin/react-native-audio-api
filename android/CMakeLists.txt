@@ -17,6 +17,7 @@ include_directories(
         ../cpp/AudioDestinationNode
         ../cpp/OscillatorNode
         ../cpp/AudioNode
+        ../cpp/GainNode
         src/main/cpp
         ../node_modules/react-native/ReactCommon/jsi
         ../node_modules/react-native/ReactAndroid/src/main/jni/react/jni
@@ -29,6 +30,7 @@ add_library(react-native-audio-context SHARED
         src/main/cpp/OscillatorNode
         src/main/cpp/AudioDestinationNode
         src/main/cpp/AudioNode
+        src/main/cpp/GainNode
 
         ../cpp/AudioContext/AudioContextHostObject
         ../cpp/AudioContext/AudioContextWrapper.h
@@ -45,6 +47,10 @@ add_library(react-native-audio-context SHARED
         ../cpp/AudioNode/AudioNodeHostObject.h
         ../cpp/AudioNode/AudioNodeWrapper.h
         ../cpp/AudioNode/android/AudioNodeWrapper.cpp
+
+        ../cpp/GainNode/GainNodeHostObject
+        ../cpp/GainNode/GainNodeWrapper.h
+        ../cpp/GainNode/android/GainNodeWrapper.cpp
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)

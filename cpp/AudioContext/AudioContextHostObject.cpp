@@ -27,6 +27,14 @@ namespace audiocontext {
             return jsi::Object::createFromHostObject(runtime, destinationHostObject);
         }
 
+        if(propName == "createGain") {
+            return jsi::Function::createFromHostFunction(runtime, propNameId, 0, [this](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* arguments, size_t count) -> jsi::Value {
+                auto gain = wrapper_->createGain();
+                auto gainHostObject = GainNodeHostObject::createFromWrapper(gain);
+                return jsi::Object::createFromHostObject(runtime, gainHostObject);
+            });
+        }
+
         throw std::runtime_error("Not yet implemented!");
     }
 
