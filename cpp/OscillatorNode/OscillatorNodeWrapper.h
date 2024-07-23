@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "AudioDestinationNodeWrapper.h"
+#include "AudioNodeWrapper.h"
 
 #ifdef ANDROID
 #include "OscillatorNode.h"
@@ -10,13 +10,11 @@
 namespace audiocontext {
     using namespace facebook;
 
-    class AudioDestinationNodeWrapper;
-
 #ifdef ANDROID
     class OscillatorNode;
 #endif
 
-    class OscillatorNodeWrapper {
+    class OscillatorNodeWrapper: public AudioNodeWrapper {
 #ifdef ANDROID
     private:
         std::shared_ptr<OscillatorNode> oscillator_;
@@ -24,7 +22,8 @@ namespace audiocontext {
 
     public:
 #ifdef ANDROID
-        explicit OscillatorNodeWrapper(std::shared_ptr<OscillatorNode> oscillator) : oscillator_(oscillator) {}
+    explicit OscillatorNodeWrapper( std::shared_ptr<OscillatorNode> oscillator) : AudioNodeWrapper(
+            oscillator), oscillator_(oscillator) {}
 #else
         explicit OscillatorNodeWrapper() {}
 #endif
@@ -33,11 +32,9 @@ namespace audiocontext {
         std::string getType();
         void start(double time);
         void stop(double time);
-        void connect(std::shared_ptr<AudioDestinationNodeWrapper> destination);
 
         void setFrequency(double frequency);
         void setDetune(double detune);
-        void setType(std::string type);
-
+        void setType(const std::string& type);
     };
 } // namespace audiocontext
