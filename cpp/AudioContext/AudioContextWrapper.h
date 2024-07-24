@@ -29,7 +29,7 @@ namespace audiocontext {
     public:
 #ifdef ANDROID
         explicit AudioContextWrapper(
-                std::shared_ptr<AudioContext> audiocontext) : audiocontext_(audiocontext) {}
+                const std::shared_ptr<AudioContext> &audiocontext) : audiocontext_(audiocontext) {}
 #else
         explicit AudioContextWrapper() {}
 #endif

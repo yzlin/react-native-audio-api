@@ -18,13 +18,11 @@ namespace audiocontext {
 #ifdef ANDROID
     private:
         std::shared_ptr<GainNode> gain_;
-#endif
-
     public:
-#ifdef ANDROID
-        explicit GainNodeWrapper( std::shared_ptr<GainNode> gain) : AudioNodeWrapper(
+        explicit GainNodeWrapper(const std::shared_ptr<GainNode> &gain) : AudioNodeWrapper(
                 gain), gain_(gain) {}
 #else
+    public:
         explicit GainNodeWrapper() {}
 #endif
         double getGain();

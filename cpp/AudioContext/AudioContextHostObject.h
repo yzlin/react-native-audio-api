@@ -20,9 +20,9 @@ namespace audiocontext
         std::shared_ptr<AudioContextWrapper> wrapper_;
 
     public:
-        explicit AudioContextHostObject(std::shared_ptr<AudioContextWrapper> wrapper) : wrapper_(wrapper) {}
+        explicit AudioContextHostObject(const std::shared_ptr<AudioContextWrapper> &wrapper) : wrapper_(wrapper) {}
 
-        static void createAndInstallFromWrapper(const std::shared_ptr<AudioContextWrapper>& wrapper, jlong jsContext) {
+        static void createAndInstallFromWrapper(const std::shared_ptr<AudioContextWrapper> &wrapper, jlong jsContext) {
             auto runtime = reinterpret_cast<jsi::Runtime *>(jsContext);
             auto hostObject = std::make_shared<AudioContextHostObject>(wrapper);
             auto object = jsi::Object::createFromHostObject(*runtime, hostObject);

@@ -6,13 +6,12 @@ namespace audiocontext
 
   std::vector<jsi::PropNameID> OscillatorNodeHostObject::getPropertyNames(jsi::Runtime &runtime)
   {
-    std::vector<jsi::PropNameID> propertyNames;
+    std::vector<jsi::PropNameID> propertyNames = AudioNodeHostObject::getPropertyNames(runtime);
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "start"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "stop"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "frequency"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "detune"));
     propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "type"));
-    propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "connect"));
     return propertyNames;
   }
 
@@ -58,17 +57,7 @@ namespace audiocontext
         return jsi::String::createFromUtf8(runtime, waveType);
     }
 
-    if (propName == "connect")
-    {
-        return jsi::Function::createFromHostFunction(runtime, propNameId, 1, [this](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value
-        {
-            auto node = args[0].getObject(rt).getHostObject<AudioNodeHostObject>(rt);
-            wrapper_->connect(std::shared_ptr<AudioNodeHostObject>(node)->wrapper_);
-            return jsi::Value::undefined();
-        });
-    }
-
-    throw std::runtime_error("Prop not yet implemented!");
+    return AudioNodeHostObject::get(runtime, propNameId);
   }
 
   void OscillatorNodeHostObject::set(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value)

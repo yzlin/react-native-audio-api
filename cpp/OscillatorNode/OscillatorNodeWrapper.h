@@ -18,13 +18,11 @@ namespace audiocontext {
 #ifdef ANDROID
     private:
         std::shared_ptr<OscillatorNode> oscillator_;
-#endif
-
     public:
-#ifdef ANDROID
-    explicit OscillatorNodeWrapper( std::shared_ptr<OscillatorNode> oscillator) : AudioNodeWrapper(
-            oscillator), oscillator_(oscillator) {}
+        explicit OscillatorNodeWrapper(const std::shared_ptr<OscillatorNode> &oscillator) : AudioNodeWrapper(
+                oscillator), oscillator_(oscillator) {}
 #else
+    public:
         explicit OscillatorNodeWrapper() {}
 #endif
         double getFrequency();
@@ -32,7 +30,6 @@ namespace audiocontext {
         std::string getType();
         void start(double time);
         void stop(double time);
-
         void setFrequency(double frequency);
         void setDetune(double detune);
         void setType(const std::string& type);

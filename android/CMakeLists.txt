@@ -44,7 +44,7 @@ add_library(react-native-audio-context SHARED
         ../cpp/OscillatorNode/OscillatorNodeWrapper.h
         ../cpp/OscillatorNode/android/OscillatorNodeWrapper.cpp
 
-        ../cpp/AudioNode/AudioNodeHostObject.h
+        ../cpp/AudioNode/AudioNodeHostObject
         ../cpp/AudioNode/AudioNodeWrapper.h
         ../cpp/AudioNode/android/AudioNodeWrapper.cpp
 
