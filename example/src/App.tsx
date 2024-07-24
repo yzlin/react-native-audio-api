@@ -7,6 +7,7 @@ import {
   AudioContext,
   type Oscillator,
   type Gain,
+  type StereoPanner,
 } from 'react-native-audio-context';
 
 const App = () => {
@@ -14,10 +15,12 @@ const App = () => {
   const [gain, setGain] = useState<number>(1.0);
   const [frequency, setFrequency] = useState<number>(440);
   const [detune, setDetune] = useState<number>(0);
+  const [pan, setPan] = useState<number>(0);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
   const gainRef = useRef<Gain | null>(null);
+  const panRef = useRef<StereoPanner | null>(null);
 
   const setUp = () => {
     audioContextRef.current = new AudioContext();
@@ -30,9 +33,13 @@ const App = () => {
     gainRef.current = audioContextRef.current.createGain();
     gainRef.current.gain = gain;
 
+    panRef.current = audioContextRef.current.createStereoPanner();
+    panRef.current.pan = pan;
+
     const destination = audioContextRef.current.destination;
     oscillatorRef.current.connect(gainRef.current);
-    gainRef.current.connect(destination);
+    gainRef.current.connect(panRef.current);
+    panRef.current.connect(destination);
   };
 
   const handleSliderChange = (
@@ -88,6 +95,19 @@ const App = () => {
           }
           minimumValue={0.0}
           maximumValue={1.0}
+          step={0.1}
+        />
+      </View>
+      <View style={styles.container}>
+        <Text>Pan: {pan.toFixed(1)}</Text>
+        <Slider
+          containerStyle={styles.slider}
+          value={pan}
+          onValueChange={(value) =>
+            handleSliderChange(value, 0, setPan, panRef, 'pan')
+          }
+          minimumValue={-1}
+          maximumValue={1}
           step={0.1}
         />
       </View>

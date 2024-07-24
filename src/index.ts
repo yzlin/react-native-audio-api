@@ -5,6 +5,7 @@ import type {
   BaseAudioContext,
   AudioDestinationNode,
   Gain,
+  StereoPanner,
 } from './types';
 
 declare global {
@@ -27,6 +28,10 @@ export class AudioContext implements BaseAudioContext {
   createGain(): Gain {
     return global.__AudioContext.createGain();
   }
+
+  createStereoPanner() {
+    return global.__AudioContext.createStereoPanner();
+  }
 }
 
-export type { Oscillator, Gain };
+export type { Oscillator, Gain, StereoPanner };

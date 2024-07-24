@@ -10,6 +10,7 @@
 #include "OscillatorNode.h"
 #include "AudioDestinationNode.h"
 #include "GainNode.h"
+#include "StereoPannerNode.h"
 
 namespace audiocontext
 {
@@ -38,9 +39,11 @@ namespace audiocontext
       });
     }
 
-    std::shared_ptr<OscillatorNode> createOscillator();
     std::shared_ptr<AudioDestinationNode> getDestination();
+    std::shared_ptr<OscillatorNode> createOscillator();
     std::shared_ptr<GainNode> createGain();
+    std::shared_ptr<StereoPannerNode> createStereoPanner();
+
 
     void install(jlong jsContext);
 

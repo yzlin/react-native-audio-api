@@ -13,23 +13,23 @@ namespace audiocontext
         AudioContextHostObject::createAndInstallFromWrapper(audioContextWrapper, jsContext);
     }
 
-  std::shared_ptr<OscillatorNode> AudioContext::createOscillator()
-  {
-    static const auto method = javaClassLocal()->getMethod<OscillatorNode()>("createOscillator");
-    auto oscillator = method(javaObject_.get());
-    auto oscillatorCppInstance = oscillator->cthis();
+    std::shared_ptr<OscillatorNode> AudioContext::createOscillator()
+    {
+        static const auto method = javaClassLocal()->getMethod<OscillatorNode()>("createOscillator");
+        auto oscillator = method(javaObject_.get());
+        auto oscillatorCppInstance = oscillator->cthis();
 
-    return std::shared_ptr<OscillatorNode>(oscillatorCppInstance);
-  }
+        return std::shared_ptr<OscillatorNode>(oscillatorCppInstance);
+    }
 
-  std::shared_ptr<AudioDestinationNode> AudioContext::getDestination()
-  {
-    static const auto method = javaClassLocal()->getMethod<AudioDestinationNode()>("getDestination");
-    auto destination = method(javaObject_.get());
-    auto destinationCppInstance = destination->cthis();
+    std::shared_ptr<AudioDestinationNode> AudioContext::getDestination()
+    {
+        static const auto method = javaClassLocal()->getMethod<AudioDestinationNode()>("getDestination");
+        auto destination = method(javaObject_.get());
+        auto destinationCppInstance = destination->cthis();
 
-    return std::shared_ptr<AudioDestinationNode>(destinationCppInstance);
-  }
+        return std::shared_ptr<AudioDestinationNode>(destinationCppInstance);
+    }
 
     std::shared_ptr<GainNode> AudioContext::createGain()
     {
@@ -40,4 +40,12 @@ namespace audiocontext
         return std::shared_ptr<GainNode>(gainCppInstance);
     }
 
+    std::shared_ptr<StereoPannerNode> AudioContext::createStereoPanner()
+    {
+        static const auto method = javaClassLocal()->getMethod<StereoPannerNode()>("createStereoPanner");
+        auto stereoPanner = method(javaObject_.get());
+        auto stereoPannerCppInstance = stereoPanner->cthis();
+
+        return std::shared_ptr<StereoPannerNode>(stereoPannerCppInstance);
+    }
 } // namespace audiocontext
