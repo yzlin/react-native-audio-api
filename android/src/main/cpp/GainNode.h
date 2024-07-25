@@ -16,7 +16,7 @@ namespace audiocontext {
     public:
         static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/GainNode;";
 
-        std::shared_ptr<AudioParam> getGain();
+        std::shared_ptr<AudioParam> getGainParam();
     };
 
 } // namespace audiocontext

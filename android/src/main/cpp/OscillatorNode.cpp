@@ -14,7 +14,7 @@ namespace audiocontext {
         method(javaObject_.get(), time);
     }
 
-    std::shared_ptr<AudioParam> OscillatorNode::getFrequency() {
+    std::shared_ptr<AudioParam> OscillatorNode::getFrequencyParam() {
         static const auto method = javaClassLocal()->getMethod<AudioParam()>("getFrequency");
         auto frquency = method(javaObject_.get());
         auto frquencyCppInstance = frquency->cthis();
@@ -22,7 +22,7 @@ namespace audiocontext {
         return std::shared_ptr<AudioParam>(frquencyCppInstance);
     }
 
-    std::shared_ptr<AudioParam> OscillatorNode::getDetune() {
+    std::shared_ptr<AudioParam> OscillatorNode::getDetuneParam() {
         static const auto method = javaClassLocal()->getMethod<AudioParam()>("getDetune");
         auto detune = method(javaObject_.get());
         auto detuneCppInstance = detune->cthis();

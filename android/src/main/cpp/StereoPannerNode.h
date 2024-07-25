@@ -16,7 +16,7 @@ namespace audiocontext {
     public:
         static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/StereoPannerNode;";
 
-        std::shared_ptr<AudioParam> getPan();
+        std::shared_ptr<AudioParam> getPanParam();
     };
 
 } // namespace audiocontext
