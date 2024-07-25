@@ -17,5 +17,10 @@ namespace audiocontext {
         auto gain = audiocontext_->createGain();
         return std::make_shared<GainNodeWrapper>(gain);
     }
+
+    std::shared_ptr<StereoPannerNodeWrapper> AudioContextWrapper::createStereoPanner() {
+        auto panner = audiocontext_->createStereoPanner();
+        return std::make_shared<StereoPannerNodeWrapper>(panner);
+    }
 } // namespace audiocontext
 #endif

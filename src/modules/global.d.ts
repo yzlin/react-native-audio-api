@@ -3,6 +3,7 @@ import type { Oscillator } from '../types';
 type AudioContext = {
   createOscillator: () => Oscillator;
   createGain: () => Gain;
+  createStereoPanner: () => StereoPanner;
   destination: AudioDestinationNode | null;
 };
 
