@@ -11,6 +11,10 @@ export interface AudioNode {
   disconnect: () => void;
 }
 
+export interface AudioParam {
+  value: number;
+}
+
 export interface AudioDestinationNode extends AudioNode {}
 
 export interface AudioScheduledSourceNode extends AudioNode {
@@ -21,15 +25,15 @@ export interface AudioScheduledSourceNode extends AudioNode {
 type WaveType = 'sine' | 'square' | 'sawtooth' | 'triangle';
 
 export interface Oscillator extends AudioScheduledSourceNode {
-  frequency: number;
+  frequency: AudioParam;
   type: WaveType;
-  detune: number;
+  detune: AudioParam;
 }
 
 export interface Gain extends AudioNode {
-  gain: number;
+  gain: AudioParam;
 }
 
 export interface StereoPanner extends AudioNode {
-  pan: number;
+  pan: AudioParam;
 }
