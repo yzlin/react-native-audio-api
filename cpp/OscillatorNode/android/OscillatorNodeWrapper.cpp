@@ -1,3 +1,4 @@
+#ifdef ANDROID
 #include "OscillatorNodeWrapper.h"
 
 namespace audiocontext {
@@ -34,3 +35,4 @@ namespace audiocontext {
         oscillatorNode_->setWaveType(type);
     }
 }
+#endif

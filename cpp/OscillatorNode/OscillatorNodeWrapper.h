@@ -6,11 +6,11 @@
 
 #ifdef ANDROID
 #include "OscillatorNode.h"
+#else
+#include "IOSOscillator.h"
 #endif
 
 namespace audiocontext {
-    using namespace facebook;
-
 #ifdef ANDROID
     class OscillatorNode;
 #endif

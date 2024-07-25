@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
 
@@ -10,7 +10,7 @@ import {
   type StereoPanner,
 } from 'react-native-audio-context';
 
-const App = () => {
+const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [gain, setGain] = useState<number>(1.0);
   const [frequency, setFrequency] = useState<number>(440);
@@ -36,10 +36,12 @@ const App = () => {
     panRef.current = audioContextRef.current.createStereoPanner();
     panRef.current.pan.value = pan;
 
-    const destination = audioContextRef.current.destination;
-    oscillatorRef.current.connect(gainRef.current);
-    gainRef.current.connect(panRef.current);
-    panRef.current.connect(destination);
+    if (Platform.OS === 'android') {
+      const destination = audioContextRef.current.destination;
+      oscillatorRef.current.connect(gainRef.current);
+      gainRef.current.connect(panRef.current);
+      panRef.current.connect(destination!);
+    }
   };
 
   const handleGainChange = (value: number[]) => {
@@ -104,14 +106,14 @@ const App = () => {
         />
       </View>
       <View style={styles.container}>
-        <Text>Gain: {gain.toFixed(1)}</Text>
+        <Text>Gain: {gain.toFixed(2)}</Text>
         <Slider
           containerStyle={styles.slider}
           value={gain}
           onValueChange={handleGainChange}
           minimumValue={0.0}
           maximumValue={1.0}
-          step={0.1}
+          step={0.01}
         />
       </View>
       <View style={styles.container}>

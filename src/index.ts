@@ -7,11 +7,9 @@ import type {
   Gain,
   StereoPanner,
 } from './types';
+import { installACModule } from './utils/install';
 
-declare global {
-  function nativeCallSyncHook(): unknown;
-  var __AudioContext: BaseAudioContext;
-}
+installACModule();
 
 export class AudioContext implements BaseAudioContext {
   destination: AudioDestinationNode;
@@ -29,7 +27,7 @@ export class AudioContext implements BaseAudioContext {
     return global.__AudioContext.createGain();
   }
 
-  createStereoPanner() {
+  createStereoPanner(): StereoPanner {
     return global.__AudioContext.createStereoPanner();
   }
 }
