@@ -26,6 +26,6 @@ namespace audiocontext {
     public:
         explicit GainNodeWrapper() {}
 #endif
-        std::shared_ptr<AudioParamWrapper> getGain();
+        std::shared_ptr<AudioParamWrapper> getGainParam();
     };
 } // namespace audiocontext

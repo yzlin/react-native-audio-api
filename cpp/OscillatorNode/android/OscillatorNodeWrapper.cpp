@@ -2,13 +2,13 @@
 
 namespace audiocontext {
 
-    std::shared_ptr<AudioParamWrapper> OscillatorNodeWrapper::getFrequency() {
-        auto frequency = oscillator_->getFrequency();
+    std::shared_ptr<AudioParamWrapper> OscillatorNodeWrapper::getFrequencyParam() {
+        auto frequency = oscillator_->getFrequencyParam();
         return std::make_shared<AudioParamWrapper>(frequency);
     }
 
-    std::shared_ptr<AudioParamWrapper> OscillatorNodeWrapper::getDetune() {
-        auto detune = oscillator_->getDetune();
+    std::shared_ptr<AudioParamWrapper> OscillatorNodeWrapper::getDetuneParam() {
+        auto detune = oscillator_->getDetuneParam();
         return std::make_shared<AudioParamWrapper>(detune);
     }
 

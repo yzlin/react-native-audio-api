@@ -26,6 +26,6 @@ namespace audiocontext {
         public:
         explicit PannerNodeWrapper() {}
 #endif
-        std::shared_ptr<AudioParamWrapper> getPan();
+        std::shared_ptr<AudioParamWrapper> getPanParam();
     };
 } // namespace audiocontext

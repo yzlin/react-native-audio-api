@@ -26,8 +26,8 @@ namespace audiocontext {
     public:
         explicit OscillatorNodeWrapper() {}
 #endif
-        std::shared_ptr<AudioParamWrapper> getFrequency();
-        std::shared_ptr<AudioParamWrapper> getDetune();
+        std::shared_ptr<AudioParamWrapper> getFrequencyParam();
+        std::shared_ptr<AudioParamWrapper> getDetuneParam();
         std::string getType();
         void start(double time);
         void stop(double time);
