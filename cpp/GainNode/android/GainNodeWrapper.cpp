@@ -2,11 +2,8 @@
 
 namespace audiocontext {
 
-    double GainNodeWrapper::getGain() {
-        return gain_->getGain();
+    std::shared_ptr<AudioParamWrapper> GainNodeWrapper::getGain() {
+        auto gain = gain_->getGain();
+        return std::make_shared<AudioParamWrapper>(gain);
     }
-
-    void GainNodeWrapper::setGain(double gain) {
-        gain_->setGain(gain);
-    }
-}
+} // namespace audiocontext

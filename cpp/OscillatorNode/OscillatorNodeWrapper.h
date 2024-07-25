@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "AudioNodeWrapper.h"
+#include "AudioParamWrapper.h"
 
 #ifdef ANDROID
 #include "OscillatorNode.h"
@@ -25,13 +26,11 @@ namespace audiocontext {
     public:
         explicit OscillatorNodeWrapper() {}
 #endif
-        double getFrequency();
-        double getDetune();
+        std::shared_ptr<AudioParamWrapper> getFrequency();
+        std::shared_ptr<AudioParamWrapper> getDetune();
         std::string getType();
         void start(double time);
         void stop(double time);
-        void setFrequency(double frequency);
-        void setDetune(double detune);
         void setType(const std::string& type);
     };
 } // namespace audiocontext

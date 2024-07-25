@@ -2,11 +2,8 @@
 
 namespace audiocontext {
 
-    double StereoPannerNodeWrapper::getPan() {
-        return panner_->getPan();
-    }
-
-    void StereoPannerNodeWrapper::setPan(double pan) {
-        panner_->setPan(pan);
+    std::shared_ptr<AudioParamWrapper> StereoPannerNodeWrapper::getPan() {
+        auto pan = panner_->getPan();
+        return std::make_shared<AudioParamWrapper>(pan);
     }
 } // namespace audiocontext

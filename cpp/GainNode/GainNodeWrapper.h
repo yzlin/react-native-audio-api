@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "AudioNodeWrapper.h"
+#include "AudioParamWrapper.h"
 
 #ifdef ANDROID
 #include "GainNode.h"
@@ -25,7 +26,6 @@ namespace audiocontext {
     public:
         explicit GainNodeWrapper() {}
 #endif
-        double getGain();
-        void setGain(double gain);
+        std::shared_ptr<AudioParamWrapper> getGain();
     };
 } // namespace audiocontext

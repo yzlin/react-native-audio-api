@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "AudioNodeWrapper.h"
+#include "AudioParamWrapper.h"
 
 #ifdef ANDROID
 #include "StereoPannerNode.h"
@@ -25,7 +26,6 @@ namespace audiocontext {
         public:
         explicit PannerNodeWrapper() {}
 #endif
-        double getPan();
-        void setPan(double pan);
+        std::shared_ptr<AudioParamWrapper> getPan();
     };
 } // namespace audiocontext
