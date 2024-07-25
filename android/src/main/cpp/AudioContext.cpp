@@ -22,7 +22,7 @@ namespace audiocontext
     return std::shared_ptr<OscillatorNode>(oscillatorCppInstance);
   }
 
-    std::shared_ptr<AudioDestinationNode> AudioContext::getDestination()
+  std::shared_ptr<AudioDestinationNode> AudioContext::getDestination()
   {
     static const auto method = javaClassLocal()->getMethod<AudioDestinationNode()>("getDestination");
     auto destination = method(javaObject_.get());
@@ -30,5 +30,14 @@ namespace audiocontext
 
     return std::shared_ptr<AudioDestinationNode>(destinationCppInstance);
   }
+
+    std::shared_ptr<GainNode> AudioContext::createGain()
+    {
+        static const auto method = javaClassLocal()->getMethod<GainNode()>("createGain");
+        auto gain = method(javaObject_.get());
+        auto gainCppInstance = gain->cthis();
+
+        return std::shared_ptr<GainNode>(gainCppInstance);
+    }
 
 } // namespace audiocontext

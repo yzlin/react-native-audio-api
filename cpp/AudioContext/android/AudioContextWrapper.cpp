@@ -12,5 +12,10 @@ namespace audiocontext {
         auto destination = audiocontext_->getDestination();
         return std::make_shared<AudioDestinationNodeWrapper>(destination);
     }
+
+    std::shared_ptr<GainNodeWrapper> AudioContextWrapper::createGain() {
+        auto gain = audiocontext_->createGain();
+        return std::make_shared<GainNodeWrapper>(gain);
+    }
 } // namespace audiocontext
 #endif

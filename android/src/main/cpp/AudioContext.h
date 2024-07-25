@@ -6,9 +6,10 @@
 #include <react/jni/JMessageQueueThread.h>
 #include <memory>
 #include "AudioContextHostObject.h"
+#include "AudioContextWrapper.h"
 #include "OscillatorNode.h"
 #include "AudioDestinationNode.h"
-#include "AudioContextWrapper.h"
+#include "GainNode.h"
 
 namespace audiocontext
 {
@@ -39,6 +40,7 @@ namespace audiocontext
 
     std::shared_ptr<OscillatorNode> createOscillator();
     std::shared_ptr<AudioDestinationNode> getDestination();
+    std::shared_ptr<GainNode> createGain();
 
     void install(jlong jsContext);
 
