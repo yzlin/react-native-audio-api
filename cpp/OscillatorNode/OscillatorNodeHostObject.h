@@ -3,6 +3,7 @@
 #include <jsi/jsi.h>
 #include "OscillatorNodeWrapper.h"
 #include "AudioNodeHostObject.h"
+#include "AudioParamHostObject.h"
 
 namespace audiocontext {
     using namespace facebook;

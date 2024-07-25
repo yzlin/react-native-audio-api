@@ -17,8 +17,9 @@ namespace audiocontext
 
         if (propName == "pan")
         {
-            auto gain = wrapper_->getPan();
-            return jsi::Value(gain);
+            auto panParamWrapper = wrapper_->getPanParam();
+            auto panParamHostObject = AudioParamHostObject::createFromWrapper(panParamWrapper);
+            return jsi::Object::createFromHostObject(runtime, panParamHostObject);
         }
 
         return AudioNodeHostObject::get(runtime, propNameId);
@@ -27,13 +28,6 @@ namespace audiocontext
     void StereoPannerNodeHostObject::set(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value)
     {
         auto propName = propNameId.utf8(runtime);
-
-        if (propName == "pan")
-        {
-            double pan = value.getNumber();
-            wrapper_->setPan(pan);
-            return;
-        }
 
         throw std::runtime_error("Not yet implemented!");
     }

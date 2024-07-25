@@ -3,6 +3,7 @@
 #include <jsi/jsi.h>
 #include "StereoPannerNodeWrapper.h"
 #include "AudioNodeHostObject.h"
+#include "AudioParamHostObject.h"
 
 namespace audiocontext {
     using namespace facebook;

@@ -23,7 +23,8 @@ namespace audiocontext {
         auto propName = propNameId.utf8(runtime);
 
         if(propName == "value") {
-            wrapper_->setValue(value.getNumber());
+            double paramValue = value.getNumber();
+            wrapper_->setValue(paramValue);
             return;
         }
 

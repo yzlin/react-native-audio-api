@@ -41,14 +41,16 @@ namespace audiocontext
 
     if (propName == "frequency")
     {
-        auto frequency = wrapper_->getFrequency();
-        return jsi::Value(frequency);
+        auto frequencyParamWrapper = wrapper_->getFrequencyParam();
+        auto frequencyParamHostObject = AudioParamHostObject::createFromWrapper(frequencyParamWrapper);
+        return jsi::Object::createFromHostObject(runtime, frequencyParamHostObject);
     }
 
     if (propName == "detune")
     {
-        auto detune = wrapper_->getDetune();
-        return jsi::Value(detune);
+        auto detuneParamWrapper = wrapper_->getDetuneParam();
+        auto detuneParamHostObject = AudioParamHostObject::createFromWrapper(detuneParamWrapper);
+        return jsi::Object::createFromHostObject(runtime, detuneParamHostObject);
     }
 
     if (propName == "type")
@@ -63,21 +65,6 @@ namespace audiocontext
   void OscillatorNodeHostObject::set(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value)
   {
     auto propName = propNameId.utf8(runtime);
-
-    if (propName == "frequency")
-    {
-        double frequency = value.getNumber();
-        wrapper_->setFrequency(frequency);
-        return;
-    }
-
-    if (propName == "detune")
-    {
-
-        double detune = value.getNumber();
-        wrapper_->setDetune(detune);
-        return;
-    }
 
     if (propName == "type")
     {

@@ -17,8 +17,9 @@ namespace audiocontext
 
         if (propName == "gain")
         {
-            auto gain = wrapper_->getGain();
-            return jsi::Value(gain);
+            auto gainParamWrapper = wrapper_->getGainParam();
+            auto gainParamHostObject = AudioParamHostObject::createFromWrapper(gainParamWrapper);
+            return jsi::Object::createFromHostObject(runtime, gainParamHostObject);
         }
 
         return AudioNodeHostObject::get(runtime, propNameId);
@@ -27,13 +28,6 @@ namespace audiocontext
     void GainNodeHostObject::set(jsi::Runtime &runtime, const jsi::PropNameID &propNameId, const jsi::Value &value)
     {
         auto propName = propNameId.utf8(runtime);
-
-        if (propName == "gain")
-        {
-            double gain = value.getNumber();
-            wrapper_->setGain(gain);
-            return;
-        }
 
         throw std::runtime_error("Not yet implemented!");
     }
