@@ -5,6 +5,7 @@
 #include <react/jni/JMessageQueueThread.h>
 #include <memory>
 #include "AudioNode.h"
+#include "AudioParam.h"
 
 namespace audiocontext {
 
@@ -19,15 +20,11 @@ namespace audiocontext {
 
         void stop(double time);
 
-        double getFrequency();
+        std::shared_ptr<AudioParam> getFrequency();
 
-        double getDetune();
+        std::shared_ptr<AudioParam> getDetune();
 
         std::string getWaveType();
-
-        void setFrequency(double frequency);
-
-        void setDetune(double detune);
 
         void setWaveType(const std::string &waveType);
     };
