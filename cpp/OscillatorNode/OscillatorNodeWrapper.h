@@ -18,14 +18,14 @@ namespace audiocontext {
     class OscillatorNodeWrapper: public AudioNodeWrapper {
 #ifdef ANDROID
     private:
-        std::shared_ptr<OscillatorNode> oscillator_;
+        std::shared_ptr<OscillatorNode> oscillatorNode_;
     public:
-        explicit OscillatorNodeWrapper(const std::shared_ptr<OscillatorNode> &oscillator) : AudioNodeWrapper(
-                oscillator), oscillator_(oscillator) {}
-#else
-    public:
-        explicit OscillatorNodeWrapper() {}
+        explicit OscillatorNodeWrapper(const std::shared_ptr<OscillatorNode> &oscillator);
 #endif
+    private:
+        std::shared_ptr<AudioParamWrapper> frequencyParam_;
+        std::shared_ptr<AudioParamWrapper> detuneParam_;
+    public:
         std::shared_ptr<AudioParamWrapper> getFrequencyParam();
         std::shared_ptr<AudioParamWrapper> getDetuneParam();
         std::string getType();

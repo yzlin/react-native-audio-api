@@ -25,15 +25,16 @@ namespace audiocontext {
 #ifdef ANDROID
     private:
         std::shared_ptr<AudioContext> audiocontext_;
-#endif
 
     public:
-#ifdef ANDROID
-        explicit AudioContextWrapper(
-                const std::shared_ptr<AudioContext> &audiocontext) : audiocontext_(audiocontext) {}
+        explicit AudioContextWrapper(const std::shared_ptr<AudioContext> &audiocontext);
 #else
+    public
         explicit AudioContextWrapper() {}
 #endif
+    private:
+        std::shared_ptr<AudioDestinationNodeWrapper> destinationNode_;
+    public:
         std::shared_ptr<OscillatorNodeWrapper> createOscillator();
         std::shared_ptr<AudioDestinationNodeWrapper> getDestination();
         std::shared_ptr<GainNodeWrapper> createGain();
