@@ -19,6 +19,7 @@ include_directories(
         ../cpp/AudioNode
         ../cpp/GainNode
         ../cpp/StereoPannerNode
+        ../cpp/AudioParam
         src/main/cpp
         ../node_modules/react-native/ReactCommon/jsi
         ../node_modules/react-native/ReactAndroid/src/main/jni/react/jni
@@ -33,6 +34,7 @@ add_library(react-native-audio-context SHARED
         src/main/cpp/AudioNode
         src/main/cpp/GainNode
         src/main/cpp/StereoPannerNode
+        src/main/cpp/AudioParam
 
         ../cpp/AudioContext/AudioContextHostObject
         ../cpp/AudioContext/AudioContextWrapper.h
@@ -57,6 +59,10 @@ add_library(react-native-audio-context SHARED
         ../cpp/StereoPannerNode/StereoPannerNodeHostObject
         ../cpp/StereoPannerNode/StereoPannerNodeWrapper.h
         ../cpp/StereoPannerNode/android/StereoPannerNodeWrapper.cpp
+
+        ../cpp/AudioParam/AudioParamHostObject
+        ../cpp/AudioParam/AudioParamWrapper.h
+        ../cpp/AudioParam/android/AudioParamWrapper.cpp
 )
 
 find_package(ReactAndroid REQUIRED CONFIG)
