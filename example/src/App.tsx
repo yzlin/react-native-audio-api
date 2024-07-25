@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const [gain, setGain] = useState<number>(1.0);
   const [frequency, setFrequency] = useState<number>(440);
   const [detune, setDetune] = useState<number>(0);
-  
+
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
   const gainRef = useRef<Gain | null>(null);
@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
     gainRef.current = audioContextRef.current.createGain();
     gainRef.current.gain = gain;
-      
+
     if (Platform.OS === 'android') {
       const destination = audioContextRef.current.destination;
       oscillatorRef.current.connect(destination!);
@@ -59,7 +59,7 @@ const App: React.FC = () => {
       oscillatorRef.current.detune = newValue;
     }
   };
-  
+
   useEffect(() => {
     return () => {
       oscillatorRef.current?.stop(0);
