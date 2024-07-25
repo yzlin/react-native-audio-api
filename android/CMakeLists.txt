@@ -28,7 +28,7 @@ add_library(react-native-audio-context SHARED
         src/main/cpp/OnLoad.cpp
         src/main/cpp/AudioContext
         src/main/cpp/OscillatorNode
-        src/main/cpp/AudioDestinationNode
+        src/main/cpp/AudioDestinationNode.h
         src/main/cpp/AudioNode
         src/main/cpp/GainNode
 

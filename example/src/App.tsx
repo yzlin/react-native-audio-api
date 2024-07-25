@@ -35,17 +35,27 @@ const App = () => {
     gainRef.current.connect(destination);
   };
 
-  const handleSliderChange = (
-    value: number[],
-    defaultValue: number,
-    setValue: (value: number) => void,
-    ref: React.MutableRefObject<{ [key: string]: any } | null>,
-    propName: string
-  ) => {
-    const newValue = value[0] || defaultValue;
-    setValue(newValue);
-    if (ref.current) {
-      ref.current[propName] = newValue;
+  const handleGainChange = (value: number[]) => {
+    const newValue = value[0] || 0.0;
+    setGain(newValue);
+    if (gainRef.current) {
+      gainRef.current.gain = newValue;
+    }
+  };
+
+  const handleFrequencyChange = (value: number[]) => {
+    const newValue = value[0] || 440;
+    setFrequency(newValue);
+    if (oscillatorRef.current) {
+      oscillatorRef.current.frequency = newValue;
+    }
+  };
+
+  const handleDetuneChange = (value: number[]) => {
+    const newValue = value[0] || 0;
+    setDetune(newValue);
+    if (oscillatorRef.current) {
+      oscillatorRef.current.detune = newValue;
     }
   };
 
@@ -83,12 +93,10 @@ const App = () => {
         <Slider
           containerStyle={styles.slider}
           value={gain}
-          onValueChange={(value) =>
-            handleSliderChange(value, 0.0, setGain, gainRef, 'gain')
-          }
+          onValueChange={handleGainChange}
           minimumValue={0.0}
           maximumValue={1.0}
-          step={0.1}
+          step={0.01}
         />
       </View>
       <View style={styles.container}>
@@ -96,15 +104,7 @@ const App = () => {
         <Slider
           containerStyle={styles.slider}
           value={frequency}
-          onValueChange={(value) =>
-            handleSliderChange(
-              value,
-              440,
-              setFrequency,
-              oscillatorRef,
-              'frequency'
-            )
-          }
+          onValueChange={handleFrequencyChange}
           minimumValue={120}
           maximumValue={1200}
           step={10}
@@ -115,9 +115,7 @@ const App = () => {
         <Slider
           containerStyle={styles.slider}
           value={detune}
-          onValueChange={(value) =>
-            handleSliderChange(value, 0, setDetune, oscillatorRef, 'detune')
-          }
+          onValueChange={handleDetuneChange}
           minimumValue={0}
           maximumValue={100}
           step={1}
