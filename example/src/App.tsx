@@ -13,7 +13,7 @@ import {
 const App = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [gain, setGain] = useState<number>(1.0);
-  const [frequency, setFrequency] = useState<number>(800);
+  const [frequency, setFrequency] = useState<number>(440);
   const [detune, setDetune] = useState<number>(0);
   const [pan, setPan] = useState<number>(0);
 
@@ -41,20 +41,6 @@ const App = () => {
     gainRef.current.connect(panRef.current);
     panRef.current.connect(destination);
   };
-
-  // const handleSliderChange = (
-  //   value: number[],
-  //   defaultValue: number,
-  //   setValue: (value: number) => void,
-  //   ref: React.MutableRefObject<{ [key: string]: any } | null>,
-  //   propName: string
-  // ) => {
-  //   const newValue = value[0] || defaultValue;
-  //   setValue(newValue);
-  //   if (ref.current) {
-  //     ref.current[propName].value = newValue;
-  //   }
-  // };
 
   const handleGainChange = (value: number[]) => {
     const newValue = value[0] || 0.0;
