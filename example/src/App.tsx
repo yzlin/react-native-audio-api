@@ -32,7 +32,8 @@ const App: React.FC = () => {
 
     if (Platform.OS === 'android') {
       const destination = audioContextRef.current.destination;
-      oscillatorRef.current.connect(destination!);
+      oscillatorRef.current.connect(gainRef.current);
+      gainRef.current.connect(destination!);
     }
   };
 
@@ -90,7 +91,7 @@ const App: React.FC = () => {
         />
       </View>
       <View style={styles.container}>
-        <Text>Gain: {gain.toFixed(1)}</Text>
+        <Text>Gain: {gain.toFixed(2)}</Text>
         <Slider
           containerStyle={styles.slider}
           value={gain}

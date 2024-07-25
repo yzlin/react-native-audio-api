@@ -2,6 +2,7 @@ import type { Oscillator } from '../types';
 
 type AudioContext = {
   createOscillator: () => Oscillator;
+  createGain: () => Gain;
   destination: AudioDestinationNode | null;
 };
 

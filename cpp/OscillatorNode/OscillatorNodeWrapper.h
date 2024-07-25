@@ -17,10 +17,6 @@ namespace audiocontext {
     class OscillatorNodeWrapper: public AudioNodeWrapper {
 #ifdef ANDROID
         std::shared_ptr<OscillatorNode> oscillator_;
-#else
-        std::shared_ptr<IOSOscillator> oscillator_;
-#endif
-
     public:
         explicit OscillatorNodeWrapper(const std::shared_ptr<OscillatorNode> &oscillator) : AudioNodeWrapper(
                 oscillator), oscillator_(oscillator) {}
