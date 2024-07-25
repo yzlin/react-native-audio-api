@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
 
@@ -9,12 +9,12 @@ import {
   type Gain,
 } from 'react-native-audio-context';
 
-const App = () => {
+const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [gain, setGain] = useState<number>(1.0);
   const [frequency, setFrequency] = useState<number>(440);
   const [detune, setDetune] = useState<number>(0);
-
+  
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
   const gainRef = useRef<Gain | null>(null);
@@ -29,10 +29,11 @@ const App = () => {
 
     gainRef.current = audioContextRef.current.createGain();
     gainRef.current.gain = gain;
-
-    const destination = audioContextRef.current.destination;
-    oscillatorRef.current.connect(gainRef.current);
-    gainRef.current.connect(destination);
+      
+    if (Platform.OS === 'android') {
+      const destination = audioContextRef.current.destination;
+      oscillatorRef.current.connect(destination!);
+    }
   };
 
   const handleGainChange = (value: number[]) => {
@@ -58,7 +59,7 @@ const App = () => {
       oscillatorRef.current.detune = newValue;
     }
   };
-
+  
   useEffect(() => {
     return () => {
       oscillatorRef.current?.stop(0);

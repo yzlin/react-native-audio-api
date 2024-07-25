@@ -1,3 +1,4 @@
+#ifdef ANDROID
 #include "AudioContextWrapper.h"
 
 namespace audiocontext {
@@ -17,3 +18,4 @@ namespace audiocontext {
         return std::make_shared<GainNodeWrapper>(gain);
     }
 } // namespace audiocontext
+#endif

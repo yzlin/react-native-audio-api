@@ -6,11 +6,9 @@ import type {
   AudioDestinationNode,
   Gain,
 } from './types';
+import { installACModule } from './utils/install';
 
-declare global {
-  function nativeCallSyncHook(): unknown;
-  var __AudioContext: BaseAudioContext;
-}
+installACModule();
 
 export class AudioContext implements BaseAudioContext {
   destination: AudioDestinationNode;
