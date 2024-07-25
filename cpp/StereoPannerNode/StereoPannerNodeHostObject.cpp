@@ -4,6 +4,11 @@ namespace audiocontext
 {
     using namespace facebook;
 
+    StereoPannerNodeHostObject::StereoPannerNodeHostObject(const std::shared_ptr<StereoPannerNodeWrapper> &wrapper) : AudioNodeHostObject(wrapper), wrapper_(wrapper) {
+        auto panParam = wrapper_->getPanParam();
+        panParam_ = AudioParamHostObject::createFromWrapper(panParam);
+    }
+
     std::vector<jsi::PropNameID> StereoPannerNodeHostObject::getPropertyNames(jsi::Runtime &runtime)
     {
         std::vector<jsi::PropNameID> propertyNames = AudioNodeHostObject::getPropertyNames(runtime);
@@ -17,9 +22,7 @@ namespace audiocontext
 
         if (propName == "pan")
         {
-            auto panParamWrapper = wrapper_->getPanParam();
-            auto panParamHostObject = AudioParamHostObject::createFromWrapper(panParamWrapper);
-            return jsi::Object::createFromHostObject(runtime, panParamHostObject);
+            return jsi::Object::createFromHostObject(runtime, panParam_);
         }
 
         return AudioNodeHostObject::get(runtime, propNameId);

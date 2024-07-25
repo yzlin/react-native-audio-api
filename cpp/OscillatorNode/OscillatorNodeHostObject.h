@@ -13,9 +13,11 @@ namespace audiocontext {
     class OscillatorNodeHostObject : public AudioNodeHostObject {
     protected:
         std::shared_ptr<OscillatorNodeWrapper> wrapper_;
+        std::shared_ptr<AudioParamHostObject> frequencyParam_;
+        std::shared_ptr<AudioParamHostObject> detuneParam_;
 
     public:
-        explicit OscillatorNodeHostObject(const std::shared_ptr<OscillatorNodeWrapper> &wrapper) : AudioNodeHostObject(wrapper), wrapper_(wrapper) {}
+        explicit OscillatorNodeHostObject(const std::shared_ptr<OscillatorNodeWrapper> &wrapper);
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& name) override;
         void set(jsi::Runtime& runtime, const jsi::PropNameID& name, const jsi::Value& value) override;

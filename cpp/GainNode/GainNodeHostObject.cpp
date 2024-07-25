@@ -4,6 +4,11 @@ namespace audiocontext
 {
     using namespace facebook;
 
+    GainNodeHostObject::GainNodeHostObject(const std::shared_ptr<GainNodeWrapper> &wrapper) : AudioNodeHostObject(wrapper), wrapper_(wrapper) {
+        auto gainParamWrapper = wrapper->getGainParam();
+        gainParam_ = AudioParamHostObject::createFromWrapper(gainParamWrapper);
+    }
+
     std::vector<jsi::PropNameID> GainNodeHostObject::getPropertyNames(jsi::Runtime &runtime)
     {
         std::vector<jsi::PropNameID> propertyNames = AudioNodeHostObject::getPropertyNames(runtime);
@@ -17,9 +22,7 @@ namespace audiocontext
 
         if (propName == "gain")
         {
-            auto gainParamWrapper = wrapper_->getGainParam();
-            auto gainParamHostObject = AudioParamHostObject::createFromWrapper(gainParamWrapper);
-            return jsi::Object::createFromHostObject(runtime, gainParamHostObject);
+            return jsi::Object::createFromHostObject(runtime, gainParam_);
         }
 
         return AudioNodeHostObject::get(runtime, propNameId);

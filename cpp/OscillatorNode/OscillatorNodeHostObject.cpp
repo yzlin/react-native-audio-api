@@ -4,6 +4,13 @@ namespace audiocontext
 {
   using namespace facebook;
 
+    OscillatorNodeHostObject::OscillatorNodeHostObject(const std::shared_ptr<OscillatorNodeWrapper> &wrapper) : AudioNodeHostObject(wrapper), wrapper_(wrapper) {
+        auto frequencyParam = wrapper->getFrequencyParam();
+        frequencyParam_ = AudioParamHostObject::createFromWrapper(frequencyParam);
+        auto detuneParam = wrapper->getDetuneParam();
+        detuneParam_ = AudioParamHostObject::createFromWrapper(detuneParam);
+    }
+
   std::vector<jsi::PropNameID> OscillatorNodeHostObject::getPropertyNames(jsi::Runtime &runtime)
   {
     std::vector<jsi::PropNameID> propertyNames = AudioNodeHostObject::getPropertyNames(runtime);
@@ -41,16 +48,12 @@ namespace audiocontext
 
     if (propName == "frequency")
     {
-        auto frequencyParamWrapper = wrapper_->getFrequencyParam();
-        auto frequencyParamHostObject = AudioParamHostObject::createFromWrapper(frequencyParamWrapper);
-        return jsi::Object::createFromHostObject(runtime, frequencyParamHostObject);
+        return jsi::Object::createFromHostObject(runtime, frequencyParam_);
     }
 
     if (propName == "detune")
     {
-        auto detuneParamWrapper = wrapper_->getDetuneParam();
-        auto detuneParamHostObject = AudioParamHostObject::createFromWrapper(detuneParamWrapper);
-        return jsi::Object::createFromHostObject(runtime, detuneParamHostObject);
+        return jsi::Object::createFromHostObject(runtime, detuneParam_);
     }
 
     if (propName == "type")
