@@ -5,25 +5,23 @@
 
 #ifdef ANDROID
 #include "OscillatorNode.h"
+#else
+#include "IOSOscillator.h"
 #endif
 
 namespace audiocontext {
-    using namespace facebook;
-
 #ifdef ANDROID
     class OscillatorNode;
 #endif
 
     class OscillatorNodeWrapper: public AudioNodeWrapper {
 #ifdef ANDROID
-    private:
         std::shared_ptr<OscillatorNode> oscillator_;
     public:
         explicit OscillatorNodeWrapper(const std::shared_ptr<OscillatorNode> &oscillator) : AudioNodeWrapper(
                 oscillator), oscillator_(oscillator) {}
 #else
-    public:
-        explicit OscillatorNodeWrapper() {}
+        explicit OscillatorNodeWrapper() : oscillator_(std::make_shared<IOSOscillator>()) {}
 #endif
         double getFrequency();
         double getDetune();

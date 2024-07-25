@@ -1,4 +1,4 @@
-#ifdef ANDROID
+#ifndef ANDROID
 #include "OscillatorNodeWrapper.h"
 
 namespace audiocontext {
@@ -12,27 +12,27 @@ namespace audiocontext {
     }
 
     std::string OscillatorNodeWrapper::getType() {
-        return oscillator_->getWaveType();
+        return oscillator_->getType();
     }
 
     void OscillatorNodeWrapper::start(double time) {
-        oscillator_->start(time);
+        oscillator_->start();
     }
 
     void OscillatorNodeWrapper::stop(double time) {
-        oscillator_->stop(time);
+        oscillator_->stop();
     }
 
     void OscillatorNodeWrapper::setFrequency(double frequency) {
-        oscillator_->setFrequency(frequency);
+        oscillator_->changeFrequency(frequency);
     }
 
     void OscillatorNodeWrapper::setDetune(double detune) {
-        oscillator_->setDetune(detune);
+        oscillator_->changeDetune(detune);
     }
 
     void OscillatorNodeWrapper::setType(const std::string& type) {
-        oscillator_->setWaveType(type);
+        oscillator_->setType(type);
     }
 }
 #endif

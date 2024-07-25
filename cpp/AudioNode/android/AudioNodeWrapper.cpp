@@ -1,3 +1,4 @@
+#ifdef ANDROID
 #include "AudioNodeWrapper.h"
 
 namespace audiocontext {
@@ -10,3 +11,5 @@ namespace audiocontext {
         node_->disconnect(node->node_);
     }
 }
+
+#endif
