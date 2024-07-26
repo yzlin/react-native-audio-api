@@ -33,13 +33,13 @@ The `AudioContext` interface is the underlying audio context that manages the st
 &ensp;**`destination`**<br>
 &ensp;&ensp;&ensp;*Returns an `AudioDestinationNode` representing final destination of all audio in the context.*
 
-&ensp;**`sampleRate`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`sampleRate`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns a floating point number representing sample rate, in samples per second used by all nodes in this audio context*
 
-&ensp;**`currentTime`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`currentTime`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns a floating point number representing an ever-increasing hardware time in seconds. It starts at 0.*
 
-&ensp;**`state`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`state`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns a current state of this audio context. There are two states: running and closed.*
 
 #### Methods
@@ -53,10 +53,10 @@ The `AudioContext` interface is the underlying audio context that manages the st
 &ensp;**`createStereoPannerNode()`**<br>
 &ensp;&ensp;&ensp;*Returns and creates `StereoPannerNodeNode`.*
 
-&ensp;**`createBiquadFilter()`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`createBiquadFilter()`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns and creates `BiquadFilterNode`.*
 
-&ensp;**`close()`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`close()`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Closes audio context, releasing any system resources that it uses.*
 
 #### Code snippets
@@ -79,13 +79,13 @@ The `AudioNode` interface is the generic interface for all audio nodes in the au
 
 #### Properties
 
-&ensp;**`context`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`context`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the `AudioContext` associated with this node.*
 
-&ensp;**`numberOfInputs`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`numberOfInputs`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the number of inputs feeding the node. Source nodes are defined as nodes having value 0 for this property*
 
-&ensp;**`numberOfOutputs`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`numberOfOutputs`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the number of outputs coming out of the node. Destination nodes are defined as nodes having value 0 for this property*
 
 #### Methods
@@ -161,24 +161,24 @@ The `AudioParam` interface represents audio parameters that can be time-modulate
 &ensp;**`value`**<br>
 &ensp;&ensp;&ensp;*Returns the current value of this parameter. Initially set to defaultValue.*
 
-&ensp;**`defaultValue`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`defaultValue`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the initial value of this parameter.*
 
-&ensp;**`minValue`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`minValue`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the minimum value of this parameter*
 
-&ensp;**`maxValue`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`maxValue`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns the maximum value of this parameter*
 
 #### Methods
 
-&ensp;**`setValueAtTime(value: number, startTime: number)`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`setValueAtTime(value: number, startTime: number)`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Sets the parameter `value` at the specified time given by `startTime`.*
 
-&ensp;**`linearRampToValueAtTime(value: number, endTime: number)`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`linearRampToValueAtTime(value: number, endTime: number)`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Schedules a gradual linear change in the value. New `value` will be reached in the `endTime`.*
 
-&ensp;**`exponentialRampToValueAtTime(value: number, endTime: number)`**<span style="color:red"> not yet implemented</span><br>
+&ensp;**`exponentialRampToValueAtTime(value: number, endTime: number)`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Schedules a gradual exponential change in the value. New `value` will be reached in the `endTime`.*
 
 #### Code snippets
@@ -280,7 +280,7 @@ The `BiquadFilterNode` interface represents a simple low-order filter. It can re
 
 #### Properties
 
-<span style="color:red"> not yet implemented</span>
+:exclamation: not yet implemented :exclamation:
 
 #### Code snippets
 
