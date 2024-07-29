@@ -1,12 +1,14 @@
 export interface BaseAudioContext {
-  destination: AudioDestinationNode | null;
+  readonly destination: AudioDestinationNode | null;
   createOscillator(): Oscillator;
   createGain(): Gain;
   createStereoPanner(): StereoPanner;
 }
 
 export interface AudioNode {
-  context: BaseAudioContext;
+  readonly context: BaseAudioContext;
+  readonly numberOfInputs: number;
+  readonly numberOfOutputs: number;
   connect: (destination: AudioDestinationNode) => void;
   disconnect: () => void;
 }

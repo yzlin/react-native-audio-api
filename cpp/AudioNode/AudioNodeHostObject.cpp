@@ -7,6 +7,8 @@ namespace audiocontext {
         std::vector<jsi::PropNameID> propertyNames;
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "connect"));
         propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "disconnect"));
+        propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "numberOfInputs"));
+        propertyNames.push_back(jsi::PropNameID::forAscii(runtime, "numberOfOutputs"));
         return propertyNames;
     }
 
@@ -31,6 +33,16 @@ namespace audiocontext {
                 wrapper_->disconnect(std::shared_ptr<AudioNodeHostObject>(node)->wrapper_);
                 return jsi::Value::undefined();
             });
+        }
+
+        if (propName == "numberOfInputs")
+        {
+            return jsi::Value(wrapper_->getNumberOfInputs());
+        }
+
+        if (propName == "numberOfOutputs")
+        {
+            return jsi::Value(wrapper_->getNumberOfOutputs());
         }
 
         throw std::runtime_error("Not yet implemented!");
