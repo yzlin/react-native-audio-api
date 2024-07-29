@@ -8,8 +8,10 @@ import com.facebook.jni.HybridData
 
 class AudioContext() : BaseAudioContext {
   override val sampleRate: Int = 44100
+    get() = field
   override val destination: AudioDestinationNode = AudioDestinationNode(this)
     get() = field
+  override var state = ContextState.RUNNING
 
   private val mHybridData: HybridData?;
 
@@ -25,6 +27,10 @@ class AudioContext() : BaseAudioContext {
 
   external fun initHybrid(): HybridData?
   external fun install(jsContext: Long)
+
+  fun getState(): String {
+    return state.toString()
+  }
 
   override fun createOscillator(): OscillatorNode {
     return OscillatorNode(this)
