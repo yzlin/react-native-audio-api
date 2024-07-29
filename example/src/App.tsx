@@ -26,15 +26,15 @@ const App: React.FC = () => {
     audioContextRef.current = new AudioContext();
 
     oscillatorRef.current = audioContextRef.current.createOscillator();
-    oscillatorRef.current.frequency = frequency;
-    oscillatorRef.current.detune = detune;
+    oscillatorRef.current.frequency.value = frequency;
+    oscillatorRef.current.detune.value = detune;
     oscillatorRef.current.type = 'sine';
 
     gainRef.current = audioContextRef.current.createGain();
-    gainRef.current.gain = gain;
+    gainRef.current.gain.value = gain;
 
     panRef.current = audioContextRef.current.createStereoPanner();
-    panRef.current.pan = pan;
+    panRef.current.pan.value = pan;
 
     if (Platform.OS === 'android') {
       const destination = audioContextRef.current.destination;
@@ -48,7 +48,7 @@ const App: React.FC = () => {
     const newValue = value[0] || 0.0;
     setGain(newValue);
     if (gainRef.current) {
-      gainRef.current.gain = newValue;
+      gainRef.current.gain.value = newValue;
     }
   };
 
@@ -56,7 +56,7 @@ const App: React.FC = () => {
     const newValue = value[0] || 0;
     setPan(newValue);
     if (panRef.current) {
-      panRef.current.pan = newValue;
+      panRef.current.pan.value = newValue;
     }
   };
 
@@ -64,7 +64,7 @@ const App: React.FC = () => {
     const newValue = value[0] || 440;
     setFrequency(newValue);
     if (oscillatorRef.current) {
-      oscillatorRef.current.frequency = newValue;
+      oscillatorRef.current.frequency.value = newValue;
     }
   };
 
@@ -72,7 +72,7 @@ const App: React.FC = () => {
     const newValue = value[0] || 0;
     setDetune(newValue);
     if (oscillatorRef.current) {
-      oscillatorRef.current.detune = newValue;
+      oscillatorRef.current.detune.value = newValue;
     }
   };
 
