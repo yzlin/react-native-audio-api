@@ -13,15 +13,16 @@ namespace audiocontext {
 #ifdef ANDROID
     protected:
         std::shared_ptr<AudioParam> param_;
-        double defaultValue_;
-        double minValue_;
-        double maxValue_;
     public:
         explicit AudioParamWrapper(const std::shared_ptr<AudioParam> &param);
 #else
         public:
         explicit AudioParamWrapper() {}
 #endif
+    private:
+        double defaultValue_;
+        double minValue_;
+        double maxValue_;
     public:
         double getValue();
         void setValue(double value);
