@@ -26,6 +26,10 @@ export class AudioContext implements BaseAudioContext {
     this.sampleRate = global.__AudioContext.sampleRate;
   }
 
+  getCurrentTime(): number {
+    return global.__AudioContext.currentTime;
+  }
+
   createOscillator(): Oscillator {
     return global.__AudioContext.createOscillator();
   }

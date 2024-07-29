@@ -13,6 +13,7 @@ type AudioContext = {
   destination: AudioDestinationNode;
   state: ContextState;
   sampleRate: number;
+  currentTime: number;
 };
 
 export declare global {

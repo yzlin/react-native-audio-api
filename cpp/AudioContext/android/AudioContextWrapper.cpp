@@ -36,5 +36,9 @@ namespace audiocontext {
     int AudioContextWrapper::getSampleRate() {
         return sampleRate_;
     }
+
+    double AudioContextWrapper::getCurrentTime() {
+        return audiocontext_->getCurrentTime();
+    }
 } // namespace audiocontext
 #endif

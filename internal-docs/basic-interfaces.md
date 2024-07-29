@@ -36,9 +36,6 @@ The `AudioContext` interface is the underlying audio context that manages the st
 &ensp;**`sampleRate`**<br>
 &ensp;&ensp;&ensp;*Returns a floating point number representing sample rate, in samples per second used by all nodes in this audio context*
 
-&ensp;**`currentTime`**:exclamation: not yet implemented :exclamation:<br>
-&ensp;&ensp;&ensp;*Returns a floating point number representing an ever-increasing hardware time in seconds. It starts at 0.*
-
 &ensp;**`state`**<br>
 &ensp;&ensp;&ensp;*Returns a current state of this audio context. There are two states: running and closed.*
 
@@ -55,6 +52,9 @@ The `AudioContext` interface is the underlying audio context that manages the st
 
 &ensp;**`createBiquadFilter()`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Returns and creates `BiquadFilterNode`.*
+
+&ensp;**`getCurrentTime()`**<br>
+&ensp;&ensp;&ensp;*Returns a floating point number representing an ever-increasing hardware time in seconds. It starts at 0.*
 
 &ensp;**`close()`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Closes audio context, releasing any system resources that it uses.*

@@ -1,5 +1,6 @@
 package com.audiocontext.context
 
+import android.os.SystemClock
 import com.audiocontext.nodes.AudioDestinationNode
 import com.audiocontext.nodes.GainNode
 import com.audiocontext.nodes.StereoPannerNode
@@ -12,6 +13,7 @@ class AudioContext() : BaseAudioContext {
   override val destination: AudioDestinationNode = AudioDestinationNode(this)
     get() = field
   override var state = ContextState.RUNNING
+  private val contextStartTime: Long
 
   private val mHybridData: HybridData?;
 
@@ -23,10 +25,15 @@ class AudioContext() : BaseAudioContext {
 
   init {
     mHybridData = initHybrid()
+    contextStartTime = SystemClock.elapsedRealtimeNanos()
   }
 
   external fun initHybrid(): HybridData?
   external fun install(jsContext: Long)
+
+  fun getCurrentTime(): Double {
+    return (SystemClock.elapsedRealtimeNanos() - contextStartTime)/1_000_000_000.0
+  }
 
   fun getState(): String {
     return ContextState.toString(state)

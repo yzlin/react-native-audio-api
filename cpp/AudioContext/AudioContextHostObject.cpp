@@ -13,6 +13,7 @@ namespace audiocontext {
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "destination"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "state"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "sampleRate"));
+        propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "currentTime"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createOscillator"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createGain"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createStereoPanner"));
@@ -32,6 +33,10 @@ namespace audiocontext {
 
         if(propName == "sampleRate") {
             return jsi::Value(wrapper_->getSampleRate());
+        }
+
+        if(propName == "currentTime") {
+            return jsi::Value(wrapper_->getCurrentTime());
         }
 
         if(propName == "createOscillator") {

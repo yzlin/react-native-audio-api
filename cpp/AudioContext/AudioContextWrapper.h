@@ -45,5 +45,6 @@ namespace audiocontext {
         std::shared_ptr<StereoPannerNodeWrapper> createStereoPanner();
         std::string getState();
         int getSampleRate();
+        double getCurrentTime();
     };
 } // namespace audiocontext

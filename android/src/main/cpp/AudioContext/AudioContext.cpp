@@ -60,4 +60,10 @@ namespace audiocontext
         static const auto method = javaClassLocal()->getMethod<jint()>("getSampleRate");
         return method(javaObject_.get());
     }
+
+    double AudioContext::getCurrentTime()
+    {
+        static const auto method = javaClassLocal()->getMethod<jdouble()>("getCurrentTime");
+        return method(javaObject_.get());
+    }
 } // namespace audiocontext

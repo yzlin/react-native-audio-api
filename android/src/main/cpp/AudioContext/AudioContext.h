@@ -45,6 +45,7 @@ namespace audiocontext
     std::shared_ptr<StereoPannerNode> createStereoPanner();
     std::string getState();
     int getSampleRate();
+    double getCurrentTime();
 
     void install(jlong jsContext);
 
