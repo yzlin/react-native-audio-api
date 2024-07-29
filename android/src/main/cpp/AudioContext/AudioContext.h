@@ -43,7 +43,8 @@ namespace audiocontext
     std::shared_ptr<OscillatorNode> createOscillator();
     std::shared_ptr<GainNode> createGain();
     std::shared_ptr<StereoPannerNode> createStereoPanner();
-
+    std::string getState();
+    int getSampleRate();
 
     void install(jlong jsContext);
 

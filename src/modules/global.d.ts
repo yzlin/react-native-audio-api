@@ -1,10 +1,18 @@
-import type { Oscillator } from '../types';
+import type {
+  Oscillator,
+  Gain,
+  StereoPanner,
+  AudioDestinationNode,
+  ContextState,
+} from '../types';
 
 type AudioContext = {
   createOscillator: () => Oscillator;
   createGain: () => Gain;
   createStereoPanner: () => StereoPanner;
-  destination: AudioDestinationNode | null;
+  destination: AudioDestinationNode;
+  state: ContextState;
+  sampleRate: number;
 };
 
 export declare global {

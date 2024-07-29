@@ -1,5 +1,7 @@
 export interface BaseAudioContext {
-  readonly destination: AudioDestinationNode | null;
+  readonly destination: AudioDestinationNode;
+  readonly state: ContextState;
+  readonly sampleRate: number;
   createOscillator(): Oscillator;
   createGain(): Gain;
   createStereoPanner(): StereoPanner;
@@ -9,12 +11,15 @@ export interface AudioNode {
   readonly context: BaseAudioContext;
   readonly numberOfInputs: number;
   readonly numberOfOutputs: number;
-  connect: (destination: AudioDestinationNode) => void;
-  disconnect: () => void;
+  connect: (node: AudioNode) => void;
+  disconnect: (node: AudioNode) => void;
 }
 
 export interface AudioParam {
   value: number;
+  defaultValue: number;
+  minValue: number;
+  maxValue: number;
 }
 
 export interface AudioDestinationNode extends AudioNode {}
@@ -39,3 +44,5 @@ export interface Gain extends AudioNode {
 export interface StereoPanner extends AudioNode {
   pan: AudioParam;
 }
+
+export type ContextState = 'running' | 'closed';

@@ -29,7 +29,7 @@ class AudioContext() : BaseAudioContext {
   external fun install(jsContext: Long)
 
   fun getState(): String {
-    return state.toString()
+    return ContextState.toString(state)
   }
 
   override fun createOscillator(): OscillatorNode {
