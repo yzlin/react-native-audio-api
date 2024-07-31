@@ -56,7 +56,10 @@ The `AudioContext` interface is the underlying audio context that manages the st
 &ensp;**`createBiquadFilter()`**<br>
 &ensp;&ensp;&ensp;*Returns and creates `BiquadFilterNode`.*
 
-&ensp;**`close()`**<br>
+&ensp;**`getCurrentTime()`**<br>
+&ensp;&ensp;&ensp;*Returns a floating point number representing an ever-increasing hardware time in seconds. It starts at 0.*
+
+&ensp;**`close()`**:exclamation: not yet implemented :exclamation:<br>
 &ensp;&ensp;&ensp;*Closes audio context, releasing any system resources that it uses.*
 
 #### Code snippets
@@ -269,7 +272,7 @@ panner.pan.value = -0.5;
 
 ---
 
-### BiquadFilterNode
+### BiquadFilterNode :exclamation: not yet implemented :exclamation:
 
 The `BiquadFilterNode` interface represents a simple low-order filter. It can represent different kinds of filters, tone control devices, and graphic equalizers
 

@@ -14,13 +14,20 @@ namespace audiocontext {
     protected:
         std::shared_ptr<AudioParam> param_;
     public:
-        explicit AudioParamWrapper(const std::shared_ptr<AudioParam> &param) : param_(param) {}
+        explicit AudioParamWrapper(const std::shared_ptr<AudioParam> &param);
 #else
         public:
         explicit AudioParamWrapper() {}
 #endif
+    private:
+        double defaultValue_;
+        double minValue_;
+        double maxValue_;
     public:
         double getValue();
         void setValue(double value);
+        double getDefaultValue() const;
+        double getMinValue() const;
+        double getMaxValue() const;
     };
 } // namespace audiocontext

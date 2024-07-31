@@ -36,10 +36,15 @@ namespace audiocontext {
 #endif
     private:
         std::shared_ptr<AudioDestinationNodeWrapper> destinationNode_;
+        std::string state_;
+        int sampleRate_;
     public:
         std::shared_ptr<OscillatorNodeWrapper> createOscillator();
         std::shared_ptr<AudioDestinationNodeWrapper> getDestination();
         std::shared_ptr<GainNodeWrapper> createGain();
         std::shared_ptr<StereoPannerNodeWrapper> createStereoPanner();
+        std::string getState();
+        int getSampleRate();
+        double getCurrentTime();
     };
 } // namespace audiocontext
