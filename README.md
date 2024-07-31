@@ -15,18 +15,17 @@ npm install react-native-audio-context
 <details>
   <summary><b>AudioContext</b><br/> Android: ⏳ <br/>iOS: ⏳</summary>
 
-| Method / Property     | iOS  | Android |
-| --------------------- | ---- | ------- |
-| :---                  | ---: | ---:    |
-| 🔹 destination        |      | ✅      |
-| 🔹 sampleRate         |      | ✅      |
-| 🔹 state              |      | ✅      |
-| 🔘 createGain         |      | ✅      |
-| 🔘 createOscillator   |      | ✅      |
-| 🔘 createStereoPanner |      | ✅      |
-| 🔘 createBiquadFilter |      | ⏳      |
-| 🔘 getCurrentTime     |      | ✅      |
-| 🔘 close              |      | ⏳      |
+|       Method / Property       | iOS  | Android |
+| ----------------------------- | ---- | ------- |
+| 🔹 destination                |      | ✅      |
+| 🔹 sampleRate                 |      | ✅      |
+| 🔹 state                      |      | ✅      |
+| 🔘 createGain                 |      | ✅      |
+| 🔘 createOscillator           |      | ✅      |
+| 🔘 createStereoPanner         |      | ✅      |
+| 🔘 createBiquadFilter         |      | ⏳      |
+| 🔘 getCurrentTime             |      | ✅      |
+| 🔘 close                      |      | ⏳      |
 
 </details>
 
@@ -35,7 +34,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹context                     |      | ✅      |
 | 🔹numberOfInputs              |      | ✅      |
 | 🔹numberOfOutputs             |      | ✅      |
@@ -49,7 +47,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔘start                       |      | ✅      |
 | 🔘stop                        |      | ✅      |
 
@@ -60,7 +57,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 
 </details>
 
@@ -69,7 +65,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹value                       |      | ✅      |
 | 🔹defaultValue                |      | ✅      |
 | 🔹minValue                    |      | ✅      |
@@ -85,7 +80,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹frequency                   |      | ✅      |
 | 🔹detune                      |      | ✅      |
 | 🔹type                        |      | ✅      |
@@ -97,7 +91,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹gain                        |      | ✅      |
 
 </details>
@@ -107,7 +100,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹pan                         |      | ✅      |
 
 </details>
@@ -117,7 +109,6 @@ npm install react-native-audio-context
 
 |       Method / Property       | iOS  | Android |
 | ----------------------------- | ---- | ------- |
-| :---                          | ---: | ---:    |
 | 🔹frequency                   |      | ⏳      |
 | 🔹detune                      |      | ⏳      |
 | 🔹Q                           |      | ⏳      |
