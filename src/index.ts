@@ -19,21 +19,17 @@ export class AudioContext implements BaseAudioContext {
 
   constructor() {
     this.destination = null;
-    this.state = 'running';
-    this.sampleRate = 44100;
 
     if (Platform.OS === 'android') {
-      if (global.__AudioContext == null) {
-        AudioContextModule.installAudioContext();
-      }
-
+      AudioContextModule.installAudioContext();
       this.destination = global.__AudioContext.destination;
-      this.state = global.__AudioContext.state;
-      this.sampleRate = global.__AudioContext.sampleRate;
     }
+
+    this.state = global.__AudioContext.state;
+    this.sampleRate = global.__AudioContext.sampleRate;
   }
 
-  getCurrentTime(): number {
+  public get currentTime() {
     return global.__AudioContext.currentTime;
   }
 

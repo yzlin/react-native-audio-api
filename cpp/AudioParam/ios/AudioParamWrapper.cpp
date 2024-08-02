@@ -11,16 +11,17 @@ namespace audiocontext
         param_->setValue(value);
     }
 
-    double AudioParamWrapper::getDefaultValue() const {
-        throw std::runtime_error("[AudioParamHostObject] getDefaultValue not implemented yet!");
+    double AudioParamWrapper::getMaxValue() const {
+        return param_->getMaxValue();
     }
 
     double AudioParamWrapper::getMinValue() const {
-        throw std::runtime_error("[AudioParamHostObject] getMinValue not implemented yet!");
+        return param_->getMinValue();
     }
 
-    double AudioParamWrapper::getMaxValue() const {
-        throw std::runtime_error("[AudioParamHostObject] getMaxValue not implemented yet!");
+    double AudioParamWrapper::getDefaultValue() const {
+        return param_->getDefaultValue();
     }
 } // namespace audiocontext
 #endif
+

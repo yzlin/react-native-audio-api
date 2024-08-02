@@ -17,6 +17,9 @@ namespace audiocontext {
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createOscillator"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createGain"));
         propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "createStereoPanner"));
+        propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "state"));
+        propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "sampleRate"));
+        propertyNames.push_back(jsi::PropNameID::forUtf8(runtime, "currentTime"));
         return propertyNames;
     }
 

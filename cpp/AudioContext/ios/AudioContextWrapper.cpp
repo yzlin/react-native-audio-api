@@ -20,14 +20,16 @@ namespace audiocontext
         return std::make_shared<StereoPannerNodeWrapper>(audiocontext_);
     }
 
-    std::string AudioContextWrapper::getState() {
-        throw std::runtime_error("[AudioContextHostObject] getState not implemented yet!");
-    }
-    int AudioContextWrapper::getSampleRate() {
-        throw std::runtime_error("[AudioContextHostObject] getSampleRate not implemented yet!");
-    }
     double AudioContextWrapper::getCurrentTime() {
-        throw std::runtime_error("[AudioContextHostObject] getCurrentTime not implemented yet!");
+        return audiocontext_->getCurrentTime();
+    }
+
+    std::string AudioContextWrapper::getState() {
+        return audiocontext_->getState();
+    }
+
+    int AudioContextWrapper::getSampleRate() {
+        return audiocontext_->getSampleRate();
     }
 } // namespace audiocontext
 #endif

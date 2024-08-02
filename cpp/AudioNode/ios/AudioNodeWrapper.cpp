@@ -12,10 +12,11 @@ namespace audiocontext
     }
 
     int AudioNodeWrapper::getNumberOfInputs() const {
-        throw std::runtime_error("[AudioNodeHostObject] getNumberOfInputs not implemented yet!");
+        return node_->getNumberOfInputs();
     }
+
     int AudioNodeWrapper::getNumberOfOutputs() const {
-        throw std::runtime_error("[AudioNodeHostObject] getNumberOfOutputs not implemented yet!");
+        return node_->getNumberOfOutputs();
     }
 } // namespace audiocontext
 #endif
