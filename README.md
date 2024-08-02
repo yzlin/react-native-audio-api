@@ -20,11 +20,11 @@ npm install react-native-audio-context
 | 🔹 destination        | ✅  | ✅      |
 | 🔹 sampleRate         | ✅  | ✅      |
 | 🔹 state              | ✅  | ✅      |
+| 🔹 currentTime        | ✅  | ✅      |
 | 🔘 createGain         | ✅  | ✅      |
 | 🔘 createOscillator   | ✅  | ✅      |
 | 🔘 createStereoPanner | ✅  | ✅      |
 | 🔘 createBiquadFilter | ⏳  | ⏳      |
-| 🔘 getCurrentTime     | ✅  | ✅      |
 | 🔘 close              | ⏳  | ⏳      |
 
 </details>
