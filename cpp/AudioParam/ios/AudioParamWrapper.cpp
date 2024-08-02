@@ -1,14 +1,8 @@
-#ifdef ANDROID
+#ifndef ANDROID
 #include "AudioParamWrapper.h"
 
-namespace audiocontext{
-
-    AudioParamWrapper::AudioParamWrapper(const std::shared_ptr<AudioParam> &param) : param_(param) {
-        defaultValue_ = param->getDefaultValue();
-        minValue_ = param->getMinValue();
-        maxValue_ = param->getMaxValue();
-    }
-
+namespace audiocontext
+{
     double AudioParamWrapper::getValue() {
         return param_->getValue();
     }
@@ -18,15 +12,15 @@ namespace audiocontext{
     }
 
     double AudioParamWrapper::getDefaultValue() const {
-        return defaultValue_;
+        throw std::runtime_error("[AudioParamHostObject] getDefaultValue not implemented yet!");
     }
 
     double AudioParamWrapper::getMinValue() const {
-        return minValue_;
+        throw std::runtime_error("[AudioParamHostObject] getMinValue not implemented yet!");
     }
 
     double AudioParamWrapper::getMaxValue() const {
-        return maxValue_;
+        throw std::runtime_error("[AudioParamHostObject] getMaxValue not implemented yet!");
     }
-}
+} // namespace audiocontext
 #endif

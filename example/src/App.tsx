@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
@@ -10,39 +10,46 @@ import {
   type StereoPanner,
 } from 'react-native-audio-context';
 
+const INITIAL_FREQUENCY = 440;
+const INITIAL_DETUNE = 0;
+const INITIAL_GAIN = 0.5;
+const INITIAL_PAN = 0;
+
 const App: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [gain, setGain] = useState<number>(1.0);
-  const [frequency, setFrequency] = useState<number>(440);
-  const [detune, setDetune] = useState<number>(0);
-  const [pan, setPan] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gain, setGain] = useState(INITIAL_GAIN);
+  const [frequency, setFrequency] = useState(INITIAL_FREQUENCY);
+  const [detune, setDetune] = useState(INITIAL_DETUNE);
+  const [pan, setPan] = useState(INITIAL_PAN);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<Oscillator | null>(null);
   const gainRef = useRef<Gain | null>(null);
   const panRef = useRef<StereoPanner | null>(null);
 
-  const setUp = () => {
-    audioContextRef.current = new AudioContext();
+  useEffect(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
 
-    oscillatorRef.current = audioContextRef.current.createOscillator();
-    oscillatorRef.current.frequency.value = frequency;
-    oscillatorRef.current.detune.value = detune;
-    oscillatorRef.current.type = 'sine';
+      oscillatorRef.current = audioContextRef.current.createOscillator();
+      oscillatorRef.current.frequency.value = INITIAL_FREQUENCY;
+      oscillatorRef.current.detune.value = INITIAL_DETUNE;
+      oscillatorRef.current.type = 'sine';
 
-    gainRef.current = audioContextRef.current.createGain();
-    gainRef.current.gain.value = gain;
-
-    panRef.current = audioContextRef.current.createStereoPanner();
-    panRef.current.pan.value = pan;
-
-    if (Platform.OS === 'android') {
-      const destination = audioContextRef.current.destination;
+      gainRef.current = audioContextRef.current.createGain();
       oscillatorRef.current.connect(gainRef.current);
+
+      panRef.current = audioContextRef.current.createStereoPanner();
+      panRef.current.pan.value = INITIAL_PAN;
       gainRef.current.connect(panRef.current);
-      panRef.current.connect(destination!);
+
+      if (Platform.OS === 'android') {
+        const destination = audioContextRef.current.destination;
+        oscillatorRef.current.connect(gainRef.current);
+        gainRef.current.connect(destination!);
+      }
     }
-  };
+  }, []);
 
   const handleGainChange = (value: number[]) => {
     const newValue = value[0] || 0.0;
@@ -83,17 +90,13 @@ const App: React.FC = () => {
   }, []);
 
   const handlePlayPause = () => {
-    if (!audioContextRef.current) {
-      setUp();
-    }
-
     if (isPlaying) {
       oscillatorRef.current?.stop(0);
     } else {
       oscillatorRef.current?.start(0);
     }
 
-    setIsPlaying(!isPlaying);
+    setIsPlaying((prev) => !prev);
   };
 
   return (

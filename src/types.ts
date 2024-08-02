@@ -1,5 +1,5 @@
 export interface BaseAudioContext {
-  readonly destination: AudioDestinationNode;
+  readonly destination: AudioDestinationNode | null;
   readonly state: ContextState;
   readonly sampleRate: number;
   createOscillator(): Oscillator;

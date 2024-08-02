@@ -4,11 +4,11 @@
 
 #ifdef ANDROID
 #include "AudioParam.h"
+#else
+#include "IOSAudioParam.h"
 #endif
 
 namespace audiocontext {
-    using namespace facebook;
-
     class AudioParamWrapper {
 #ifdef ANDROID
     protected:
@@ -16,8 +16,12 @@ namespace audiocontext {
     public:
         explicit AudioParamWrapper(const std::shared_ptr<AudioParam> &param);
 #else
+        protected:
+            std::shared_ptr<IOSAudioParam> param_;
         public:
-        explicit AudioParamWrapper() {}
+            explicit AudioParamWrapper(std::shared_ptr<IOSAudioParam> param) {
+                param_ = param;
+            }
 #endif
     private:
         double defaultValue_;
