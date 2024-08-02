@@ -13,5 +13,4 @@ namespace audiocontext {
         return gainParam_;
     }
 } // namespace audiocontext
-
 #endif

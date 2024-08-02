@@ -3,9 +3,9 @@ export interface BaseAudioContext {
   readonly state: ContextState;
   readonly sampleRate: number;
   readonly currentTime: number;
-  createOscillator(): Oscillator;
-  createGain(): Gain;
-  createStereoPanner(): StereoPanner;
+  createOscillator(): OscillatorNode;
+  createGain(): GainNode;
+  createStereoPanner(): StereoPannerNode;
 }
 
 export interface AudioNode {
@@ -21,6 +21,9 @@ export interface AudioParam {
   defaultValue: number;
   minValue: number;
   maxValue: number;
+  setValueAtTime: (value: number, startTime: number) => void;
+  linearRampToValueAtTime: (value: number, endTime: number) => void;
+  exponentialRampToValueAtTime: (value: number, endTime: number) => void;
 }
 
 export interface AudioDestinationNode extends AudioNode {}
@@ -32,17 +35,17 @@ export interface AudioScheduledSourceNode extends AudioNode {
 
 type WaveType = 'sine' | 'square' | 'sawtooth' | 'triangle';
 
-export interface Oscillator extends AudioScheduledSourceNode {
+export interface OscillatorNode extends AudioScheduledSourceNode {
   frequency: AudioParam;
   type: WaveType;
   detune: AudioParam;
 }
 
-export interface Gain extends AudioNode {
+export interface GainNode extends AudioNode {
   gain: AudioParam;
 }
 
-export interface StereoPanner extends AudioNode {
+export interface StereoPannerNode extends AudioNode {
   pan: AudioParam;
 }
 

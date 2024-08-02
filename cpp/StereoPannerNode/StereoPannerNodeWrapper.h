@@ -12,6 +12,7 @@
 #endif
 
 namespace audiocontext {
+
 #ifdef ANDROID
     class StereoPannerNode;
 #endif

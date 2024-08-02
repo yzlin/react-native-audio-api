@@ -13,5 +13,4 @@ namespace audiocontext {
         return panParam_;
     }
 } // namespace audiocontext
-
 #endif
