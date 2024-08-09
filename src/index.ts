@@ -46,7 +46,9 @@ export class AudioContext implements BaseAudioContext {
   }
 
   close(): void {
-    global.__AudioContext.close();
+    if (Platform.OS === 'android') {
+      global.__AudioContext.close();
+    }
   }
 }
 
