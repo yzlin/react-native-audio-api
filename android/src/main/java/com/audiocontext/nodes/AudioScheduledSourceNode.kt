@@ -6,9 +6,7 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import com.audiocontext.context.BaseAudioContext
 import com.audiocontext.nodes.parameters.PlaybackParameters
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import java.util.PriorityQueue
 
 abstract class AudioScheduledSourceNode(context: BaseAudioContext) : AudioNode(context) {
   override val numberOfInputs: Int = 0
@@ -17,9 +15,8 @@ abstract class AudioScheduledSourceNode(context: BaseAudioContext) : AudioNode(c
   protected var playbackParameters: PlaybackParameters
   @Volatile protected var isPlaying: Boolean = false
 
-  private val coroutineScope = CoroutineScope(Dispatchers.Default)
-  private val mutex = Mutex()
-  private var audioJob: Job? = null
+  private var playbackThread: Thread? = null;
+  private val stopQueue = PriorityQueue<Double>()
 
   init {
     val bufferSize = AudioTrack.getMinBufferSize(
@@ -43,36 +40,57 @@ abstract class AudioScheduledSourceNode(context: BaseAudioContext) : AudioNode(c
     this.playbackParameters = PlaybackParameters(audioTrack, buffer)
   }
 
-  protected abstract fun generateSound();
-
-  fun start(time: Double) {
-    coroutineScope.launch {
-      mutex.withLock {
-        if (audioJob?.isActive == true) return@launch
-        audioJob = launch {
-          while (context.getCurrentTime() < time) {
-            delay(1)
-          }
-          isPlaying = true
-          playbackParameters.audioTrack.play()
-          generateSound()
-        }
+  private fun generateSound() {
+    while(isPlaying) {
+      generateBuffer()
+      process(playbackParameters)
+      if(stopQueue.isNotEmpty() && context.getCurrentTime() >= stopQueue.peek()!!) {
+        handleStop()
+        stopQueue.poll()
       }
     }
+    playbackParameters.audioTrack.flush()
+  }
+
+  private fun handleStop(){
+    isPlaying = false
+    try {
+      playbackParameters.audioTrack.stop()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
+    }
+
+    playbackThread?.interrupt()
+  }
+
+  protected abstract fun generateBuffer()
+
+  fun start(time: Double) {
+    playbackThread = Thread {
+      while (context.getCurrentTime() < time) {
+        Thread.sleep(1)
+      }
+      isPlaying = true
+      playbackParameters.audioTrack.play()
+      generateSound()
+    }
+    playbackThread?.start()
   }
 
   fun stop(time: Double) {
-    coroutineScope.launch {
-      mutex.withLock {
-        launch {
-          while (context.getCurrentTime() < time) {
-            delay(1)
-          }
-          isPlaying = false
-          playbackParameters.audioTrack.stop()
-          audioJob?.cancel()
-        }
-      }
+    stopQueue.add(time)
+  }
+
+  private fun prepareForDeconstruction() {
+    handleStop()
+    playbackParameters.audioTrack.release()
+  }
+
+  fun close() {
+    try {
+      playbackParameters.audioTrack.stop()
+    } catch (e: IllegalStateException) {
+      e.printStackTrace()
     }
   }
 }

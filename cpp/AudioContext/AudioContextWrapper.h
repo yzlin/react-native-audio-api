@@ -17,9 +17,6 @@
 namespace audiocontext {
     using namespace facebook;
 
-    class OscillatorNodeWrapper;
-    class AudioDestinationNodeWrapper;
-
 #ifdef ANDROID
     class AudioContext;
 #endif
@@ -28,7 +25,7 @@ namespace audiocontext {
 #ifdef ANDROID
         private:
             std::shared_ptr<AudioContext> audiocontext_;
-        
+
         public:
             explicit AudioContextWrapper(const std::shared_ptr<AudioContext> &audiocontext);
 #else
@@ -49,5 +46,6 @@ namespace audiocontext {
         std::string getState();
         int getSampleRate();
         double getCurrentTime();
+        void close();
     };
 } // namespace audiocontext
