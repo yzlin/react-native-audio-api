@@ -5,6 +5,7 @@ import type {
   GainNode,
   StereoPannerNode,
   OscillatorNode,
+  BiquadFilterNode,
 } from './types';
 import { installACModule } from './utils/install';
 
@@ -45,6 +46,10 @@ export class AudioContext implements BaseAudioContext {
     return global.__AudioContext.createStereoPanner();
   }
 
+  createBiquadFilter(): BiquadFilterNode {
+    return global.__AudioContext.createBiquadFilter();
+  }
+
   close(): void {
     if (Platform.OS === 'android') {
       global.__AudioContext.close();
@@ -52,4 +57,4 @@ export class AudioContext implements BaseAudioContext {
   }
 }
 
-export type { GainNode, StereoPannerNode, OscillatorNode };
+export type { GainNode, StereoPannerNode, OscillatorNode, BiquadFilterNode };
