@@ -3,7 +3,6 @@ import {
   type GainNode,
   type OscillatorNode,
 } from 'react-native-audio-context';
-import { Platform } from 'react-native';
 import type { SoundEngine } from './SoundEngine';
 
 export class Kick implements SoundEngine {
@@ -24,11 +23,9 @@ export class Kick implements SoundEngine {
   setup() {
     this.gain = this.audioContext.createGain();
     this.oscillator = this.audioContext.createOscillator();
-    this.oscillator.connect(this.gain);
 
-    if (Platform.OS === 'android') {
-      this.gain.connect(this.audioContext.destination!);
-    }
+    this.oscillator.connect(this.gain);
+    this.gain.connect(this.audioContext.destination!);
   }
 
   play(time: number) {
