@@ -16,7 +16,7 @@ class StereoPannerNode(context: BaseAudioContext): AudioNode(context) {
 
   @RequiresApi(Build.VERSION_CODES.N)
   override fun process(playbackParameters: PlaybackParameters) {
-    double currentTime = context.getCurrentTime()
+    val currentTime = context.getCurrentTime()
     playbackParameters.leftPan *= min(1.0 - pan.getValueAtTime(currentTime), 1.0)
     playbackParameters.rightPan *= min(1.0 + pan.getValueAtTime(currentTime), 1.0)
     super.process(playbackParameters)

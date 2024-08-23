@@ -1,6 +1,5 @@
 import { AudioContext } from 'react-native-audio-context';
 import type { SoundEngine } from './SoundEngine';
-import { Platform } from 'react-native';
 
 export class HiHat implements SoundEngine {
   public audioContext: AudioContext;
@@ -24,43 +23,41 @@ export class HiHat implements SoundEngine {
   }
 
   play(time: number) {
-    if (Platform.OS === 'android') {
-      const bandpassFilter = this.audioContext.createBiquadFilter();
-      const highpassFilter = this.audioContext.createBiquadFilter();
-      const gain = this.audioContext.createGain();
+    const bandpassFilter = this.audioContext.createBiquadFilter();
+    const highpassFilter = this.audioContext.createBiquadFilter();
+    const gain = this.audioContext.createGain();
 
-      bandpassFilter.type = 'bandpass';
-      bandpassFilter.frequency.value = this.bandpassFilterFrequency;
-      bandpassFilter.Q.value = this.bandPassQ;
+    bandpassFilter.type = 'bandpass';
+    bandpassFilter.frequency.value = this.bandpassFilterFrequency;
+    bandpassFilter.Q.value = this.bandPassQ;
 
-      highpassFilter.type = 'highpass';
-      highpassFilter.frequency.value = this.highpassFilterFrequency;
+    highpassFilter.type = 'highpass';
+    highpassFilter.frequency.value = this.highpassFilterFrequency;
 
-      bandpassFilter.connect(highpassFilter);
-      highpassFilter.connect(gain);
-      gain.connect(this.audioContext.destination!);
+    bandpassFilter.connect(highpassFilter);
+    highpassFilter.connect(gain);
+    gain.connect(this.audioContext.destination!);
 
-      this.ratios.forEach((ratio) => {
-        const oscillator = this.audioContext.createOscillator();
-        oscillator.type = 'square';
-        oscillator.frequency.value = this.tone * ratio;
-        oscillator.connect(bandpassFilter);
-        oscillator.start(time);
-        oscillator.stop(time + this.decay);
-      });
+    this.ratios.forEach((ratio) => {
+      const oscillator = this.audioContext.createOscillator();
+      oscillator.type = 'square';
+      oscillator.frequency.value = this.tone * ratio;
+      oscillator.connect(bandpassFilter);
+      oscillator.start(time);
+      oscillator.stop(time + this.decay);
+    });
 
-      gain.gain.exponentialRampToValueAtTime(
-        this.volume,
-        time + 0.067 * this.decay
-      );
-      gain.gain.exponentialRampToValueAtTime(
-        this.volume * 0.3,
-        time + 0.1 * this.decay
-      );
-      gain.gain.exponentialRampToValueAtTime(
-        this.volume * 0.00001,
-        time + this.decay
-      );
-    }
+    gain.gain.exponentialRampToValueAtTime(
+      this.volume,
+      time + 0.067 * this.decay
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      this.volume * 0.3,
+      time + 0.1 * this.decay
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      this.volume * 0.00001,
+      time + this.decay
+    );
   }
 }
