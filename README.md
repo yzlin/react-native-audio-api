@@ -13,7 +13,7 @@ npm install react-native-audio-context
 ## WebAudio API roadmap and coverage
 
 <details>
-  <summary><b>AudioContext</b><br/> Android: ⏳ <br/>iOS: ⏳</summary>
+  <summary><b>AudioContext</b><br/> Android: ✅ <br/>iOS: ⏳</summary>
 
 | Method / Property     | iOS | Android |
 | --------------------- | --- | ------- |
@@ -24,8 +24,8 @@ npm install react-native-audio-context
 | 🔘 createGain         | ✅  | ✅      |
 | 🔘 createOscillator   | ✅  | ✅      |
 | 🔘 createStereoPanner | ✅  | ✅      |
-| 🔘 createBiquadFilter | ⏳  | ⏳      |
-| 🔘 close              | ⏳  | ✅      |
+| 🔘 createBiquadFilter | ⏳  | ✅      |
+| 🔘 close              | ✅  | ✅      |
 
 </details>
 
@@ -105,15 +105,15 @@ npm install react-native-audio-context
 </details>
 
 <details>
-  <summary><b>BiquadFilterNode</b><br/> Android: ⏳ <br />iOS: ⏳</summary>
+  <summary><b>BiquadFilterNode</b><br/> Android: ✅ <br />iOS: ⏳</summary>
 
 | Method / Property | iOS | Android |
 | ----------------- | --- | ------- |
-| 🔹frequency       | ⏳  | ⏳      |
-| 🔹detune          | ⏳  | ⏳      |
-| 🔹Q               | ⏳  | ⏳      |
-| 🔹gain            | ⏳  | ⏳      |
-| 🔹type            | ⏳  | ⏳      |
+| 🔹frequency       | ⏳  | ✅      |
+| 🔹detune          | ⏳  | ✅      |
+| 🔹Q               | ⏳  | ✅      |
+| 🔹gain            | ⏳  | ✅      |
+| 🔹type            | ⏳  | ✅      |
 
 </details>
 
