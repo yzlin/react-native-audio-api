@@ -9,10 +9,17 @@ export interface BaseAudioContext {
   close(): void;
 }
 
+type channelCountMode = 'max' | 'clamped-max' | 'explicit';
+
+type channelInterpretation = 'speakers' | 'discrete';
+
 export interface AudioNode {
   readonly context: BaseAudioContext;
   readonly numberOfInputs: number;
   readonly numberOfOutputs: number;
+  readonly channelCount: number;
+  readonly channelCountMode: channelCountMode;
+  readonly channelInterpretation: channelInterpretation;
   connect: (node: AudioNode) => void;
   disconnect: (node: AudioNode) => void;
 }
@@ -69,3 +76,17 @@ export interface BiquadFilterNode extends AudioNode {
 }
 
 export type ContextState = 'running' | 'closed';
+
+export interface AudioBuffer {
+  readonly length: number;
+  readonly duration: number;
+  readonly sampleRate: number;
+  readonly numberOfChannels: number;
+  getChannelData(channel: number): number[];
+  setChannelData(channel: number, data: number[]): void;
+}
+
+export interface AudioBufferSourceNode extends AudioScheduledSourceNode {
+  buffer: AudioBuffer;
+  loop: boolean;
+}

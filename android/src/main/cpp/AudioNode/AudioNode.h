@@ -12,7 +12,7 @@ namespace audiocontext {
 
     class AudioNode : public jni::HybridClass<AudioNode> {
     public:
-        static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/AudioNode;";
+        static auto constexpr kJavaDescriptor = "Lcom/audiocontext/nodes/audionode/AudioNode;";
 
         static jni::local_ref<AudioNode::jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis)
         {
@@ -27,6 +27,9 @@ namespace audiocontext {
 
         int getNumberOfInputs();
         int getNumberOfOutputs();
+        int getChannelCount();
+        std::string getChannelCountMode();
+        std::string getChannelInterpretation();
         void connect(const AudioNode *node);
         void disconnect(const AudioNode *node);
         void resetJavaPart();

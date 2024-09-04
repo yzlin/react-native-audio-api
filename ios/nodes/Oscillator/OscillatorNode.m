@@ -12,14 +12,12 @@
     _detuneParam = [[AudioParam alloc] initWithContext:context value:0 minValue:-[Constants maxDetune] maxValue:[Constants maxDetune]];
     _waveType = WaveTypeSine;
     _isPlaying = NO;
-    _deltaTime = 1 / self.context.sampleRate;
     
     self.numberOfOutputs = 1;
     self.numberOfInputs = 0;
 
     _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.context.sampleRate channels:2];
     _phase = 0.0;
-    _playbackParameters = nil;
 
     __weak typeof(self) weakSelf = self;
     _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:_format renderBlock:^OSStatus(BOOL *isSilence, const AudioTimeStamp *timestamp, AVAudioFrameCount frameCount, AudioBufferList *outputData) {
@@ -93,14 +91,10 @@
     float *leftBuffer = (float *)outputData->mBuffers[0].mData;
     float *rightBuffer = (float *)outputData->mBuffers[1].mData;
     
-    if (_playbackParameters == nil) {
-        _playbackParameters = [[PlaybackParameters alloc] initWithLeftBuffer:leftBuffer rightBuffer:rightBuffer frameCount:frameCount];
-    }
-    
-    [_playbackParameters reset];
-    
     float time = [self.context getCurrentTime];
-    for (int frame = 0; frame < frameCount; frame++) {
+    float deltaTime = 1 / self.context.sampleRate;
+
+    for (int frame = 0; frame < frameCount; frame += 1) {
         // Convert cents to HZ
         if (!_isPlaying) {
             leftBuffer[frame] = 0;
@@ -108,21 +102,21 @@
             continue;
         }
        
-        double detuneRatio = pow(2.0, [_detuneParam getValue] / OCTAVE_IN_CENTS);
+        double detuneRatio = pow(2.0, [_detuneParam getValueAtTime:time] / OCTAVE_IN_CENTS);
         double detunedFrequency = round(detuneRatio * [_frequencyParam getValueAtTime:time]);
-        double phaseIncrement = FULL_CIRCLE_RADIANS * detunedFrequency / self.context.sampleRate;
+        double phaseIncrement = FULL_CIRCLE_RADIANS * (detunedFrequency / self.context.sampleRate);
         leftBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
         rightBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
-                    
-        time += _deltaTime;
 
         _phase += phaseIncrement;
+        time += deltaTime;
+        
         if (_phase > FULL_CIRCLE_RADIANS) {
             _phase -= FULL_CIRCLE_RADIANS;
         }
     }
     
-    [self processWithParameters:_playbackParameters];
+    [self process:frameCount bufferList:outputData];
     
     return noErr;
 }

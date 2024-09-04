@@ -3,7 +3,7 @@ package com.audiocontext.nodes.filter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.audiocontext.context.BaseAudioContext
-import com.audiocontext.nodes.AudioNode
+import com.audiocontext.nodes.audionode.AudioNode
 import com.audiocontext.parameters.AudioParam
 import com.audiocontext.parameters.PlaybackParameters
 import com.audiocontext.utils.Constants
@@ -15,6 +15,8 @@ import kotlin.math.*
 class BiquadFilterNode(context: BaseAudioContext): AudioNode(context) {
   override val numberOfInputs: Int = 1
   override val numberOfOutputs: Int = 1
+  override var channelCount: Int = 2
+
   private val frequency: AudioParam = AudioParam(context, 350.0, Constants.MAX_FILTER_FREQUENCY, Constants.MIN_FILTER_FREQUENCY)
     get() = field
   private val detune: AudioParam = AudioParam(context, 0.0, Constants.MAX_DETUNE, -Constants.MAX_DETUNE)
@@ -318,10 +320,24 @@ class BiquadFilterNode(context: BaseAudioContext): AudioNode(context) {
 
   @RequiresApi(Build.VERSION_CODES.N)
   override fun process(playbackParameters: PlaybackParameters) {
+    mixBuffers(playbackParameters)
+
     resetCoefficients()
     applyFilter()
-    for (i in playbackParameters.buffer.indices) {
-      val input = playbackParameters.buffer[i]
+
+    var x1 = this.x1
+    var x2 = this.x2
+    var y1 = this.y1
+    var y2 = this.y2
+
+    val b0 = this.b0
+    val b1 = this.b1
+    val b2 = this.b2
+    val a1 = this.a1
+    val a2 = this.a2
+
+    for (i in 0 until playbackParameters.audioBuffer.length) {
+      val input = playbackParameters.audioBuffer.getChannelData(0)[i]
       val output = b0 * input + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2
 
       x2 = x1
@@ -329,7 +345,9 @@ class BiquadFilterNode(context: BaseAudioContext): AudioNode(context) {
       y2 = y1
       y1 = output
 
-      playbackParameters.buffer[i] = output.toInt().toShort()
+      for (j in 0 until playbackParameters.audioBuffer.numberOfChannels) {
+        playbackParameters.audioBuffer.getChannelData(j)[i] = output.toInt().toShort()
+      }
     }
 
     super.process(playbackParameters)

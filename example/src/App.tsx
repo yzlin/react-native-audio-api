@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
 import { Kick } from './sound-engines/Kick';
 import { HiHat } from './sound-engines/HiHat';
+import { Clap } from './sound-engines/Clap';
 
 import {
   AudioContext,
@@ -30,6 +31,7 @@ const App: React.FC = () => {
   const panRef = useRef<StereoPannerNode | null>(null);
   const kickRef = useRef<Kick | null>(null);
   const hiHatRef = useRef<HiHat | null>(null);
+  const clapRef = useRef<Clap | null>(null);
 
   const setup = () => {
     if (!audioContextRef.current) {
@@ -129,6 +131,18 @@ const App: React.FC = () => {
     hiHatRef.current.play(audioContextRef.current.currentTime);
   };
 
+  const handlePlayClap = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    if (!clapRef.current) {
+      clapRef.current = new Clap(audioContextRef.current);
+    }
+
+    clapRef.current.play(audioContextRef.current.currentTime);
+  };
+
   return (
     <View style={styles.mainContainer}>
       <Text style={styles.title}>React Native Oscillator</Text>
@@ -187,6 +201,9 @@ const App: React.FC = () => {
       </View>
       <View style={styles.button}>
         <Button title="Play HiHat" onPress={handlePlayHiHat} />
+      </View>
+      <View style={styles.button}>
+        <Button title="Play Clap" onPress={handlePlayClap} />
       </View>
     </View>
   );

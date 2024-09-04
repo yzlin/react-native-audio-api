@@ -5,6 +5,8 @@ import type {
   StereoPannerNode,
   OscillatorNode,
   BiquadFilterNode,
+  AudioBufferSourceNode,
+  AudioBuffer,
 } from './types';
 import { installACModule } from './utils/install';
 
@@ -43,6 +45,22 @@ export class AudioContext implements BaseAudioContext {
 
   createBiquadFilter(): BiquadFilterNode {
     return global.__AudioContext.createBiquadFilter();
+  }
+
+  createBufferSource(): AudioBufferSourceNode {
+    return global.__AudioContext.createBufferSource();
+  }
+
+  createBuffer(
+    sampleRate: number,
+    length: number,
+    numOfChannels: number
+  ): AudioBuffer {
+    return global.__AudioContext.createBuffer(
+      sampleRate,
+      length,
+      numOfChannels
+    );
   }
 
   close(): void {
