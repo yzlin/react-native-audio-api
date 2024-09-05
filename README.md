@@ -20,6 +20,7 @@ allowing developers to generate and modify audio in exact same way it is possibl
 ## Documentation
 
 react-native-audio-api tries to strictly follow the Web Audi API specification, which can be found at [https://www.w3.org/TR/webaudio/](https://www.w3.org/TR/webaudio/).
+<br />
 [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) is usefull resource to get familiar with audio processing basics.
 
 For development purposes there is also simplified description of already implemented interfaces as well as overview on Web Audio API coverage.
