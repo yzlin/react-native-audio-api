@@ -3,12 +3,12 @@
 
 // TODO implement AudioBufferSourceNodeWrapper for iOS
 
-namespace audiocontext {
-AudioBufferSourceNode::start(double time) {
+namespace audioapi {
+void AudioBufferSourceNodeWrapper::start(double time) {
   return;
 }
 
-AudioBufferSourceNode::stop(double time) {
+void AudioBufferSourceNodeWrapper::stop(double time) {
   return;
 }
 
@@ -23,5 +23,5 @@ bool AudioBufferSourceNodeWrapper::getLoop() {
 std::shared_ptr<AudioBufferWrapper> AudioBufferSourceNodeWrapper::getBuffer() {
   return std::make_shared<AudioBufferWrapper>(nullptr);
 }
-} // namespace audiocontext
+} // namespace audioapi
 #endif
