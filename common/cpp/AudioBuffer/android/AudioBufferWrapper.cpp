@@ -35,9 +35,9 @@ float **AudioBufferWrapper::getChannelData(int channel) const {
   return audioBuffer_->getChannelData(channel);
 }
 
-void AudioBufferWrapper::setChannelData(int channel, float **data, int length)
+void AudioBufferWrapper::setChannelData(int channel, float **data, int)
     const {
-  audioBuffer_->setChannelData(channel, data, length);
+  audioBuffer_->setChannelData(channel, data);
 }
 } // namespace audioapi
 #endif
