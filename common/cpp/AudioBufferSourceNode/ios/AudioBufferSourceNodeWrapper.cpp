@@ -21,7 +21,11 @@ bool AudioBufferSourceNodeWrapper::getLoop() {
 }
 
 std::shared_ptr<AudioBufferWrapper> AudioBufferSourceNodeWrapper::getBuffer() {
-  return std::make_shared<AudioBufferWrapper>(nullptr);
+  return std::make_shared<AudioBufferWrapper>();
+}
+
+void AudioBufferSourceNodeWrapper::setBuffer(
+    const std::shared_ptr<AudioBufferWrapper> &buffer) {
 }
 } // namespace audioapi
 #endif

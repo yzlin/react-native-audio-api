@@ -1,5 +1,4 @@
 #include "AudioBufferHostObject.h"
-#include <android/log.h>
 
 namespace audioapi {
 using namespace facebook;

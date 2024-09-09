@@ -27,9 +27,7 @@ class AudioBufferSourceNodeWrapper : public AudioNodeWrapper {
 #else
 
  public:
-  AudioBufferSourceNodeWrapper() : AudioNodeWrapper() {
-    //    node_ = std::make_shared<AudioNode>(context);
-  }
+  AudioBufferSourceNodeWrapper() : AudioNodeWrapper() {}
 #endif
 
  public:

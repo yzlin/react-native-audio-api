@@ -34,8 +34,7 @@ std::shared_ptr<AudioBufferWrapper> AudioContextWrapper::createBuffer(
     int sampleRate,
     int length,
     int numberOfChannels) {
-  return std::make_shared<AudioBufferWrapper>(
-      sampleRate, length, numberOfChannels);
+  return std::make_shared<AudioBufferWrapper>();
 }
 
 double AudioContextWrapper::getCurrentTime() {
