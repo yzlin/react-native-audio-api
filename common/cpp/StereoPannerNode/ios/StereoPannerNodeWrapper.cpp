@@ -3,11 +3,10 @@
 
 namespace audioapi {
 StereoPannerNodeWrapper::StereoPannerNodeWrapper(
-    std::shared_ptr<IOSAudioContext> context)
-    : AudioNodeWrapper() {
-  node_ = std::make_shared<IOSStereoPannerNode>(context);
-  panParam_ = std::make_shared<AudioParamWrapper>(
-      getStereoPannerNodeFromAudioNode()->getPanParam());
+    std::shared_ptr<IOSStereoPannerNode> stereoPannerNode)
+    : AudioNodeWrapper(stereoPannerNode) {
+  panParam_ =
+      std::make_shared<AudioParamWrapper>(stereoPannerNode->getPanParam());
 }
 
 std::shared_ptr<IOSStereoPannerNode>

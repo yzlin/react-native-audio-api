@@ -4,28 +4,42 @@
 // TODO implement AudioBufferSourceNodeWrapper for iOS
 
 namespace audioapi {
+
+std::shared_ptr<IOSAudioBufferSourceNode>
+AudioBufferSourceNodeWrapper::getAudioBufferSourceNodeFromAudioNode() {
+  return std::static_pointer_cast<IOSAudioBufferSourceNode>(node_);
+}
+
 void AudioBufferSourceNodeWrapper::start(double time) {
-  return;
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  bufferSource->start(time);
 }
 
 void AudioBufferSourceNodeWrapper::stop(double time) {
-  return;
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  bufferSource->stop(time);
 }
 
 void AudioBufferSourceNodeWrapper::setLoop(bool loop) {
-  return;
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  bufferSource->setLoop(loop);
 }
 
 bool AudioBufferSourceNodeWrapper::getLoop() {
-  return true;
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  return bufferSource->getLoop();
 }
 
 std::shared_ptr<AudioBufferWrapper> AudioBufferSourceNodeWrapper::getBuffer() {
-  return std::make_shared<AudioBufferWrapper>();
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  auto buffer = bufferSource->getBuffer();
+  return std::make_shared<AudioBufferWrapper>(buffer);
 }
 
 void AudioBufferSourceNodeWrapper::setBuffer(
     const std::shared_ptr<AudioBufferWrapper> &buffer) {
+  auto bufferSource = getAudioBufferSourceNodeFromAudioNode();
+  bufferSource->setBuffer(buffer->audioBuffer_);
 }
 } // namespace audioapi
 #endif

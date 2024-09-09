@@ -2,9 +2,9 @@
 
 namespace audioapi {
 
-IOSOscillatorNode::IOSOscillatorNode(std::shared_ptr<IOSAudioContext> context)
+IOSOscillatorNode::IOSOscillatorNode(OscillatorNode *oscillator)
 {
-  audioNode_ = oscillatorNode_ = [[OscillatorNode alloc] initWithContext:context->audioContext_];
+  audioNode_ = oscillatorNode_ = oscillator;
 }
 
 IOSOscillatorNode::~IOSOscillatorNode()
@@ -37,15 +37,13 @@ std::string IOSOscillatorNode::getType() const
 
 std::shared_ptr<IOSAudioParam> IOSOscillatorNode::getFrequencyParam()
 {
-  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>();
-  param->audioParam = oscillatorNode_.frequencyParam;
+  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>(oscillatorNode_.frequencyParam);
   return param;
 }
 
 std::shared_ptr<IOSAudioParam> IOSOscillatorNode::getDetuneParam()
 {
-  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>();
-  param->audioParam = oscillatorNode_.detuneParam;
+  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>(oscillatorNode_.detuneParam);
   return param;
 }
 } // namespace audioapi

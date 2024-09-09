@@ -8,16 +8,14 @@
                        minValue:(float)minValue
                        maxValue:(float)maxValue
 {
-  if (self != [super init]) {
-    return self;
+  if (self = [super init]) {
+    _value = value;
+    _defaultValue = value;
+    _minValue = minValue;
+    _maxValue = maxValue;
+    _context = context;
+    _timeline = [[PriorityQueue alloc] init];
   }
-
-  _value = value;
-  _defaultValue = value;
-  _minValue = minValue;
-  _maxValue = maxValue;
-  _context = context;
-  _timeline = [[PriorityQueue alloc] init];
 
   return self;
 }

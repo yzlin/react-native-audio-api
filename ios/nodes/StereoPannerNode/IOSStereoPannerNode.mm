@@ -3,9 +3,9 @@
 
 namespace audioapi {
 
-IOSStereoPannerNode::IOSStereoPannerNode(std::shared_ptr<IOSAudioContext> context)
+IOSStereoPannerNode::IOSStereoPannerNode(StereoPannerNode *stereoPanner)
 {
-  audioNode_ = panner_ = [[StereoPannerNode alloc] initWithContext:context->audioContext_];
+  audioNode_ = panner_ = stereoPanner;
 }
 
 IOSStereoPannerNode::~IOSStereoPannerNode()
@@ -16,8 +16,7 @@ IOSStereoPannerNode::~IOSStereoPannerNode()
 
 std::shared_ptr<IOSAudioParam> IOSStereoPannerNode::getPanParam()
 {
-  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>();
-  param->audioParam = panner_.panParam;
+  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>(panner_.panParam);
   return param;
 }
 } // namespace audioapi

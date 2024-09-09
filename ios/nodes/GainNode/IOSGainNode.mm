@@ -2,9 +2,9 @@
 
 namespace audioapi {
 
-IOSGainNode::IOSGainNode(std::shared_ptr<IOSAudioContext> context)
+IOSGainNode::IOSGainNode(GainNode *gainNode)
 {
-  audioNode_ = gainNode_ = [[GainNode alloc] initWithContext:context->audioContext_];
+  audioNode_ = gainNode_ = gainNode;
 }
 
 IOSGainNode::~IOSGainNode()
@@ -15,8 +15,7 @@ IOSGainNode::~IOSGainNode()
 
 std::shared_ptr<IOSAudioParam> IOSGainNode::getGainParam()
 {
-  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>();
-  param->audioParam = gainNode_.gainParam;
+  std::shared_ptr<IOSAudioParam> param = std::make_shared<IOSAudioParam>(gainNode_.gainParam);
   return param;
 }
 } // namespace audioapi

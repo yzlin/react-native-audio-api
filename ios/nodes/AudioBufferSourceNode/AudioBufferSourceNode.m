@@ -1,31 +1,31 @@
-#import <OscillatorNode.h>
-#import "Constants.h"
+#import "AudioBufferSourceNode.h"
 
-@implementation OscillatorNode
+@implementation AudioBufferSourceNode
 
 - (instancetype)initWithContext:(AudioContext *)context
 {
-  if (self != [super initWithContext:context]) {
-    return self;
+  self = [super initWithContext:context];
+  if (self) {
+    _loop = true;
+    _isPlaying = NO;
+    _bufferIndex = 0;
+    self.channelCount = 2;
+    _buffer = [[RNAA_AudioBuffer alloc] initWithSampleRate:context.sampleRate
+                                                    length:[Constants bufferSize]
+                                          numberOfChannels:2];
+
+    self.numberOfOutputs = 1;
+    self.numberOfInputs = 0;
+
+    [self initAudioSourceNode:_buffer];
   }
+  return self;
+}
 
-  _frequencyParam = [[AudioParam alloc] initWithContext:context
-                                                  value:440
-                                               minValue:-[Constants nyquistFrequency]
-                                               maxValue:[Constants nyquistFrequency]];
-  _detuneParam = [[AudioParam alloc] initWithContext:context
-                                               value:0
-                                            minValue:-[Constants maxDetune]
-                                            maxValue:[Constants maxDetune]];
-  _waveType = WaveTypeSine;
-  _isPlaying = NO;
-
-  self.numberOfOutputs = 1;
-  self.numberOfInputs = 0;
-
-  _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.context.sampleRate channels:2];
-  _phase = 0.0;
-
+- (void)initAudioSourceNode:(RNAA_AudioBuffer *)buffer
+{
+  _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:_buffer.sampleRate
+                                                           channels:_buffer.numberOfChannels];
   __weak typeof(self) weakSelf = self;
   _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:_format
                                               renderBlock:^OSStatus(
@@ -38,7 +38,6 @@
                                                                                   frameCount:frameCount
                                                                                   outputData:outputData];
                                               }];
-
   [self.context.audioEngine attachNode:self.sourceNode];
   [self.context.audioEngine connect:self.sourceNode to:self.context.audioEngine.mainMixerNode format:self.format];
 
@@ -48,8 +47,6 @@
       NSLog(@"Error starting audio engine: %@", [error localizedDescription]);
     }
   }
-
-  return self;
 }
 
 - (void)cleanup
@@ -59,10 +56,23 @@
   }
 
   [self.context.audioEngine detachNode:self.sourceNode];
-
-  _frequencyParam = nil;
-  _detuneParam = nil;
   _format = nil;
+}
+
+- (bool)getLoop
+{
+  return _loop;
+}
+
+- (void)setLoop:(bool)loop
+{
+  _loop = loop;
+}
+
+- (void)setBuffer:(RNAA_AudioBuffer *)buffer
+{
+  _buffer = buffer;
+  [self initAudioSourceNode:_buffer];
 }
 
 - (void)start:(double)time
@@ -112,35 +122,31 @@
                              frameCount:(AVAudioFrameCount)frameCount
                              outputData:(AudioBufferList *)outputData
 {
-  if (outputData->mNumberBuffers < 2) {
-    return noErr; // Ensure we have stereo output
-  }
-
-  float *leftBuffer = (float *)outputData->mBuffers[0].mData;
-  float *rightBuffer = (float *)outputData->mBuffers[1].mData;
-
-  float time = [self.context getCurrentTime];
-  float deltaTime = 1 / self.context.sampleRate;
-
-  for (int frame = 0; frame < frameCount; frame += 1) {
-    // Convert cents to HZ
+  for (int frame = 0; frame < frameCount; ++frame) {
     if (!_isPlaying) {
-      leftBuffer[frame] = 0;
-      rightBuffer[frame] = 0;
+      for (int channel = 0; channel < outputData->mNumberBuffers; ++channel) {
+        float *outBuffer = (float *)outputData->mBuffers[channel].mData;
+        outBuffer[frame] = 0.0f;
+      }
       continue;
     }
 
-    double detuneRatio = pow(2.0, [_detuneParam getValueAtTime:time] / OCTAVE_IN_CENTS);
-    double detunedFrequency = round(detuneRatio * [_frequencyParam getValueAtTime:time]);
-    double phaseIncrement = FULL_CIRCLE_RADIANS * (detunedFrequency / self.context.sampleRate);
-    leftBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
-    rightBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
+    for (int channel = 0; channel < _buffer.numberOfChannels; ++channel) {
+      float *outBuffer = (float *)outputData->mBuffers[channel].mData;
+      float *data = [_buffer getChannelDataForChannel:channel];
+      outBuffer[frame] = data[_bufferIndex];
+    }
 
-    _phase += phaseIncrement;
-    time += deltaTime;
+    ++_bufferIndex;
 
-    if (_phase > FULL_CIRCLE_RADIANS) {
-      _phase -= FULL_CIRCLE_RADIANS;
+    if (_bufferIndex >= _buffer.length) {
+      if (_loop) {
+        _bufferIndex = 0;
+      } else {
+        _isPlaying = NO;
+        _bufferIndex = 0;
+        break;
+      }
     }
   }
 
@@ -152,16 +158,6 @@
 - (Boolean)getIsPlaying
 {
   return _isPlaying;
-}
-
-- (void)setType:(NSString *)type
-{
-  _waveType = [WaveType waveTypeFromString:type];
-}
-
-- (NSString *)getType
-{
-  return [WaveType stringFromWaveType:self.waveType];
 }
 
 @end

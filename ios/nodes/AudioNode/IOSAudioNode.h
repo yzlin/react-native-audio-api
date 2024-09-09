@@ -7,15 +7,21 @@ typedef struct objc_object AudioNode;
 #endif // __OBJC__
 
 #import <memory>
+#include <string>
 
 namespace audioapi {
 class IOSAudioNode {
+ protected:
+  AudioNode *audioNode_;
+
  public:
   ~IOSAudioNode();
-  AudioNode *audioNode_;
   virtual void connect(std::shared_ptr<IOSAudioNode> node);
   virtual void disconnect(std::shared_ptr<IOSAudioNode> node);
   int getNumberOfInputs();
   int getNumberOfOutputs();
+  int getChannelCount() const;
+  std::string getChannelCountMode() const;
+  std::string getChannelInterpretation() const;
 };
 } // namespace audioapi

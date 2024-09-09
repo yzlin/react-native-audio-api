@@ -31,12 +31,13 @@ int AudioBufferWrapper::getNumberOfChannels() const {
   return numberOfChannels;
 }
 
-int16_t **AudioBufferWrapper::getChannelData(int channel) const {
+float **AudioBufferWrapper::getChannelData(int channel) const {
   return audioBuffer_->getChannelData(channel);
 }
 
-void AudioBufferWrapper::setChannelData(int channel, int16_t **data) const {
-  audioBuffer_->setChannelData(channel, data);
+void AudioBufferWrapper::setChannelData(int channel, float **data, int length)
+    const {
+  audioBuffer_->setChannelData(channel, data, length);
 }
 } // namespace audioapi
 #endif
