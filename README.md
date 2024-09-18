@@ -30,7 +30,7 @@ For development purposes there is also simplified description of already impleme
 
 ## Examples
 
-The source code for the example app is unther the [`/example`](./example/) directory. Check [Example README](./example/README.md) file for installation instruction.
+The source code for the example app is unther the [`/apps/common-example`](./apps/common-example/) directory. Check [Example README](./apps/common-example/README.md) file for installation instruction.
 
 ## Your feedback
 
