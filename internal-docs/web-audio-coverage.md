@@ -18,6 +18,35 @@
 </details>
 
 <details>
+  <summary><b>AudioParam</b><br/> Android: ✅ <br />iOS: ✅</summary>
+
+| Method / Property              | iOS | Android |
+| ------------------------------ | --- | ------- |
+| 🔹value                        | ✅  | ✅      |
+| 🔹defaultValue                 | ✅  | ✅      |
+| 🔹minValue                     | ✅  | ✅      |
+| 🔹maxValue                     | ✅  | ✅      |
+| 🔘setValueAtTime               | ✅  | ✅      |
+| 🔘linearRampToValueAtTime      | ✅  | ✅      |
+| 🔘exponentialRampToValueAtTime | ✅  | ✅      |
+
+</details>
+
+<details>
+  <summary><b>AudioBuffer</b><br/> Android: ✅ <br />iOS: ✅</summary>
+
+| Method / Property              | iOS | Android |
+| ------------------------------ | --- | ------- |
+| 🔹sampleRate                   | ✅  | ✅      |
+| 🔹length                       | ✅  | ✅      |
+| 🔹duration                     | ✅  | ✅      |
+| 🔹numberOfChannels             | ✅  | ✅      |
+| 🔘getChannelData               | ✅  | ✅      |
+| 🔘setChannelData               | ✅  | ✅      |
+
+</details>
+
+<details>
   <summary><b>AudioNode</b><br/> Android: ✅ <br />iOS: ✅</summary>
 
 | Method / Property       | iOS | Android |
@@ -25,9 +54,9 @@
 | 🔹context               | ✅  | ✅      |
 | 🔹numberOfInputs        | ✅  | ✅      |
 | 🔹numberOfOutputs       | ✅  | ✅      |
-| 🔹channelCount          | ⌛  | ✅      |
-| 🔹channelCountMode      | ⌛  | ⌛      |
-| 🔹channelInterpretation | ⌛  | ⌛      |
+| 🔹channelCount          | ✅  | ✅      |
+| 🔹channelCountMode      | ✅  | ✅      |
+| 🔹channelInterpretation | ✅  | ✅      |
 | 🔘connect               | ✅  | ✅      |
 | 🔘disconnect            | ✅  | ✅      |
 
@@ -48,21 +77,6 @@
 
 | Method / Property | iOS | Android |
 | ----------------- | --- | ------- |
-
-</details>
-
-<details>
-  <summary><b>AudioParam</b><br/> Android: ✅ <br />iOS: ✅</summary>
-
-| Method / Property              | iOS | Android |
-| ------------------------------ | --- | ------- |
-| 🔹value                        | ✅  | ✅      |
-| 🔹defaultValue                 | ✅  | ✅      |
-| 🔹minValue                     | ✅  | ✅      |
-| 🔹maxValue                     | ✅  | ✅      |
-| 🔘setValueAtTime               | ✅  | ✅      |
-| 🔘linearRampToValueAtTime      | ✅  | ✅      |
-| 🔘exponentialRampToValueAtTime | ✅  | ✅      |
 
 </details>
 
@@ -105,5 +119,15 @@
 | 🔹Q               | ✅  | ✅      |
 | 🔹gain            | ✅  | ✅      |
 | 🔹type            | ✅  | ✅      |
+
+</details>
+
+<details>
+  <summary><b>AudioBufferSourceNode</b><br/> Android: ✅ <br />iOS: ✅</summary>
+
+| Method / Property | iOS | Android |
+| ----------------- | --- | ------- |
+| 🔹buffer          | ✅  | ✅      |
+| 🔹loop            | ✅  | ✅      |
 
 </details>

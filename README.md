@@ -38,8 +38,6 @@ We are open to new ideas and general feedback. If you want to share your opinion
 
 ## Roadmap
 
-- [ ] AudioBuffer on iOS
-- [ ] AudioBufferSourceNode on iOS
 - [ ] Split existing examples separate screens using react-navigation
 - [ ] Add simple drum machine implementation
 - [ ] Add example using AudioBufferSourceNode
