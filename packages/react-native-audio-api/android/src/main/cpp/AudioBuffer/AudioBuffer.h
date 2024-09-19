@@ -33,7 +33,7 @@ class AudioBuffer : public jni::HybridClass<AudioBuffer> {
   double getDuration() const;
   int getNumberOfChannels() const;
   float *getChannelData(int channel) const;
-  void setChannelData(int channel, const float *data);
+  void setChannelData(int channel, const float *data) const;
   void prepareForDeconstruction();
 
  public:

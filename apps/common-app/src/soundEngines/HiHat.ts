@@ -34,6 +34,13 @@ export class HiHat implements SoundEngine {
     highpassFilter.type = 'highpass';
     highpassFilter.frequency.value = this.highpassFilterFrequency;
 
+    gain.gain.setValueAtTime(0.01, time);
+
+    gain.gain.exponentialRampToValueAtTime(this.volume, time + 0.02);
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0.7, time + 0.03);
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0.001, time + 0.3);
+    gain.gain.exponentialRampToValueAtTime(this.volume * 0, time + 0.31);
+
     bandpassFilter.connect(highpassFilter);
     highpassFilter.connect(gain);
     gain.connect(this.audioContext.destination!);
@@ -46,12 +53,5 @@ export class HiHat implements SoundEngine {
       oscillator.start(time);
       oscillator.stop(time + 0.3);
     });
-
-    gain.gain.setValueAtTime(0.01, time);
-
-    gain.gain.exponentialRampToValueAtTime(this.volume, time + 0.02);
-    gain.gain.exponentialRampToValueAtTime(this.volume * 0.3, time + 0.03);
-    gain.gain.exponentialRampToValueAtTime(this.volume * 0.001, time + 0.3);
-    gain.gain.exponentialRampToValueAtTime(this.volume * 0, time + 0.31);
   }
 }

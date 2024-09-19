@@ -34,7 +34,7 @@ float *AudioBuffer::getChannelData(int channel) const {
   auto jArray = method(javaPart_, channel);
   auto length = jArray->size();
 
-  auto channelData = new float [length];
+  auto channelData = new float[length];
   auto pin = jArray->pin();
   for (int i = 0; i < length; i++) {
     channelData[i] = pin[i];
@@ -43,7 +43,7 @@ float *AudioBuffer::getChannelData(int channel) const {
   return channelData;
 }
 
-void AudioBuffer::setChannelData(int channel, const float *data) {
+void AudioBuffer::setChannelData(int channel, const float *data) const {
   static const auto method =
       javaClassStatic()->getMethod<void(jint, jfloatArray)>("setChannelData");
   std::vector<jfloat> buffer(getLength());
