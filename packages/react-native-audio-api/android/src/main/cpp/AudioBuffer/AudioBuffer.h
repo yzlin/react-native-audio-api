@@ -28,12 +28,12 @@ class AudioBuffer : public jni::HybridClass<AudioBuffer> {
     });
   }
 
-  int getSampleRate();
-  int getLength();
-  double getDuration();
-  int getNumberOfChannels();
-  float *getChannelData(int channel);
-  void setChannelData(int channel, float *data);
+  int getSampleRate() const;
+  int getLength() const;
+  double getDuration() const;
+  int getNumberOfChannels() const;
+  float *getChannelData(int channel) const;
+  void setChannelData(int channel, const float *data);
   void prepareForDeconstruction();
 
  public:
