@@ -6,6 +6,11 @@
 {
   self = [super init];
   if (self) {
+    if (!(numberOfChannels == 1 || numberOfChannels == 2)) {
+      @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                     reason:@"only 1 or 2 channels buffer is allowed"
+                                   userInfo:nil];
+    }
     _sampleRate = sampleRate;
     _length = length;
     _numberOfChannels = numberOfChannels;
@@ -21,6 +26,7 @@
       [_channels addObject:channelData];
     }
   }
+
   return self;
 }
 
@@ -33,9 +39,10 @@
   }
 
   NSMutableArray<NSNumber *> *channelData = self.channels[channel];
-  float *data = (float *)malloc(self.length * sizeof(float));
+
+  float *data = (float *)malloc(_length * sizeof(float));
   for (int i = 0; i < self.length; i++) {
-    data[i] = [channelData[i] floatValue];
+    data[i] = channelData[i].floatValue;
   }
   return data;
 }
@@ -59,19 +66,9 @@
   }
 }
 
-- (RNAA_AudioBuffer *)copyBuffer
+- (void)cleanup
 {
-  RNAA_AudioBuffer *outputBuffer = [[RNAA_AudioBuffer alloc] initWithSampleRate:self.sampleRate
-                                                                         length:self.length
-                                                               numberOfChannels:self.numberOfChannels];
-
-  for (int i = 0; i < self.numberOfChannels; i++) {
-    float *copiedData = [self getChannelDataForChannel:i];
-    [outputBuffer setChannelData:i data:copiedData length:self.length];
-    free(copiedData);
-  }
-
-  return outputBuffer;
+  _channels = nil;
 }
 
 - (RNAA_AudioBuffer *)mixWithOutputNumberOfChannels:(int)outputNumberOfChannels

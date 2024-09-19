@@ -17,36 +17,30 @@
     self.numberOfOutputs = 1;
     self.numberOfInputs = 0;
 
-    [self initAudioSourceNode:_buffer];
-  }
-  return self;
-}
+    _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:_buffer.sampleRate channels:2];
+    __weak typeof(self) weakSelf = self;
+    _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:_format
+                                                renderBlock:^OSStatus(
+                                                    BOOL *isSilence,
+                                                    const AudioTimeStamp *timestamp,
+                                                    AVAudioFrameCount frameCount,
+                                                    AudioBufferList *outputData) {
+                                                  return [weakSelf renderCallbackWithIsSilence:isSilence
+                                                                                     timestamp:timestamp
+                                                                                    frameCount:frameCount
+                                                                                    outputData:outputData];
+                                                }];
+    [self.context.audioEngine attachNode:self.sourceNode];
+    [self.context.audioEngine connect:self.sourceNode to:self.context.audioEngine.mainMixerNode format:self.format];
 
-- (void)initAudioSourceNode:(RNAA_AudioBuffer *)buffer
-{
-  _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:_buffer.sampleRate
-                                                           channels:_buffer.numberOfChannels];
-  __weak typeof(self) weakSelf = self;
-  _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:_format
-                                              renderBlock:^OSStatus(
-                                                  BOOL *isSilence,
-                                                  const AudioTimeStamp *timestamp,
-                                                  AVAudioFrameCount frameCount,
-                                                  AudioBufferList *outputData) {
-                                                return [weakSelf renderCallbackWithIsSilence:isSilence
-                                                                                   timestamp:timestamp
-                                                                                  frameCount:frameCount
-                                                                                  outputData:outputData];
-                                              }];
-  [self.context.audioEngine attachNode:self.sourceNode];
-  [self.context.audioEngine connect:self.sourceNode to:self.context.audioEngine.mainMixerNode format:self.format];
-
-  if (!self.context.audioEngine.isRunning) {
-    NSError *error = nil;
-    if (![self.context.audioEngine startAndReturnError:&error]) {
-      NSLog(@"Error starting audio engine: %@", [error localizedDescription]);
+    if (!self.context.audioEngine.isRunning) {
+      NSError *error = nil;
+      if (![self.context.audioEngine startAndReturnError:&error]) {
+        NSLog(@"Error starting audio engine: %@", [error localizedDescription]);
+      }
     }
   }
+  return self;
 }
 
 - (void)cleanup
@@ -72,7 +66,7 @@
 - (void)setBuffer:(RNAA_AudioBuffer *)buffer
 {
   _buffer = buffer;
-  [self initAudioSourceNode:_buffer];
+  _mixedBuffer = [_buffer mixWithOutputNumberOfChannels:self.channelCount];
 }
 
 - (OSStatus)renderCallbackWithIsSilence:(BOOL *)isSilence
@@ -80,20 +74,26 @@
                              frameCount:(AVAudioFrameCount)frameCount
                              outputData:(AudioBufferList *)outputData
 {
-  for (int frame = 0; frame < frameCount; ++frame) {
+  if (outputData->mNumberBuffers < 2) {
+    return noErr; // Ensure we have stereo output
+  }
+
+  float *leftBuffer = (float *)outputData->mBuffers[0].mData;
+  float *rightBuffer = (float *)outputData->mBuffers[1].mData;
+
+  float *leftBufferData = [_mixedBuffer getChannelDataForChannel:0];
+  float *rightBufferData = [_mixedBuffer getChannelDataForChannel:1];
+
+  for (int frame = 0; frame < frameCount; frame += 1) {
+    // Convert cents to HZ
     if (!self.isPlaying) {
-      for (int channel = 0; channel < outputData->mNumberBuffers; ++channel) {
-        float *outBuffer = (float *)outputData->mBuffers[channel].mData;
-        outBuffer[frame] = 0.0f;
-      }
+      leftBuffer[frame] = 0;
+      rightBuffer[frame] = 0;
       continue;
     }
 
-    for (int channel = 0; channel < _buffer.numberOfChannels; ++channel) {
-      float *outBuffer = (float *)outputData->mBuffers[channel].mData;
-      float *data = [_buffer getChannelDataForChannel:channel];
-      outBuffer[frame] = data[_bufferIndex];
-    }
+    leftBuffer[frame] = leftBufferData[_bufferIndex];
+    rightBuffer[frame] = rightBufferData[_bufferIndex];
 
     ++_bufferIndex;
 
