@@ -10,13 +10,13 @@ class AudioBufferSourceNode(
 ) : AudioScheduledSourceNode(context) {
   override var playbackParameters: PlaybackParameters? = null
 
-  private var loop: Boolean = true
+  private var loop: Boolean = false
     get() = field
   private var buffer: AudioBuffer
     get() = field
 
   init {
-    buffer = AudioBuffer(context.sampleRate, Constants.BUFFER_SIZE, 2)
+    buffer = AudioBuffer(2, Constants.BUFFER_SIZE, context.sampleRate)
     val audioTrack = context.getAudioTrack(Constants.BUFFER_SIZE * 2)
     playbackParameters = PlaybackParameters(audioTrack, buffer)
   }
@@ -27,7 +27,7 @@ class AudioBufferSourceNode(
     channelCount = audioBuffer.numberOfChannels
 
     val audioTrack = context.getAudioTrack(2 * buffer.length)
-    val buffer = AudioBuffer(buffer.sampleRate, buffer.length, buffer.numberOfChannels)
+    val buffer = AudioBuffer(buffer.numberOfChannels, buffer.length, buffer.sampleRate)
     playbackParameters = PlaybackParameters(audioTrack, buffer)
   }
 
@@ -38,14 +38,14 @@ class AudioBufferSourceNode(
   override fun fillBuffer(playbackParameters: PlaybackParameters) {
     mixBuffers(playbackParameters)
 
+    for (i in 0 until playbackParameters.audioBuffer.numberOfChannels) {
+      for (j in 0 until playbackParameters.audioBuffer.length) {
+        playbackParameters.audioBuffer.getChannelData(i)[j] = buffer.getChannelData(i)[j % buffer.length]
+      }
+    }
+
     if (!loop) {
       isPlaying = false
-    } else {
-      for (i in 0 until playbackParameters.audioBuffer.numberOfChannels) {
-        for (j in 0 until playbackParameters.audioBuffer.length) {
-          playbackParameters.audioBuffer.getChannelData(i)[j] = buffer.getChannelData(i)[j % buffer.length]
-        }
-      }
     }
   }
 }

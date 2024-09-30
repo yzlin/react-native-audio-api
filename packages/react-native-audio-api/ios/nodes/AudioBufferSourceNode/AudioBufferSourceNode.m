@@ -7,12 +7,12 @@
 {
   self = [super initWithContext:context];
   if (self) {
-    _loop = true;
+    _loop = false;
     _bufferIndex = 0;
     self.channelCount = 2;
-    _buffer = [[RNAA_AudioBuffer alloc] initWithSampleRate:context.sampleRate
-                                                    length:[Constants bufferSize]
-                                          numberOfChannels:2];
+    _buffer = [[RNAA_AudioBuffer alloc] initWithNumberOfChannels:2
+                                                          length:[Constants bufferSize]
+                                                      sampleRate:context.sampleRate];
 
     self.numberOfOutputs = 1;
     self.numberOfInputs = 0;

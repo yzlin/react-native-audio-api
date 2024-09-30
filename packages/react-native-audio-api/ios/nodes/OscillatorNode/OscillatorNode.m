@@ -61,6 +61,7 @@
   _frequencyParam = nil;
   _detuneParam = nil;
   _format = nil;
+  _sourceNode = nil;
 }
 
 - (OSStatus)renderCallbackWithIsSilence:(BOOL *)isSilence
@@ -89,8 +90,9 @@
     double detuneRatio = pow(2.0, [_detuneParam getValueAtTime:time] / OCTAVE_IN_CENTS);
     double detunedFrequency = round(detuneRatio * [_frequencyParam getValueAtTime:time]);
     double phaseIncrement = FULL_CIRCLE_RADIANS * (detunedFrequency / self.context.sampleRate);
-    leftBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
-    rightBuffer[frame] = [WaveType valueForWaveType:_waveType atPhase:_phase];
+    float value = [WaveType valueForWaveType:_waveType atPhase:_phase];
+    leftBuffer[frame] = value;
+    rightBuffer[frame] = value;
 
     _phase += phaseIncrement;
     time += deltaTime;
@@ -98,9 +100,15 @@
     if (_phase > FULL_CIRCLE_RADIANS) {
       _phase -= FULL_CIRCLE_RADIANS;
     }
+
+    if (_phase < 0) {
+      _phase += FULL_CIRCLE_RADIANS;
+    }
   }
 
-  [self process:frameCount bufferList:outputData];
+  if (self.isPlaying) {
+    [self process:frameCount bufferList:outputData];
+  }
 
   return noErr;
 }
