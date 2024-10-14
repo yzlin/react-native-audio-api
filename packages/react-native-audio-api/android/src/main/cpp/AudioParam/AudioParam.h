@@ -1,46 +1,50 @@
 #pragma once
 
-#include <fbjni/fbjni.h>
-#include <react/jni/CxxModuleWrapper.h>
-#include <react/jni/JMessageQueueThread.h>
 #include <memory>
+#include <set>
+#include <vector>
+
+#include "ParamChange.h"
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
+class AudioContext;
 
-class AudioParam : public jni::HybridClass<AudioParam> {
+class AudioParam {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/parameters/AudioParam;";
+  explicit AudioParam(
+      AudioContext *context,
+      float defaultValue,
+      float minValue,
+      float maxValue);
 
-  static jni::local_ref<AudioParam::jhybriddata> initHybrid(
-      jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
+  float getValue() const;
+  float getValueAtTime(double time);
+  void setValue(float value);
+  float getDefaultValue() const;
+  float getMinValue() const;
+  float getMaxValue() const;
+  void setValueAtTime(float value, double startTime);
+  void linearRampToValueAtTime(float value, double endTime);
+  void exponentialRampToValueAtTime(float value, double endTime);
 
-  static void registerNatives() {
-    registerHybrid({
-        makeNativeMethod("initHybrid", AudioParam::initHybrid),
-    });
-  }
+ private:
+  float value_;
+  float defaultValue_;
+  float minValue_;
+  float maxValue_;
+  AudioContext *context_;
+  std::set<ParamChange> changesQueue_;
 
-  double getValue();
-  void setValue(double value);
-  double getDefaultValue();
-  double getMinValue();
-  double getMaxValue();
-  void setValueAtTime(double value, double startTime);
-  void linearRampToValueAtTime(double value, double endTime);
-  void exponentialRampToValueAtTime(double value, double endTime);
+  double startTime_;
+  double endTime_;
+  float startValue_;
+  float endValue_;
+  std::function<float(double, double, float, float, double)> calculateValue_;
 
- protected:
-  friend HybridBase;
-
-  global_ref<AudioParam::javaobject> javaPart_;
-
-  explicit AudioParam(jni::alias_ref<AudioParam::jhybridobject> &jThis);
+  void checkValue(float value) const;
+  double getStartTime();
+  float getStartValue();
 };
 
 } // namespace audioapi

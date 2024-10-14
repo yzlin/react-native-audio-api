@@ -15,12 +15,8 @@ void AudioAPIInstaller::install(jlong jsContext) {
       audioAPIInstallerWrapper, jsContext);
 }
 
-AudioContext *AudioAPIInstaller::createAudioContext() {
-  static const auto method =
-      javaClassLocal()->getMethod<AudioContext()>("createAudioContext");
-  auto audioContext = method(javaPart_.get());
-
-  return audioContext->cthis();
+std::shared_ptr<AudioContext> AudioAPIInstaller::createAudioContext() {
+  return std::make_shared<AudioContext>();
 }
 
 } // namespace audioapi

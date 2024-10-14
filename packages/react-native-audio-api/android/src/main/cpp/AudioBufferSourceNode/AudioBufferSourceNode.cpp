@@ -1,31 +1,58 @@
 #include "AudioBufferSourceNode.h"
+#include "AudioContext.h"
 
 namespace audioapi {
 
-using namespace facebook::jni;
+AudioBufferSourceNode::AudioBufferSourceNode(AudioContext *context)
+    : AudioScheduledSourceNode(context), loop_(false), bufferIndex_(0) {
+  numberOfInputs_ = 0;
+  buffer_ = std::nullopt;
+}
 
-bool AudioBufferSourceNode::getLoop() {
-  static const auto method = javaClassLocal()->getMethod<jboolean()>("getLoop");
-  return method(javaPart_.get());
+bool AudioBufferSourceNode::getLoop() const {
+  return loop_;
+}
+
+std::shared_ptr<AudioBuffer> AudioBufferSourceNode::getBuffer() const {
+    if (!buffer_.has_value()) {
+        throw std::runtime_error("Buffer is not set");
+    }
+
+    return buffer_.value();
 }
 
 void AudioBufferSourceNode::setLoop(bool loop) {
-  static const auto method =
-      javaClassLocal()->getMethod<void(jboolean)>("setLoop");
-  method(javaPart_.get(), loop);
+  loop_ = loop;
 }
 
-AudioBuffer *AudioBufferSourceNode::getBuffer() {
-  static const auto method =
-      javaClassLocal()->getMethod<AudioBuffer()>("getBuffer");
-  auto buffer = method(javaPart_.get());
-
-  return buffer->cthis();
+void AudioBufferSourceNode::setBuffer(
+    const std::shared_ptr<AudioBuffer> &buffer) {
+  buffer_ = buffer->mix(channelCount_);
 }
 
-void AudioBufferSourceNode::setBuffer(const AudioBuffer *buffer) {
-  static const auto method =
-      javaClassLocal()->getMethod<void(AudioBuffer::javaobject)>("setBuffer");
-  method(javaPart_.get(), buffer->javaPart_.get());
+bool AudioBufferSourceNode::processAudio(float *audioData, int32_t numFrames) {
+  if (!isPlaying_ || !buffer_.has_value()) {
+    return false;
+  } else {
+    for (int i = 0; i < numFrames; ++i) {
+      for (int j = 0; j < channelCount_; j++) {
+        audioData[i * channelCount_ + j] =
+            buffer_.value()->getChannelData(j)[bufferIndex_];
+      }
+
+      bufferIndex_++;
+
+      if (bufferIndex_ >= buffer_.value()->getLength()) {
+        if (loop_) {
+          bufferIndex_ = 0;
+        } else {
+          isPlaying_ = false;
+          break;
+        }
+      }
+    }
+
+    return true;
+  }
 }
 } // namespace audioapi

@@ -4,6 +4,10 @@
 namespace audioapi {
 using namespace facebook;
 
+AudioNodeHostObject::AudioNodeHostObject(
+    const std::shared_ptr<AudioNodeWrapper> &wrapper)
+    : wrapper_(wrapper) {}
+
 std::vector<jsi::PropNameID> AudioNodeHostObject::getPropertyNames(
     jsi::Runtime &runtime) {
   std::vector<jsi::PropNameID> propertyNames;
@@ -63,15 +67,15 @@ jsi::Value AudioNodeHostObject::get(
   }
 
   if (propName == "numberOfInputs") {
-    return jsi::Value(wrapper_->getNumberOfInputs());
+    return {wrapper_->getNumberOfInputs()};
   }
 
   if (propName == "numberOfOutputs") {
-    return jsi::Value(wrapper_->getNumberOfOutputs());
+    return {wrapper_->getNumberOfOutputs()};
   }
 
   if (propName == "channelCount") {
-    return jsi::Value(wrapper_->getChannelCount());
+    return {wrapper_->getChannelCount()};
   }
 
   if (propName == "channelCountMode") {
@@ -85,10 +89,8 @@ jsi::Value AudioNodeHostObject::get(
   }
 
   if (propName == "context") {
-    auto context =
-        runtime.global().getPropertyAsObject(runtime, "__AudioContext");
-    auto hostObject = context.getHostObject<AudioContextHostObject>(runtime);
-    return jsi::Object::createFromHostObject(runtime, hostObject);
+    // TODO fix this
+    return jsi::Value::undefined();
   }
 
   throw std::runtime_error("Not yet implemented!");

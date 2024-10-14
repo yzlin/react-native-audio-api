@@ -3,11 +3,13 @@
 
 namespace audioapi {
 
-OscillatorNode *OscillatorNodeWrapper::getOscillatorNodeFromAudioNode() {
-  return static_cast<OscillatorNode *>(node_);
+std::shared_ptr<OscillatorNode>
+OscillatorNodeWrapper::getOscillatorNodeFromAudioNode() {
+  return std::static_pointer_cast<OscillatorNode>(node_);
 }
 
-OscillatorNodeWrapper::OscillatorNodeWrapper(OscillatorNode *oscillator)
+OscillatorNodeWrapper::OscillatorNodeWrapper(
+    const std::shared_ptr<OscillatorNode> &oscillator)
     : AudioScheduledSourceNodeWrapper(oscillator) {
   auto frequencyParam = oscillator->getFrequencyParam();
   frequencyParam_ = std::make_shared<AudioParamWrapper>(frequencyParam);
@@ -27,12 +29,12 @@ std::shared_ptr<AudioParamWrapper> OscillatorNodeWrapper::getDetuneParam()
 
 std::string OscillatorNodeWrapper::getType() {
   auto oscillatorNode_ = getOscillatorNodeFromAudioNode();
-  return oscillatorNode_->getWaveType();
+  return oscillatorNode_->getType();
 }
 
 void OscillatorNodeWrapper::setType(const std::string &type) {
   auto oscillatorNode_ = getOscillatorNodeFromAudioNode();
-  oscillatorNode_->setWaveType(type);
+  oscillatorNode_->setType(type);
 }
 } // namespace audioapi
 #endif

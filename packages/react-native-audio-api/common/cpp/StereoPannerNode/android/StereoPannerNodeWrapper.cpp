@@ -3,9 +3,10 @@
 
 namespace audioapi {
 
-StereoPannerNodeWrapper::StereoPannerNodeWrapper(StereoPannerNode *pannerNode)
-    : AudioNodeWrapper(pannerNode) {
-  auto panParam = pannerNode->getPanParam();
+StereoPannerNodeWrapper::StereoPannerNodeWrapper(
+    const std::shared_ptr<StereoPannerNode> &stereoPannerNode)
+    : AudioNodeWrapper(stereoPannerNode) {
+  auto panParam = stereoPannerNode->getPanParam();
   panParam_ = std::make_shared<AudioParamWrapper>(panParam);
 }
 

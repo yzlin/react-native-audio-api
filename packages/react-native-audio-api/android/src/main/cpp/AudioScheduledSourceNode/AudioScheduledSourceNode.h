@@ -1,20 +1,30 @@
 #pragma once
 
+#include <atomic>
+#include <chrono>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <thread>
+
 #include "AudioNode.h"
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
-
-class AudioScheduledSourceNode
-    : public jni::HybridClass<AudioScheduledSourceNode, AudioNode> {
+class AudioScheduledSourceNode : public AudioNode {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/nodes/AudioScheduledSourceNode;";
+  explicit AudioScheduledSourceNode(AudioContext *context);
 
   void start(double time);
   void stop(double time);
+
+ protected:
+  std::atomic<bool> isPlaying_;
+
+ private:
+  void startPlayback();
+  void stopPlayback();
+  void waitAndExecute(double time, const std::function<void(double)> &fun);
 };
 
 } // namespace audioapi

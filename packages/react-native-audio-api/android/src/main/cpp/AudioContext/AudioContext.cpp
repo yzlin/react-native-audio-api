@@ -2,89 +2,94 @@
 
 namespace audioapi {
 
-using namespace facebook::jni;
+AudioContext::AudioContext() {
+  destination_ = std::make_shared<AudioDestinationNode>(this);
 
-AudioContext::AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis)
-    : javaPart_(make_global(jThis)) {}
+  auto now = std::chrono::high_resolution_clock ::now();
+  contextStartTime_ =
+      static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                              now.time_since_epoch())
+                              .count());
 
-AudioDestinationNode *AudioContext::getDestination() {
-  static const auto method =
-      javaClassLocal()->getMethod<AudioDestinationNode()>("getDestination");
-  auto destination = method(javaPart_.get());
+  AudioStreamBuilder builder;
+  builder.setSharingMode(SharingMode::Exclusive)
+      ->setFormat(AudioFormat::Float)
+      ->setFormatConversionAllowed(true)
+      ->setPerformanceMode(PerformanceMode::LowLatency)
+      ->setChannelCount(CHANNEL_COUNT)
+      ->setSampleRate(sampleRate_)
+      ->setSampleRateConversionQuality(SampleRateConversionQuality::Medium)
+      ->setDataCallback(this)
+      ->openStream(mStream_);
 
-  return destination->cthis();
-}
-
-OscillatorNode *AudioContext::createOscillator() {
-  static const auto method =
-      javaClassLocal()->getMethod<OscillatorNode()>("createOscillator");
-  auto oscillator = method(javaPart_.get());
-
-  return oscillator->cthis();
-}
-
-GainNode *AudioContext::createGain() {
-  static const auto method =
-      javaClassLocal()->getMethod<GainNode()>("createGain");
-  auto gain = method(javaPart_.get());
-
-  return gain->cthis();
-}
-
-StereoPannerNode *AudioContext::createStereoPanner() {
-  static const auto method =
-      javaClassLocal()->getMethod<StereoPannerNode()>("createStereoPanner");
-  auto stereoPanner = method(javaPart_.get());
-
-  return stereoPanner->cthis();
-}
-
-BiquadFilterNode *AudioContext::createBiquadFilter() {
-  static const auto method =
-      javaClassLocal()->getMethod<BiquadFilterNode()>("createBiquadFilter");
-  auto biquadFilter = method(javaPart_.get());
-
-  return biquadFilter->cthis();
-}
-
-AudioBufferSourceNode *AudioContext::createBufferSource() {
-  static const auto method =
-      javaClassLocal()->getMethod<AudioBufferSourceNode()>(
-          "createBufferSource");
-  auto bufferSource = method(javaPart_.get());
-
-  return bufferSource->cthis();
-}
-
-AudioBuffer *
-AudioContext::createBuffer(int numberOfChannels, int length, int sampleRate) {
-  static const auto method =
-      javaClassLocal()->getMethod<AudioBuffer(int, int, int)>("createBuffer");
-  auto buffer = method(javaPart_.get(), numberOfChannels, length, sampleRate);
-
-  return buffer->cthis();
+  mStream_->requestStart();
 }
 
 std::string AudioContext::getState() {
-  static const auto method = javaClassLocal()->getMethod<JString()>("getState");
-  return method(javaPart_.get())->toStdString();
+  return AudioContext::toString(state_);
 }
 
-int AudioContext::getSampleRate() {
-  static const auto method =
-      javaClassLocal()->getMethod<jint()>("getSampleRate");
-  return method(javaPart_.get());
+int AudioContext::getSampleRate() const {
+  return sampleRate_;
 }
 
-double AudioContext::getCurrentTime() {
-  static const auto method =
-      javaClassLocal()->getMethod<jdouble()>("getCurrentTime");
-  return method(javaPart_.get());
+double AudioContext::getCurrentTime() const {
+  auto now = std::chrono::high_resolution_clock ::now();
+  auto currentTime =
+      static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                              now.time_since_epoch())
+                              .count());
+  return (currentTime - contextStartTime_) / 1e9;
 }
 
 void AudioContext::close() {
-  static const auto method = javaClassLocal()->getMethod<void()>("close");
-  method(javaPart_.get());
-  javaPart_.reset();
+  state_ = State::CLOSED;
+
+  if (mStream_) {
+    mStream_->requestStop();
+    mStream_->close();
+  }
+  mStream_.reset();
+
+  destination_.reset();
+}
+
+std::shared_ptr<AudioDestinationNode> AudioContext::getDestination() {
+  return destination_;
+}
+
+std::shared_ptr<OscillatorNode> AudioContext::createOscillator() {
+  return std::make_shared<OscillatorNode>(this);
+}
+
+std::shared_ptr<GainNode> AudioContext::createGain() {
+  return std::make_shared<GainNode>(this);
+}
+
+std::shared_ptr<StereoPannerNode> AudioContext::createStereoPanner() {
+  return std::make_shared<StereoPannerNode>(this);
+}
+
+std::shared_ptr<BiquadFilterNode> AudioContext::createBiquadFilter() {
+  return std::make_shared<BiquadFilterNode>(this);
+}
+
+std::shared_ptr<AudioBufferSourceNode> AudioContext::createBufferSource() {
+  return std::make_shared<AudioBufferSourceNode>(this);
+}
+
+std::shared_ptr<AudioBuffer>
+AudioContext::createBuffer(int numberOfChannels, int length, int sampleRate) {
+  return std::make_shared<AudioBuffer>(numberOfChannels, length, sampleRate);
+}
+
+DataCallbackResult AudioContext::onAudioReady(
+    AudioStream *oboeStream,
+    void *audioData,
+    int32_t numFrames) {
+  auto buffer = static_cast<float *>(audioData);
+  destination_->renderAudio(buffer, numFrames);
+
+  return DataCallbackResult::Continue;
 }
 } // namespace audioapi

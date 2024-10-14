@@ -1,22 +1,26 @@
 #pragma once
 
+#include <memory>
+#include <optional>
+
 #include "AudioBuffer.h"
 #include "AudioScheduledSourceNode.h"
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
-
-class AudioBufferSourceNode
-    : public jni::HybridClass<AudioBufferSourceNode, AudioScheduledSourceNode> {
+class AudioBufferSourceNode : public AudioScheduledSourceNode {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/nodes/AudioBufferSourceNode;";
+  explicit AudioBufferSourceNode(AudioContext *context);
 
-  bool getLoop();
+  bool getLoop() const;
+  std::shared_ptr<AudioBuffer> getBuffer() const;
   void setLoop(bool loop);
-  AudioBuffer *getBuffer();
-  void setBuffer(const AudioBuffer *buffer);
+  void setBuffer(const std::shared_ptr<AudioBuffer> &buffer);
+  bool processAudio(float *audioData, int32_t numFrames) override;
+
+ private:
+  bool loop_;
+  std::optional<std::shared_ptr<AudioBuffer>> buffer_;
+  int bufferIndex_;
 };
 } // namespace audioapi

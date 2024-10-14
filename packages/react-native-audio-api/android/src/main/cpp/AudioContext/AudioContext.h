@@ -1,64 +1,67 @@
 #pragma once
 
-#include <fbjni/fbjni.h>
-#include <jsi/jsi.h>
-#include <react/jni/CxxModuleWrapper.h>
-#include <react/jni/JMessageQueueThread.h>
+#include <oboe/Oboe.h>
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "AudioBuffer.h"
 #include "AudioBufferSourceNode.h"
-#include "AudioContextHostObject.h"
-#include "AudioContextWrapper.h"
 #include "AudioDestinationNode.h"
+#include "AudioScheduledSourceNode.h"
 #include "BiquadFilterNode.h"
+#include "Constants.h"
 #include "GainNode.h"
 #include "OscillatorNode.h"
 #include "StereoPannerNode.h"
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
+using namespace oboe;
 
-class AudioContext : public jni::HybridClass<AudioContext> {
+class AudioContext : public AudioStreamDataCallback {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/context/AudioContext;";
-
-  static jni::local_ref<AudioContext::jhybriddata> initHybrid(
-      jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  static void registerNatives() {
-    registerHybrid({
-        makeNativeMethod("initHybrid", AudioContext::initHybrid),
-    });
-  }
-
-  AudioDestinationNode *getDestination();
-  OscillatorNode *createOscillator();
-  GainNode *createGain();
-  StereoPannerNode *createStereoPanner();
-  BiquadFilterNode *createBiquadFilter();
-  AudioBufferSourceNode *createBufferSource();
-  AudioBuffer *createBuffer(int numberOfChannels, int length, int sampleRate);
+  AudioContext();
   std::string getState();
-  int getSampleRate();
-  double getCurrentTime();
+  int getSampleRate() const;
+  double getCurrentTime() const;
   void close();
 
-  void install(jlong jsContext);
+  std::shared_ptr<AudioDestinationNode> getDestination();
+  std::shared_ptr<OscillatorNode> createOscillator();
+  std::shared_ptr<GainNode> createGain();
+  std::shared_ptr<StereoPannerNode> createStereoPanner();
+  std::shared_ptr<BiquadFilterNode> createBiquadFilter();
+  std::shared_ptr<AudioBufferSourceNode> createBufferSource();
+  static std::shared_ptr<AudioBuffer>
+  createBuffer(int numberOfChannels, int length, int sampleRate);
 
  private:
-  friend HybridBase;
+  enum class State { RUNNING, CLOSED };
 
-  global_ref<AudioContext::javaobject> javaPart_;
+  static std::string toString(State state) {
+    switch (state) {
+      case State::RUNNING:
+        return "running";
+      case State::CLOSED:
+        return "closed";
+      default:
+        throw std::invalid_argument("Unknown context state");
+    }
+  }
 
-  explicit AudioContext(jni::alias_ref<AudioContext::jhybridobject> &jThis);
+  DataCallbackResult onAudioReady(
+      AudioStream *oboeStream,
+      void *audioData,
+      int32_t numFrames) override;
+
+ private:
+  std::shared_ptr<AudioDestinationNode> destination_;
+  std::shared_ptr<AudioStream> mStream_;
+  State state_ = State::RUNNING;
+  int sampleRate_ = SAMPLE_RATE;
+  double contextStartTime_;
 };
 
 } // namespace audioapi

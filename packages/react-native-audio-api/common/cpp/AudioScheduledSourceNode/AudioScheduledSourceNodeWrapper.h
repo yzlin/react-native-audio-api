@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include "AudioNodeWrapper.h"
 
 #ifdef ANDROID
@@ -11,30 +12,27 @@
 
 namespace audioapi {
 
-#ifdef ANDROID
-class AudioScheduledSourceNode;
-#endif
-
 class AudioScheduledSourceNodeWrapper : public AudioNodeWrapper {
 #ifdef ANDROID
 
- private:
-  AudioScheduledSourceNode *getAudioScheduledSourceNodeFromAudioNode();
-
  public:
   explicit AudioScheduledSourceNodeWrapper(
-      AudioScheduledSourceNode *audioScheduledSourceNode)
-      : AudioNodeWrapper(audioScheduledSourceNode) {}
+      const std::shared_ptr<AudioScheduledSourceNode>
+          &audioScheduledSourceNode);
+
+ private:
+  std::shared_ptr<AudioScheduledSourceNode>
+  getAudioScheduledSourceNodeFromAudioNode();
 #else
+
+ public:
+  AudioScheduledSourceNodeWrapper(
+      const std::shared_ptr<IOSAudioScheduledSourceNode>
+          &audioScheduledSourceNode);
 
  private:
   std::shared_ptr<IOSAudioScheduledSourceNode>
   getAudioScheduledSourceNodeFromAudioNode();
-
- public:
-  AudioScheduledSourceNodeWrapper(
-      std::shared_ptr<IOSAudioScheduledSourceNode> audioScheduledSourceNode)
-      : AudioNodeWrapper(audioScheduledSourceNode) {}
 #endif
 
  public:

@@ -1,46 +1,74 @@
 #pragma once
 
-#include <fbjni/fbjni.h>
-#include <react/jni/CxxModuleWrapper.h>
-#include <react/jni/JMessageQueueThread.h>
 #include <memory>
 #include <string>
+#include <vector>
+#include "Constants.h"
+
+// channelCount always equal to 2
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
+class AudioContext;
 
-class AudioNode : public jni::HybridClass<AudioNode> {
+class AudioNode : public std::enable_shared_from_this<AudioNode> {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/nodes/audionode/AudioNode;";
+  explicit AudioNode(AudioContext *context);
+  virtual ~AudioNode();
+  int getNumberOfInputs() const;
+  int getNumberOfOutputs() const;
+  int getChannelCount() const;
+  std::string getChannelCountMode() const;
+  std::string getChannelInterpretation() const;
+  void connect(const std::shared_ptr<AudioNode> &node);
+  void disconnect(const std::shared_ptr<AudioNode> &node);
 
-  static jni::local_ref<AudioNode::jhybriddata> initHybrid(
-      jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  static void registerNatives() {
-    registerHybrid({
-        makeNativeMethod("initHybrid", AudioNode::initHybrid),
-    });
-  }
-
-  int getNumberOfInputs();
-  int getNumberOfOutputs();
-  int getChannelCount();
-  std::string getChannelCountMode();
-  std::string getChannelInterpretation();
-  void connect(const AudioNode *node);
-  void disconnect(const AudioNode *node);
+  // Change public to protected
+  virtual bool processAudio(float *audioData, int32_t numFrames);
 
  protected:
-  friend HybridBase;
+  enum class ChannelCountMode { MAX, CLAMPED_MAX, EXPLICIT };
 
-  global_ref<AudioNode::javaobject> javaPart_;
+  static std::string toString(ChannelCountMode mode) {
+    switch (mode) {
+      case ChannelCountMode::MAX:
+        return "max";
+      case ChannelCountMode::CLAMPED_MAX:
+        return "clamped-max";
+      case ChannelCountMode::EXPLICIT:
+        return "explicit";
+      default:
+        throw std::invalid_argument("Unknown channel count mode");
+    }
+  }
 
-  explicit AudioNode(jni::alias_ref<AudioNode::jhybridobject> &jThis);
+  enum class ChannelInterpretation { SPEAKERS, DISCRETE };
+
+  static std::string toString(ChannelInterpretation interpretation) {
+    switch (interpretation) {
+      case ChannelInterpretation::SPEAKERS:
+        return "speakers";
+      case ChannelInterpretation::DISCRETE:
+        return "discrete";
+      default:
+        throw std::invalid_argument("Unknown channel interpretation");
+    }
+  }
+
+ protected:
+  AudioContext *context_;
+  int numberOfInputs_ = 1;
+  int numberOfOutputs_ = 1;
+  int channelCount_ = CHANNEL_COUNT;
+  ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
+  ChannelInterpretation channelInterpretation_ =
+      ChannelInterpretation::SPEAKERS;
+
+  std::vector<std::shared_ptr<AudioNode>> inputNodes_ = {};
+  std::vector<std::shared_ptr<AudioNode>> outputNodes_ = {};
+
+ private:
+  void cleanup();
 };
 
 } // namespace audioapi

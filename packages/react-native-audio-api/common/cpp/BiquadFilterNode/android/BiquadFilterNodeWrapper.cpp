@@ -3,12 +3,13 @@
 
 namespace audioapi {
 
-BiquadFilterNode *BiquadFilterNodeWrapper::getBiquadFilterNodeFromAudioNode() {
-  return static_cast<BiquadFilterNode *>(node_);
+std::shared_ptr<BiquadFilterNode>
+BiquadFilterNodeWrapper::getBiquadFilterNodeFromAudioNode() {
+  return std::static_pointer_cast<BiquadFilterNode>(node_);
 }
 
 BiquadFilterNodeWrapper::BiquadFilterNodeWrapper(
-    BiquadFilterNode *biquadFilterNode)
+    const std::shared_ptr<BiquadFilterNode> &biquadFilterNode)
     : AudioNodeWrapper(biquadFilterNode) {
   auto frequencyParam = biquadFilterNode->getFrequencyParam();
   frequencyParam_ = std::make_shared<AudioParamWrapper>(frequencyParam);
@@ -41,12 +42,12 @@ std::shared_ptr<AudioParamWrapper> BiquadFilterNodeWrapper::getGainParam()
 
 std::string BiquadFilterNodeWrapper::getType() {
   auto biquadFilterNode_ = getBiquadFilterNodeFromAudioNode();
-  return biquadFilterNode_->getFilterType();
+  return biquadFilterNode_->getType();
 }
 
 void BiquadFilterNodeWrapper::setType(const std::string &filterType) {
   auto biquadFilterNode_ = getBiquadFilterNodeFromAudioNode();
-  biquadFilterNode_->setFilterType(filterType);
+  biquadFilterNode_->setType(filterType);
 }
 } // namespace audioapi
 #endif

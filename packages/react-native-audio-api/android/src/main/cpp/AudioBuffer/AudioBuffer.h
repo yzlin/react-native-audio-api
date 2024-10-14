@@ -1,46 +1,33 @@
 #pragma once
 
-#include <fbjni/fbjni.h>
-#include <react/jni/CxxModuleWrapper.h>
-#include <react/jni/JMessageQueueThread.h>
 #include <memory>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
-
-class AudioBuffer : public jni::HybridClass<AudioBuffer> {
+class AudioBuffer : public std::enable_shared_from_this<AudioBuffer> {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/utils/AudioBuffer;";
+  explicit AudioBuffer(int numberOfChannels, int length, int sampleRate);
 
-  static jni::local_ref<AudioBuffer::jhybriddata> initHybrid(
-      jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  static void registerNatives() {
-    registerHybrid({
-        makeNativeMethod("initHybrid", AudioBuffer::initHybrid),
-    });
-  }
-
-  int getSampleRate() const;
-  int getLength() const;
-  double getDuration() const;
   int getNumberOfChannels() const;
+  int getLength() const;
+  int getSampleRate() const;
+  double getDuration() const;
   float *getChannelData(int channel) const;
-  void setChannelData(int channel, const float *data) const;
+  void setChannelData(int channel, const float *data, int length);
 
- public:
-  friend HybridBase;
+ private:
+  friend class AudioBufferSourceNode;
 
-  global_ref<AudioBuffer::javaobject> javaPart_;
+  int numberOfChannels_;
+  int length_;
+  int sampleRate_;
+  double duration_;
+  float **channels_;
 
-  explicit AudioBuffer(jni::alias_ref<AudioBuffer::jhybridobject> &jThis);
+  std::shared_ptr<AudioBuffer> mix(int outputNumberOfChannels);
 };
 
 } // namespace audioapi

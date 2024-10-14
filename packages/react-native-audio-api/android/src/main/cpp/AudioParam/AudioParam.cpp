@@ -1,55 +1,136 @@
 #include "AudioParam.h"
+#include "AudioContext.h"
 
 namespace audioapi {
 
-AudioParam::AudioParam(alias_ref<AudioParam::jhybridobject> &jThis)
-    : javaPart_(make_global(jThis)) {}
-
-double AudioParam::getValue() {
-  static const auto method = javaClassLocal()->getMethod<double()>("getValue");
-  return method(javaPart_.get());
+AudioParam::AudioParam(
+    AudioContext *context,
+    float defaultValue,
+    float minValue,
+    float maxValue)
+    : value_(defaultValue),
+      defaultValue_(defaultValue),
+      minValue_(minValue),
+      maxValue_(maxValue),
+      context_(context),
+      changesQueue_() {
+  startTime_ = 0;
+  endTime_ = 0;
+  startValue_ = 0;
+  endValue_ = 0;
+  calculateValue_ = [this](double, double, float, float, double) {
+    return value_;
+  };
 }
 
-void AudioParam::setValue(double value) {
-  static const auto method =
-      javaClassLocal()->getMethod<void(double)>("setValue");
-  method(javaPart_.get(), value);
+float AudioParam::getValue() const {
+  return value_;
 }
 
-double AudioParam::getDefaultValue() {
-  static const auto method =
-      javaClassLocal()->getMethod<double()>("getDefaultValue");
-  return method(javaPart_.get());
+float AudioParam::getDefaultValue() const {
+  return defaultValue_;
 }
 
-double AudioParam::getMinValue() {
-  static const auto method =
-      javaClassLocal()->getMethod<double()>("getMinValue");
-  return method(javaPart_.get());
+float AudioParam::getMinValue() const {
+  return minValue_;
 }
 
-double AudioParam::getMaxValue() {
-  static const auto method =
-      javaClassLocal()->getMethod<double()>("getMaxValue");
-  return method(javaPart_.get());
+float AudioParam::getMaxValue() const {
+  return maxValue_;
 }
 
-void AudioParam::setValueAtTime(double value, double startTime) {
-  static const auto method =
-      javaClassLocal()->getMethod<void(double, double)>("setValueAtTime");
-  method(javaPart_.get(), value, startTime);
+void AudioParam::setValue(float value) {
+  checkValue(value);
+  value_ = value;
 }
 
-void AudioParam::linearRampToValueAtTime(double value, double endTime) {
-  static const auto method = javaClassLocal()->getMethod<void(double, double)>(
-      "linearRampToValueAtTime");
-  method(javaPart_.get(), value, endTime);
+float AudioParam::getValueAtTime(double time) {
+  if (!changesQueue_.empty()) {
+    if (endTime_ < time) {
+      auto change = *changesQueue_.begin();
+      startTime_ = change.getStartTime();
+      endTime_ = change.getEndTime();
+      startValue_ = change.getStartValue();
+      endValue_ = change.getEndValue();
+      calculateValue_ = change.getCalculateValue();
+      changesQueue_.erase(changesQueue_.begin());
+    }
+  }
+
+  if (startTime_ <= time) {
+    value_ =
+        calculateValue_(startTime_, endTime_, startValue_, endValue_, time);
+  }
+
+  return value_;
 }
 
-void AudioParam::exponentialRampToValueAtTime(double value, double endTime) {
-  static const auto method = javaClassLocal()->getMethod<void(double, double)>(
-      "exponentialRampToValueAtTime");
-  method(javaPart_.get(), value, endTime);
+void AudioParam::setValueAtTime(float value, double time) {
+  checkValue(value);
+  auto calculateValue = [](double, double, float, float endValue, double) {
+    return endValue;
+  };
+
+  auto paramChange = ParamChange(time, time, value, value, calculateValue);
+  changesQueue_.insert(paramChange);
+}
+
+void AudioParam::linearRampToValueAtTime(float value, double time) {
+  checkValue(value);
+  auto calculateValue = [](double startTime,
+                           double endTime,
+                           float startValue,
+                           float endValue,
+                           double time) {
+    return time >= endTime ? endValue
+                           : startValue +
+            (endValue - startValue) * (time - startTime) /
+                (endTime - startTime);
+  };
+
+  auto paramChange =
+      ParamChange(getStartTime(), time, getStartValue(), value, calculateValue);
+  changesQueue_.emplace(paramChange);
+}
+
+void AudioParam::exponentialRampToValueAtTime(float value, double time) {
+  checkValue(value);
+  auto calculateValue = [](double startTime,
+                           double endTime,
+                           float startValue,
+                           float endValue,
+                           double time) {
+    return time >= endTime ? endValue
+                           : startValue *
+            pow(endValue / startValue,
+                (time - startTime) / (endTime - startTime));
+  };
+
+  auto paramChange =
+      ParamChange(getStartTime(), time, getStartValue(), value, calculateValue);
+  changesQueue_.emplace(paramChange);
+}
+
+void AudioParam::checkValue(float value) const {
+  if (value < minValue_ || value > maxValue_) {
+    throw std::invalid_argument("Value out of range");
+  }
+}
+
+double AudioParam::getStartTime() {
+  if (changesQueue_.empty()) {
+    return context_->getCurrentTime();
+  }
+
+  return changesQueue_.rbegin()->getEndTime();
+}
+
+float AudioParam::getStartValue() {
+  if (changesQueue_.empty()) {
+    return this->value_;
+  }
+
+  return changesQueue_.rbegin()->getEndValue();
 }
 
 } // namespace audioapi

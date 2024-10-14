@@ -9,21 +9,20 @@
 namespace audioapi {
 using namespace facebook;
 
-class AudioBufferWrapper;
-
 class AudioBufferHostObject : public jsi::HostObject {
  public:
   std::shared_ptr<AudioBufferWrapper> wrapper_;
 
   explicit AudioBufferHostObject(
-      const std::shared_ptr<AudioBufferWrapper> &wrapper)
-      : wrapper_(wrapper) {}
+      const std::shared_ptr<AudioBufferWrapper> &wrapper);
 
   jsi::Value get(jsi::Runtime &runtime, const jsi::PropNameID &name) override;
+
   void set(
       jsi::Runtime &runtime,
       const jsi::PropNameID &name,
       const jsi::Value &value) override;
+
   std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
 
   static std::shared_ptr<AudioBufferHostObject> createFromWrapper(

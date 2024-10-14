@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.9.0)
 project(react-native-audio-api)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include("${REACT_NATIVE_DIR}/ReactAndroid/cmake-utils/folly-flags.cmake")
 add_compile_options(${folly_FLAGS})
@@ -29,6 +29,7 @@ target_include_directories(
 
 find_package(ReactAndroid REQUIRED CONFIG)
 find_package(fbjni REQUIRED CONFIG)
+find_package (oboe REQUIRED CONFIG)
 
 set(LINK_LIBRARIES
   ReactAndroid::jsi
@@ -37,6 +38,7 @@ set(LINK_LIBRARIES
   ReactAndroid::folly_runtime
   android
   log
+  oboe::oboe
 )
 
 target_link_libraries(react-native-audio-api ${LINK_LIBRARIES})

@@ -1,18 +1,39 @@
 #include "AudioScheduledSourceNode.h"
+#include "AudioContext.h"
 
 namespace audioapi {
 
-using namespace facebook::jni;
+AudioScheduledSourceNode::AudioScheduledSourceNode(AudioContext *context)
+    : AudioNode(context), isPlaying_(false) {
+  numberOfInputs_ = 0;
+}
 
 void AudioScheduledSourceNode::start(double time) {
-  static const auto method =
-      javaClassLocal()->getMethod<void(jdouble)>("start");
-  method(javaPart_.get(), time);
+  waitAndExecute(time, [this](double time) { startPlayback(); });
 }
 
 void AudioScheduledSourceNode::stop(double time) {
-  static const auto method = javaClassLocal()->getMethod<void(jdouble)>("stop");
-  method(javaPart_.get(), time);
+  waitAndExecute(time, [this](double time) { stopPlayback(); });
+}
+
+void AudioScheduledSourceNode::startPlayback() {
+  isPlaying_ = true;
+}
+
+void AudioScheduledSourceNode::stopPlayback() {
+  isPlaying_ = false;
+}
+
+void AudioScheduledSourceNode::waitAndExecute(
+    double time,
+    const std::function<void(double)> &fun) {
+  std::thread([this, time, fun]() {
+    while (context_->getCurrentTime() < time) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+
+    fun(time);
+  }).detach();
 }
 
 } // namespace audioapi

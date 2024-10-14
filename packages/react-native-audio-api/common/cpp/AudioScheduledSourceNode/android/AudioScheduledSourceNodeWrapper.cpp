@@ -3,9 +3,13 @@
 
 namespace audioapi {
 
-AudioScheduledSourceNode *
+AudioScheduledSourceNodeWrapper::AudioScheduledSourceNodeWrapper(
+    const std::shared_ptr<AudioScheduledSourceNode> &audioScheduledSourceNode)
+    : AudioNodeWrapper(audioScheduledSourceNode) {}
+
+std::shared_ptr<AudioScheduledSourceNode>
 AudioScheduledSourceNodeWrapper::getAudioScheduledSourceNodeFromAudioNode() {
-  return static_cast<AudioScheduledSourceNode *>(node_);
+  return std::static_pointer_cast<AudioScheduledSourceNode>(node_);
 }
 
 void AudioScheduledSourceNodeWrapper::start(double time) {

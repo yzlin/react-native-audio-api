@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+
 #include "AudioParamWrapper.h"
 #include "AudioScheduledSourceNodeWrapper.h"
 
@@ -13,36 +14,33 @@
 
 namespace audioapi {
 
-#ifdef ANDROID
-class OscillatorNode;
-#endif
-
 class OscillatorNodeWrapper : public AudioScheduledSourceNodeWrapper {
 #ifdef ANDROID
 
- private:
-  OscillatorNode *getOscillatorNodeFromAudioNode();
-
  public:
-  explicit OscillatorNodeWrapper(OscillatorNode *oscillator);
-#else
+  explicit OscillatorNodeWrapper(
+      const std::shared_ptr<OscillatorNode> &oscillatorNode);
 
  private:
-  std::shared_ptr<IOSOscillatorNode> getOscillatorNodeFromAudioNode();
+  std::shared_ptr<OscillatorNode> getOscillatorNodeFromAudioNode();
+#else
 
  public:
   explicit OscillatorNodeWrapper(
-      std::shared_ptr<IOSOscillatorNode> oscillatorNode);
-#endif
+      const std::shared_ptr<IOSOscillatorNode> &oscillatorNode);
 
  private:
-  std::shared_ptr<AudioParamWrapper> frequencyParam_;
-  std::shared_ptr<AudioParamWrapper> detuneParam_;
+  std::shared_ptr<IOSOscillatorNode> getOscillatorNodeFromAudioNode();
+#endif
 
  public:
   std::shared_ptr<AudioParamWrapper> getFrequencyParam() const;
   std::shared_ptr<AudioParamWrapper> getDetuneParam() const;
   std::string getType();
   void setType(const std::string &type);
+
+ private:
+  std::shared_ptr<AudioParamWrapper> frequencyParam_;
+  std::shared_ptr<AudioParamWrapper> detuneParam_;
 };
 } // namespace audioapi

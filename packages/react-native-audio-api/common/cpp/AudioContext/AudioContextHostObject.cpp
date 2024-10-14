@@ -7,7 +7,7 @@ AudioContextHostObject::AudioContextHostObject(
     const std::shared_ptr<AudioContextWrapper> &wrapper)
     : wrapper_(wrapper) {
   auto destinationNodeWrapper = wrapper_->getDestination();
-  destinationNode_ =
+  destination_ =
       AudioDestinationNodeHostObject::createFromWrapper(destinationNodeWrapper);
 }
 
@@ -38,7 +38,7 @@ jsi::Value AudioContextHostObject::get(
   auto propName = propNameId.utf8(runtime);
 
   if (propName == "destination") {
-    return jsi::Object::createFromHostObject(runtime, destinationNode_);
+    return jsi::Object::createFromHostObject(runtime, destination_);
   }
 
   if (propName == "state") {
@@ -46,11 +46,11 @@ jsi::Value AudioContextHostObject::get(
   }
 
   if (propName == "sampleRate") {
-    return jsi::Value(wrapper_->getSampleRate());
+    return {wrapper_->getSampleRate()};
   }
 
   if (propName == "currentTime") {
-    return jsi::Value(wrapper_->getCurrentTime());
+    return {wrapper_->getCurrentTime()};
   }
 
   if (propName == "createOscillator") {
@@ -151,9 +151,9 @@ jsi::Value AudioContextHostObject::get(
             const jsi::Value &thisValue,
             const jsi::Value *arguments,
             size_t count) -> jsi::Value {
-          auto numberOfChannels = arguments[0].getNumber();
-          auto length = arguments[1].getNumber();
-          auto sampleRate = arguments[2].getNumber();
+          auto numberOfChannels = static_cast<int>(arguments[0].getNumber());
+          auto length = static_cast<int>(arguments[1].getNumber());
+          auto sampleRate = static_cast<int>(arguments[2].getNumber());
           auto buffer =
               wrapper_->createBuffer(numberOfChannels, length, sampleRate);
           auto bufferHostObject =

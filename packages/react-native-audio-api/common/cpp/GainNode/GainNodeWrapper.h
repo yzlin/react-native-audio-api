@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include "AudioNodeWrapper.h"
 #include "AudioParamWrapper.h"
 
@@ -12,25 +13,23 @@
 
 namespace audioapi {
 
-#ifdef ANDROID
-class GainNode;
-#endif
-
 class GainNodeWrapper : public AudioNodeWrapper {
 #ifdef ANDROID
  public:
-  explicit GainNodeWrapper(GainNode *gainNode);
+  explicit GainNodeWrapper(const std::shared_ptr<GainNode> &gainNode);
 #else
- private:
-  std::shared_ptr<IOSGainNode> getGainNodeFromAudioNode();
 
  public:
-  explicit GainNodeWrapper(std::shared_ptr<IOSGainNode> gainNode);
-#endif
+  explicit GainNodeWrapper(const std::shared_ptr<IOSGainNode> &gainNode);
+
  private:
-  std::shared_ptr<AudioParamWrapper> gainParam_;
+  std::shared_ptr<IOSGainNode> getGainNodeFromAudioNode();
+#endif
 
  public:
   std::shared_ptr<AudioParamWrapper> getGainParam() const;
+
+ private:
+  std::shared_ptr<AudioParamWrapper> gainParam_;
 };
 } // namespace audioapi

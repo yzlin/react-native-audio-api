@@ -20,44 +20,39 @@
 
 namespace audioapi {
 
-#ifdef ANDROID
-using namespace facebook;
-class AudioContext;
-#endif
-
 class AudioContextWrapper {
 #ifdef ANDROID
 
- private:
-  AudioContext *audiocontext_;
-
  public:
-  explicit AudioContextWrapper(AudioContext *audiocontext);
-#else
+  explicit AudioContextWrapper(
+      const std::shared_ptr<AudioContext> &audiocontext);
 
  private:
-  std::shared_ptr<IOSAudioContext> audiocontext_;
+  std::shared_ptr<AudioContext> audioContext_;
+#else
 
  public:
   AudioContextWrapper();
-#endif
 
  private:
-  std::shared_ptr<AudioDestinationNodeWrapper> destinationNode_;
-  int sampleRate_;
+  std::shared_ptr<IOSAudioContext> audioContext_;
+#endif
 
  public:
-  std::shared_ptr<OscillatorNodeWrapper> createOscillator();
   std::shared_ptr<AudioDestinationNodeWrapper> getDestination() const;
-  std::shared_ptr<GainNodeWrapper> createGain();
-  std::shared_ptr<StereoPannerNodeWrapper> createStereoPanner();
-  std::shared_ptr<BiquadFilterNodeWrapper> createBiquadFilter();
-  std::shared_ptr<AudioBufferSourceNodeWrapper> createBufferSource();
+  std::shared_ptr<OscillatorNodeWrapper> createOscillator() const;
+  std::shared_ptr<GainNodeWrapper> createGain() const;
+  std::shared_ptr<StereoPannerNodeWrapper> createStereoPanner() const;
+  std::shared_ptr<BiquadFilterNodeWrapper> createBiquadFilter() const;
+  std::shared_ptr<AudioBufferSourceNodeWrapper> createBufferSource() const;
   std::shared_ptr<AudioBufferWrapper>
-  createBuffer(int numberOfChannels, int length, int sampleRate);
-  std::string getState();
+  createBuffer(int numberOfChannels, int length, int sampleRate) const;
+  std::string getState() const;
   int getSampleRate() const;
-  double getCurrentTime();
-  void close();
+  double getCurrentTime() const;
+  void close() const;
+
+ private:
+  std::shared_ptr<AudioDestinationNodeWrapper> destination_;
 };
 } // namespace audioapi

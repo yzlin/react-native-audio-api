@@ -14,22 +14,17 @@ class AudioBufferWrapper {
 #ifdef ANDROID
 
  public:
-  AudioBuffer *audioBuffer_;
+  std::shared_ptr<AudioBuffer> audioBuffer_;
 
-  explicit AudioBufferWrapper(AudioBuffer *audioBuffer);
+  explicit AudioBufferWrapper(const std::shared_ptr<AudioBuffer> &audioBuffer);
 #else
 
  public:
   std::shared_ptr<IOSAudioBuffer> audioBuffer_;
 
-  explicit AudioBufferWrapper(std::shared_ptr<IOSAudioBuffer> audioBuffer);
+  explicit AudioBufferWrapper(
+      const std::shared_ptr<IOSAudioBuffer> &audioBuffer);
 #endif
-
- private:
-  int numberOfChannels;
-  int length;
-  int sampleRate;
-  double duration;
 
  public:
   int getNumberOfChannels() const;

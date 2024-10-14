@@ -1,19 +1,25 @@
 #pragma once
 
+#include <algorithm>
+#include <memory>
+
 #include "AudioNode.h"
 #include "AudioParam.h"
 
 namespace audioapi {
 
-using namespace facebook;
-using namespace facebook::jni;
-
-class StereoPannerNode : public jni::HybridClass<StereoPannerNode, AudioNode> {
+class StereoPannerNode : public AudioNode {
  public:
-  static auto constexpr kJavaDescriptor =
-      "Lcom/swmansion/audioapi/nodes/StereoPannerNode;";
+  explicit StereoPannerNode(AudioContext *context);
+  std::shared_ptr<AudioParam> getPanParam() const;
 
-  AudioParam *getPanParam();
+ protected:
+  bool processAudio(float *audioData, int32_t numFrames) override;
+
+ private:
+  std::shared_ptr<AudioParam> panParam_;
+
+  void normalize(float *audioData, int32_t numFrames);
 };
 
 } // namespace audioapi
