@@ -29,9 +29,8 @@ allowing developers to generate and modify audio in exact same way it is possibl
 <br />
 [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) is usefull resource to get familiar with audio processing basics.
 
-For development purposes there is also simplified description of already implemented interfaces as well as overview on Web Audio API coverage.
+For development purposes there is overview on Web Audio API coverage.
 
-- [Basic interfaces description](./internal-docs/basic-interfaces.md)
 - [Web Audio API coverage](./internal-docs/web-audio-coverage.md)
 
 ## Examples
