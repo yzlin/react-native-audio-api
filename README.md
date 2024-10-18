@@ -2,7 +2,7 @@
 
 ### ⚠️ Pre-Alpha
 
-This library is at a very early stage of development. There are know performance issues and the library is not yet suitable for real production applications. We will be publishing the first alpha version of the library in the upcoming days, stay tunned! 🎶
+This library is at a very early stage of development. There are known performance issues and the library is not yet suitable for real production applications. We will be publishing the first alpha version of the library in the upcoming days, stay tuned! 🎶
 
 If you have questions about the library, our progress, plans or just want to say "hi!" you can reach us in our <a href="https://discord.swmansion.com" target="_blank" rel="noopener noreferrer">discord server</a>
 
@@ -27,13 +27,13 @@ allowing developers to generate and modify audio in exact same way it is possibl
 
 `react-native-audio-api` tries to strictly follow the Web Audi API specification, which can be found at [https://www.w3.org/TR/webaudio/](https://www.w3.org/TR/webaudio/).
 <br />
-[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) is usefull resource to get familiar with audio processing basics.
+[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) is useful resource to get familiar with audio processing basics.
 
 For development purposes there is overview on [Web Audio API coverage](./internal-docs/web-audio-coverage.md).
 
 ## Examples
 
-The source code for the example application is unther the [`/apps/common-app`](./apps/common-app/) directory. If you want to play with the API but don't feel like trying it on a real app, you can run the example project. Check [Example README](./apps/common-example/README.md) for installation instructions.
+The source code for the example application is under the [`/apps/common-app`](./apps/common-app/) directory. If you want to play with the API but don't feel like trying it on a real app, you can run the example project. Check [Example README](./apps/common-example/README.md) for installation instructions.
 
 ## Your feedback
 
