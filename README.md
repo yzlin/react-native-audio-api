@@ -1,4 +1,4 @@
-<img src="./internal-docs/assets/react-native-audio-api-gh-cover.png" alt="React Native Audio API" width="100%">
+<img src="./internal-docs/assets/react-native-audio-api-gh-cover.png?v0.1.0" alt="React Native Audio API" width="100%">
 
 ### ⚠️ Pre-Alpha
 
@@ -28,7 +28,6 @@ allowing developers to generate and modify audio in exact same way it is possibl
 `react-native-audio-api` tries to strictly follow the Web Audi API specification, which can be found at [https://www.w3.org/TR/webaudio/](https://www.w3.org/TR/webaudio/).
 <br />
 [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) is useful resource to get familiar with audio processing basics.
-
 
 ## Coverage
 
