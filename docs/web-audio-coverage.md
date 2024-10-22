@@ -7,28 +7,28 @@ Some of the noticeable implementation details that are still in progress or not 
 - Support of different number of channels (current approach in most of the audio-graph nodes assumes working with two channel audio)
 - Multi-input for each node and input mixing (Although specification suggests that most of the nodes can cave only one input or output, common use-cases proves otherwise). Only node that mixes multiple inputs is `DestinationNode`.
 
-## Completed (**5** out of 33)
+## ✅ Completed (**5** out of 33)
 
 <details>
- <summary><b>✅ AudioScheduledSourceNode</b></summary>
+ <summary><b>AudioScheduledSourceNode</b></summary>
 </details>
 <details>
- <summary><b>✅ AudioDestinationNode</b></summary>
+ <summary><b>AudioDestinationNode</b></summary>
 </details>
 <details>
- <summary><b>✅ GainNode</b></summary>
+ <summary><b>GainNode</b></summary>
 </details>
 <details>
- <summary><b>✅ StereoPannerNode</b></summary>
+ <summary><b>StereoPannerNode</b></summary>
 </details>
 <details>
- <summary><b>✅ AudioNode</b></summary>
+ <summary><b>AudioNode</b></summary>
 </details>
 
-## In Progress (**7** out of 33)
+## 🚧 In Progress (**7** out of 33)
 
 <details>
-  <summary><b>🚧 AudioContext</b></summary>
+  <summary><b>AudioContext</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
@@ -50,69 +50,69 @@ Some of the noticeable implementation details that are still in progress or not 
 </details>
 
 <details>
-  <summary><b>🚧 AudioBuffer</b></summary>
+  <summary><b>AudioBuffer</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
 | Property 🔹/ Method 🔘 | state |
 | ---------------------- | ----- |
-| 🔹sampleRate           | ✅    |
-| 🔹length               | ✅    |
-| 🔹duration             | ✅    |
-| 🔹numberOfChannels     | ✅    |
-| 🔘getChannelData       | ✅    |
-| 🔘getChannelData       | ✅    |
-| 🔘setChannelData       | ✅    |
-| 🔘copyFromChannel      | ❌    |
-| 🔘copyToChannel        | ❌    |
+| 🔹 sampleRate          | ✅    |
+| 🔹 length              | ✅    |
+| 🔹 duration            | ✅    |
+| 🔹 numberOfChannels    | ✅    |
+| 🔘 getChannelData      | ✅    |
+| 🔘 getChannelData      | ✅    |
+| 🔘 setChannelData      | ✅    |
+| 🔘 copyFromChannel     | ❌    |
+| 🔘 copyToChannel       | ❌    |
 
 </div>
 
 </details>
 
 <details>
-  <summary><b>🚧 AudioBufferSourceNode</b></summary>
+  <summary><b>AudioBufferSourceNode</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
 | Property 🔹/ Method 🔘 | state |
 | ---------------------- | ----- |
-| 🔹buffer               | ✅    |
-| 🔹detune               | ❌    |
-| 🔹loop                 | ✅    |
-| 🔹loopStart            | ❌    |
-| 🔹loopEnd              | ❌    |
-| 🔹playBackRate         | ❌    |
-| 🔘start(overridden)    | ❌    |
+| 🔹 buffer              | ✅    |
+| 🔹 detune              | ❌    |
+| 🔹 loop                | ✅    |
+| 🔹 loopStart           | ❌    |
+| 🔹 loopEnd             | ❌    |
+| 🔹 playBackRate        | ❌    |
+| 🔘 start(overridden)   | ❌    |
 
 </div>
 
 </details>
 
 <details>
-  <summary><b>🚧 AudioParam</b></summary>
+  <summary><b>AudioParam</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
-| Property 🔹/ Method 🔘    | state |
-| ------------------------- | ----- |
-| 🔹value                   | ✅    |
-| 🔹defaultValue            | ✅    |
-| 🔹minValue                | ✅    |
-| 🔹maxValue                | ✅    |
-| 🔘setValueAtTime          | ✅    |
-| 🔘linearRampToValueAtTime | ✅    |
-| 🔘setTargetAtTime         | ❌    |
-| 🔘setValueCurveAtTime     | ❌    |
-| 🔘cancelScheduledValues   | ❌    |
-| 🔘cancelAndHoldAtTime     | ❌    |
+| Property 🔹/ Method 🔘     | state |
+| -------------------------- | ----- |
+| 🔹 value                   | ✅    |
+| 🔹 defaultValue            | ✅    |
+| 🔹 minValue                | ✅    |
+| 🔹 maxValue                | ✅    |
+| 🔘 setValueAtTime          | ✅    |
+| 🔘 linearRampToValueAtTime | ✅    |
+| 🔘 setTargetAtTime         | ❌    |
+| 🔘 setValueCurveAtTime     | ❌    |
+| 🔘 cancelScheduledValues   | ❌    |
+| 🔘 cancelAndHoldAtTime     | ❌    |
 
 </div>
 
 </details>
 
 <details>
-  <summary><b>🚧 BaseAudioContext</b></summary>
+  <summary><b>BaseAudioContext</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
@@ -148,101 +148,101 @@ Some of the noticeable implementation details that are still in progress or not 
 </details>
 
 <details>
-  <summary><b>🚧 OscillatorNode</b></summary>
+  <summary><b>OscillatorNode</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
 | Property 🔹/ Method 🔘 | state |
 | ---------------------- | ----- |
-| 🔹frequency            | ✅    |
-| 🔹detune               | ✅    |
-| 🔹type                 | ✅    |
-| 🔘setPeriodicWave      | ❌    |
+| 🔹 frequency           | ✅    |
+| 🔹 detune              | ✅    |
+| 🔹 type                | ✅    |
+| 🔘 setPeriodicWave     | ❌    |
 
 </div>
 
 </details>
 
 <details>
-  <summary><b>🚧 BiquadFilterNode</b></summary>
+  <summary><b>BiquadFilterNode</b></summary>
 
 <div style="padding: 16px; padding-left: 42px;">
 
-| Property 🔹/ Method 🔘 | state |
-| ---------------------- | ----- |
-| 🔹frequency            | ✅    |
-| 🔹detune               | ✅    |
-| 🔹Q                    | ✅    |
-| 🔹gain                 | ✅    |
-| 🔹type                 | ✅    |
-| 🔘getFrequencyResponse | ❌    |
+| Property 🔹/ Method 🔘  | state |
+| ----------------------- | ----- |
+| 🔹 frequency            | ✅    |
+| 🔹 detune               | ✅    |
+| 🔹 Q                    | ✅    |
+| 🔹 gain                 | ✅    |
+| 🔹 type                 | ✅    |
+| 🔘 getFrequencyResponse | ❌    |
 
 </div>
 
 </details>
 
-## Not yet available (**21** out of 33)
+## ❌ Not yet available (**21** out of 33)
 
 <details>
- <summary><b>❌ AudioParamMap</b></summary>
+ <summary><b>AudioParamMap</b></summary>
 </details>
 <details>
- <summary><b>❌ MediaElementAudioSourceNode</b></summary>
+ <summary><b>MediaElementAudioSourceNode</b></summary>
 </details>
 <details>
- <summary><b>❌ MediaStreamAudioSourceNode</b></summary>
+ <summary><b>MediaStreamAudioSourceNode</b></summary>
 </details>
 <details>
- <summary><b>❌ MediaStreamTrackAudioSourceNode</b></summary>
+ <summary><b>MediaStreamTrackAudioSourceNode</b></summary>
 </details>
 <details>
- <summary><b>❌ ConvolverNode</b></summary>
+ <summary><b>ConvolverNode</b></summary>
 </details>
 <details>
- <summary><b>❌ DelayNode</b></summary>
+ <summary><b>DelayNode</b></summary>
 </details>
 <details>
- <summary><b>❌ DynamicsCompressorNode</b></summary>
+ <summary><b>DynamicsCompressorNode</b></summary>
 </details>
 <details>
- <summary><b>❌ WaveShaperNode</b></summary>
+ <summary><b>WaveShaperNode</b></summary>
 </details>
 <details>
- <summary><b>❌ PeriodicWave</b></summary>
+ <summary><b>PeriodicWave</b></summary>
 </details>
 <details>
- <summary><b>❌ IRRFilterNode</b></summary>
+ <summary><b>IRRFilterNode</b></summary>
 </details>
 <details>
- <summary><b>❌ MediaStreamAudioDestinationNode</b></summary>
+ <summary><b>MediaStreamAudioDestinationNode</b></summary>
 </details>
 <details>
- <summary><b>❌ AnalyserNode</b></summary>
+ <summary><b>AnalyserNode</b></summary>
 </details>
 <details>
- <summary><b>❌ ChannelSplitterNode</b></summary>
+ <summary><b>ChannelSplitterNode</b></summary>
 </details>
 <details>
- <summary><b>❌ MergerNode</b></summary>
+ <summary><b>MergerNode</b></summary>
 </details>
 <details>
- <summary><b>❌ AudioListener</b></summary>
+ <summary><b>AudioListener</b></summary>
 </details>
 <details>
- <summary><b>❌ PannerNode</b></summary>
+ <summary><b>PannerNode</b></summary>
 </details>
 <details>
- <summary><b>❌ AudioWorkletNode</b></summary>
+ <summary><b>AudioWorkletNode</b></summary>
 </details>
 <details>
- <summary><b>❌ AudioWorkletProcessor</b></summary>
+ <summary><b>AudioWorkletProcessor</b></summary>
 </details>
 <details>
- <summary><b>❌ AudioWorkletGlobalScope</b></summary>
+ <summary><b>AudioWorkletGlobalScope</b></summary>
 </details>
 <details>
- <summary><b>❌ OfflineAudioContext</b></summary>
+ <summary><b>OfflineAudioContext</b></summary>
 </details>
 <details>
- <summary><b>❌ AudioParamMap</b></summary>
+ <summary><b>AudioParamMap</b></summary>
 </details>

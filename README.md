@@ -1,4 +1,4 @@
-<img src="./internal-docs/assets/react-native-audio-api-gh-cover.png?v0.1.0" alt="React Native Audio API" width="100%">
+<img src="./docs/assets/react-native-audio-api-gh-cover.png?v0.0.1" alt="React Native Audio API" width="100%">
 
 ### ⚠️ Pre-Alpha
 
@@ -31,7 +31,7 @@ allowing developers to generate and modify audio in exact same way it is possibl
 
 ## Coverage
 
-Our current coverage of Web Audio API specification can be found here: [Web Audio API coverage](./internal-docs/web-audio-coverage.md).
+Our current coverage of Web Audio API specification can be found here: [Web Audio API coverage](./docs/web-audio-coverage.md).
 
 ## Examples
 
