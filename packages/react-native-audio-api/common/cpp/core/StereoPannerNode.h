@@ -20,8 +20,6 @@ class StereoPannerNode : public AudioNode {
 
  private:
   std::shared_ptr<AudioParam> panParam_;
-
-  void normalize(float *audioData, int32_t numFrames);
 };
 
 } // namespace audioapi
