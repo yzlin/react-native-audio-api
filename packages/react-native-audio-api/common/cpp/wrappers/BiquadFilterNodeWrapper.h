@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "AudioNodeWrapper.h"
 #include "AudioParamWrapper.h"
@@ -20,6 +21,10 @@ class BiquadFilterNodeWrapper : public AudioNodeWrapper {
   [[nodiscard]] std::shared_ptr<AudioParamWrapper> getGainParam() const;
   std::string getType();
   void setType(const std::string &filterType);
+  void getFrequencyResponse(
+      const std::vector<float> &frequencyArray,
+      std::vector<float> &magResponseOutput,
+      std::vector<float> &phaseResponseOutput);
 
  private:
   std::shared_ptr<AudioParamWrapper> frequencyParam_;
