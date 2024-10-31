@@ -4,8 +4,6 @@
 
 This library is at a very early stage of development. There are known performance issues and the library might not yet suitable for real production applications.
 
-If you have questions about the library, our progress, plans or just want to say "hi!" you can reach us in our <a href="https://discord.swmansion.com" target="_blank" rel="noopener noreferrer">discord server</a>
-
 ### React Native Audio API
 
 `react-native-audio-api` provides system for controlling audio in React Native environment compatible with Web Audio API specification,
