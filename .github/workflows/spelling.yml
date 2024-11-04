@@ -96,7 +96,7 @@ jobs:
       with:
         suppress_push_for_open_pull_request: ${{ github.actor != 'dependabot[bot]' && 1 }}
         checkout: true
-        check_file_names: 1
+        check_file_names: 0
         spell_check_this: check-spelling/spell-check-this@prerelease
         post_comment: 0
         use_magic_file: 1
@@ -107,6 +107,26 @@ jobs:
         extra_dictionary_limit: 20
         extra_dictionaries:
           cspell:software-terms/dict/softwareTerms.txt
+          cspell:filetypes/filetypes.txt
+          cspell:typescript/dict/typescript.txt
+          cspell:npm/dict/npm.txt
+          cspell:lorem-ipsum/dictionary.txt
+          cspell:cpp/src/stdlib-cpp.txt
+          cspell:shell/dict/shell-all-words.txt
+          cspell:java/src/java.txt
+          cspell:golang/dict/go.txt
+          cspell:aws/aws.txt
+          cspell:html/dict/html.txt
+          cspell:k8s/dict/k8s.txt
+          cspell:python/src/common/extra.txt
+          cspell:python/src/python/python-lib.txt
+          cspell:php/dict/php.txt
+          cspell:node/dict/node.txt
+          cspell:fullstack/dict/fullstack.txt
+          cspell:dotnet/dict/dotnet.txt
+          cspell:python/src/python/python.txt
+          cspell:r/src/r.txt
+          cspell:cpp/src/lang-keywords.txt
 
   comment-push:
     name: Report (Push)
