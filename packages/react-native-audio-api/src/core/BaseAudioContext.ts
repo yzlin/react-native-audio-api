@@ -7,6 +7,7 @@ import StereoPannerNode from './StereoPannerNode';
 import BiquadFilterNode from './BiquadFilterNode';
 import AudioBufferSourceNode from './AudioBufferSourceNode';
 import AudioBuffer from './AudioBuffer';
+import { RangeError } from '../errors';
 
 export default class BaseAudioContext {
   readonly destination: AudioDestinationNode;
@@ -52,6 +53,24 @@ export default class BaseAudioContext {
     length: number,
     sampleRate: number
   ): AudioBuffer {
+    if (numOfChannels < 1 || numOfChannels > 3) {
+      throw new RangeError(
+        `The number of channels provided (${numOfChannels}) is outside the range [1, 2]`
+      );
+    }
+
+    if (length <= 0) {
+      throw new RangeError(
+        `The number of frames provided (${length}) is less than or equal to the minimum bound (0)`
+      );
+    }
+
+    if (sampleRate <= 0) {
+      throw new RangeError(
+        `The sample rate provided (${sampleRate}) is outside the range [3000, 768000]`
+      );
+    }
+
     return new AudioBuffer(
       this.context.createBuffer(numOfChannels, length, sampleRate)
     );

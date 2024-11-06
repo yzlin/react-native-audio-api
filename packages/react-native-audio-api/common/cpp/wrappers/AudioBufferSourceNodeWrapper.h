@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 #include "AudioBufferSourceNode.h"
 #include "AudioBufferWrapper.h"

@@ -61,11 +61,6 @@ void BiquadFilterNode::getFrequencyResponse(
   auto magResponseOutputSize = magResponseOutput.size();
   auto phaseResponseOutputSize = phaseResponseOutput.size();
 
-  if (magResponseOutputSize != frequencyArraySize ||
-      phaseResponseOutputSize != frequencyArraySize) {
-    throw std::invalid_argument("Output arrays must have the same size");
-  }
-
   float b0 = b0_;
   float b1 = b1_;
   float b2 = b2_;
@@ -81,10 +76,6 @@ void BiquadFilterNode::getFrequencyResponse(
     phaseResponseOutput[i] =
         static_cast<float>(atan2(imag(response), real(response)));
   }
-}
-
-float BiquadFilterNode::clamp(float value, float min, float max) {
-  return std::min(std::max(value, min), max);
 }
 
 void BiquadFilterNode::resetCoefficients() {
@@ -110,7 +101,7 @@ void BiquadFilterNode::setNormalizedCoefficients(
 }
 
 void BiquadFilterNode::setLowpassCoefficients(float frequency, float Q) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   if (frequency == 1.0) {
     setNormalizedCoefficients(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
     return;
@@ -133,7 +124,7 @@ void BiquadFilterNode::setLowpassCoefficients(float frequency, float Q) {
 }
 
 void BiquadFilterNode::setHighpassCoefficients(float frequency, float Q) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   if (frequency == 1.0) {
     setNormalizedCoefficients(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
     return;
@@ -156,7 +147,7 @@ void BiquadFilterNode::setHighpassCoefficients(float frequency, float Q) {
 }
 
 void BiquadFilterNode::setBandpassCoefficients(float frequency, float Q) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   Q = std::max(0.0f, Q);
 
   if (frequency <= 0.0 || frequency >= 1.0) {
@@ -178,7 +169,7 @@ void BiquadFilterNode::setBandpassCoefficients(float frequency, float Q) {
 }
 
 void BiquadFilterNode::setLowshelfCoefficients(float frequency, float gain) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   float A = std::pow(10.0f, gain / 40.0f);
 
   if (frequency == 1.0) {
@@ -207,7 +198,7 @@ void BiquadFilterNode::setLowshelfCoefficients(float frequency, float gain) {
 }
 
 void BiquadFilterNode::setHighshelfCoefficients(float frequency, float gain) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   float A = std::pow(10.0f, gain / 40.0f);
 
   if (frequency == 1.0) {
@@ -239,7 +230,7 @@ void BiquadFilterNode::setPeakingCoefficients(
     float frequency,
     float Q,
     float gain) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   Q = std::max(0.0f, Q);
   float A = std::pow(10.0f, gain / 40.0f);
 
@@ -267,7 +258,7 @@ void BiquadFilterNode::setPeakingCoefficients(
 }
 
 void BiquadFilterNode::setNotchCoefficients(float frequency, float Q) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   Q = std::max(0.0f, Q);
 
   if (frequency <= 0.0 || frequency >= 1.0) {
@@ -288,7 +279,7 @@ void BiquadFilterNode::setNotchCoefficients(float frequency, float Q) {
 }
 
 void BiquadFilterNode::setAllpassCoefficients(float frequency, float Q) {
-  frequency = clamp(frequency, 0.0, 1.0);
+  frequency = std::clamp(frequency, 0.0f, 1.0f);
   Q = std::max(0.0f, Q);
 
   if (frequency <= 0.0 || frequency >= 1.0) {

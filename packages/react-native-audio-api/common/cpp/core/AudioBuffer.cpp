@@ -7,10 +7,6 @@ AudioBuffer::AudioBuffer(int numberOfChannels, int length, int sampleRate)
       length_(length),
       sampleRate_(sampleRate),
       duration_(static_cast<double>(length) / sampleRate) {
-  if (numberOfChannels != 1 && numberOfChannels != 2) {
-    throw std::invalid_argument("Invalid number of channels");
-  }
-
   channels_ = new float *[numberOfChannels];
 
   for (int i = 0; i < numberOfChannels; i++) {
@@ -39,18 +35,10 @@ double AudioBuffer::getDuration() const {
 }
 
 float *AudioBuffer::getChannelData(int channel) const {
-  if (channel < 0 || channel >= numberOfChannels_) {
-    throw std::invalid_argument("Invalid channel number");
-  }
-
   return channels_[channel];
 }
 
 std::shared_ptr<AudioBuffer> AudioBuffer::mix(int outputNumberOfChannels) {
-  if (outputNumberOfChannels != 1 && outputNumberOfChannels != 2) {
-    throw std::invalid_argument("Invalid number of channels");
-  }
-
   if (outputNumberOfChannels == numberOfChannels_) {
     return shared_from_this();
   }
@@ -79,14 +67,6 @@ void AudioBuffer::copyFromChannel(
     int destinationLength,
     int channelNumber,
     int startInChannel) const {
-  if (channelNumber < 0 || channelNumber >= numberOfChannels_) {
-    throw std::invalid_argument("Invalid channel number");
-  }
-
-  if (startInChannel < 0 || startInChannel >= length_) {
-    throw std::invalid_argument("Invalid start in channel");
-  }
-
   std::copy(
       channels_[channelNumber] + startInChannel,
       channels_[channelNumber] + startInChannel +
@@ -99,14 +79,6 @@ void AudioBuffer::copyToChannel(
     int sourceLength,
     int channelNumber,
     int startInChannel) {
-  if (channelNumber < 0 || channelNumber >= numberOfChannels_) {
-    throw std::invalid_argument("Invalid channel number");
-  }
-
-  if (startInChannel < 0 || startInChannel >= length_) {
-    throw std::invalid_argument("Invalid start in channel");
-  }
-
   std::copy(
       source,
       source + std::min(sourceLength, length_ - startInChannel),

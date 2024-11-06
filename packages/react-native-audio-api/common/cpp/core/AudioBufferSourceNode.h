@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 
 #include "AudioBuffer.h"
 #include "AudioScheduledSourceNode.h"
@@ -20,7 +19,7 @@ class AudioBufferSourceNode : public AudioScheduledSourceNode {
 
  private:
   bool loop_;
-  std::optional<std::shared_ptr<AudioBuffer>> buffer_;
+  std::shared_ptr<AudioBuffer> buffer_;
   int bufferIndex_;
 };
 } // namespace audioapi

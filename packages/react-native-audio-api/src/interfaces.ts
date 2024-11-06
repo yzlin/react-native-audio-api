@@ -52,6 +52,11 @@ export interface IBiquadFilterNode extends IAudioNode {
   readonly Q: AudioParam;
   readonly gain: AudioParam;
   type: FilterType;
+  getFrequencyResponse(
+    frequencyArray: number[],
+    magResponseOutput: number[],
+    phaseResponseOutput: number[]
+  ): void;
 }
 
 export interface IAudioDestinationNode extends IAudioNode {}
@@ -68,7 +73,7 @@ export interface IOscillatorNode extends IAudioScheduledSourceNode {
 }
 
 export interface IAudioBufferSourceNode extends IAudioScheduledSourceNode {
-  buffer: IAudioBuffer;
+  buffer: IAudioBuffer | null;
   loop: boolean;
 }
 
