@@ -12,8 +12,11 @@
 #include "AudioScheduledSourceNode.h"
 #include "BiquadFilterNode.h"
 #include "Constants.h"
+#include "ContextState.h"
 #include "GainNode.h"
 #include "OscillatorNode.h"
+#include "OscillatorType.h"
+#include "PeriodicWave.h"
 #include "StereoPannerNode.h"
 
 #ifdef ANDROID
@@ -39,23 +42,14 @@ class BaseAudioContext {
   std::shared_ptr<AudioBufferSourceNode> createBufferSource();
   static std::shared_ptr<AudioBuffer>
   createBuffer(int numberOfChannels, int length, int sampleRate);
+  std::shared_ptr<PeriodicWave> createPeriodicWave(
+      float *real,
+      float *imag,
+      bool disableNormalization,
+      int length);
+
   std::function<void(float *, int)> renderAudio();
-
- protected:
-  enum class State { SUSPENDED, RUNNING, CLOSED };
-
-  static std::string toString(State state) {
-    switch (state) {
-      case State::SUSPENDED:
-        return "suspended";
-      case State::RUNNING:
-        return "running";
-      case State::CLOSED:
-        return "closed";
-      default:
-        throw std::invalid_argument("Unknown context state");
-    }
-  }
+  std::shared_ptr<PeriodicWave> getBasicWaveForm(OscillatorType type);
 
  protected:
   std::shared_ptr<AudioDestinationNode> destination_;
@@ -64,9 +58,28 @@ class BaseAudioContext {
 #else
   std::shared_ptr<IOSAudioPlayer> audioPlayer_;
 #endif
-  State state_ = State::RUNNING;
+  ContextState state_ = ContextState::RUNNING;
   int sampleRate_;
   double contextStartTime_;
+
+ private:
+  std::shared_ptr<PeriodicWave> cachedSineWave_ = nullptr;
+  std::shared_ptr<PeriodicWave> cachedSquareWave_ = nullptr;
+  std::shared_ptr<PeriodicWave> cachedSawtoothWave_ = nullptr;
+  std::shared_ptr<PeriodicWave> cachedTriangleWave_ = nullptr;
+
+  static std::string toString(ContextState state) {
+    switch (state) {
+      case ContextState::SUSPENDED:
+        return "suspended";
+      case ContextState::RUNNING:
+        return "running";
+      case ContextState::CLOSED:
+        return "closed";
+      default:
+        throw std::invalid_argument("Unknown context state");
+    }
+  }
 };
 
 } // namespace audioapi

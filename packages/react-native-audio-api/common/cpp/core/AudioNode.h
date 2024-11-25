@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "ChannelCountMode.h"
+#include "ChannelInterpretation.h"
 #include "Constants.h"
 
 // channelCount always equal to 2
@@ -27,8 +29,18 @@ class AudioNode : public std::enable_shared_from_this<AudioNode> {
   virtual bool processAudio(float *audioData, int32_t numFrames);
 
  protected:
-  enum class ChannelCountMode { MAX, CLAMPED_MAX, EXPLICIT };
+  BaseAudioContext *context_;
+  int numberOfInputs_ = 1;
+  int numberOfOutputs_ = 1;
+  int channelCount_ = CHANNEL_COUNT;
+  ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
+  ChannelInterpretation channelInterpretation_ =
+      ChannelInterpretation::SPEAKERS;
 
+  std::vector<std::shared_ptr<AudioNode>> inputNodes_ = {};
+  std::vector<std::shared_ptr<AudioNode>> outputNodes_ = {};
+
+ private:
   static std::string toString(ChannelCountMode mode) {
     switch (mode) {
       case ChannelCountMode::MAX:
@@ -42,8 +54,6 @@ class AudioNode : public std::enable_shared_from_this<AudioNode> {
     }
   }
 
-  enum class ChannelInterpretation { SPEAKERS, DISCRETE };
-
   static std::string toString(ChannelInterpretation interpretation) {
     switch (interpretation) {
       case ChannelInterpretation::SPEAKERS:
@@ -55,19 +65,6 @@ class AudioNode : public std::enable_shared_from_this<AudioNode> {
     }
   }
 
- protected:
-  BaseAudioContext *context_;
-  int numberOfInputs_ = 1;
-  int numberOfOutputs_ = 1;
-  int channelCount_ = CHANNEL_COUNT;
-  ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
-  ChannelInterpretation channelInterpretation_ =
-      ChannelInterpretation::SPEAKERS;
-
-  std::vector<std::shared_ptr<AudioNode>> inputNodes_ = {};
-  std::vector<std::shared_ptr<AudioNode>> outputNodes_ = {};
-
- private:
   void cleanup();
 };
 

@@ -69,13 +69,57 @@ std::shared_ptr<AudioBuffer> BaseAudioContext::createBuffer(
   return std::make_shared<AudioBuffer>(numberOfChannels, length, sampleRate);
 }
 
+std::shared_ptr<PeriodicWave> BaseAudioContext::createPeriodicWave(
+    float *real,
+    float *imag,
+    bool disableNormalization,
+    int length) {
+  // add normalization
+  return std::make_shared<PeriodicWave>(
+      sampleRate_, real, imag, length, disableNormalization);
+}
+
 std::function<void(float *, int)> BaseAudioContext::renderAudio() {
-  if (state_ == State::CLOSED) {
+  if (state_ == ContextState::CLOSED) {
     return [](float *, int) {};
   }
 
   return [this](float *data, int frames) {
     destination_->renderAudio(data, frames);
   };
+}
+
+std::shared_ptr<PeriodicWave> BaseAudioContext::getBasicWaveForm(
+    OscillatorType type) {
+  switch (type) {
+    case OscillatorType::SINE:
+      if (cachedSineWave_ == nullptr) {
+        cachedSineWave_ =
+            std::make_shared<PeriodicWave>(sampleRate_, type, false);
+      }
+      return cachedSineWave_;
+    case OscillatorType::SQUARE:
+      if (cachedSquareWave_ == nullptr) {
+        cachedSquareWave_ =
+            std::make_shared<PeriodicWave>(sampleRate_, type, false);
+      }
+      return cachedSquareWave_;
+    case OscillatorType::SAWTOOTH:
+      if (cachedSawtoothWave_ == nullptr) {
+        cachedSawtoothWave_ =
+            std::make_shared<PeriodicWave>(sampleRate_, type, false);
+      }
+      return cachedSawtoothWave_;
+    case OscillatorType::TRIANGLE:
+      if (cachedTriangleWave_ == nullptr) {
+        cachedTriangleWave_ =
+            std::make_shared<PeriodicWave>(sampleRate_, type, false);
+      }
+      return cachedTriangleWave_;
+    case OscillatorType::CUSTOM:
+      throw std::invalid_argument(
+          "You can't get a custom wave form. You need to create it.");
+      break;
+  }
 }
 } // namespace audioapi

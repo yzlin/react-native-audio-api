@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9.0)
+cmake_minimum_required(VERSION 3.12.0)
 project(react-native-audio-api)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -32,7 +32,10 @@ file(GLOB_RECURSE SOURCE_FILES
   "../common/cpp/HostObjects/*.h"
   "../common/cpp/utils/*.cpp"
   "../common/cpp/utils/*.h"
+  "../common/cpp/types/*.h"
 )
+
+add_subdirectory(../external/kfr ${CMAKE_CURRENT_BINARY_DIR}/kfr-build)
 
 add_library(react-native-audio-api SHARED ${SOURCE_FILES})
 
@@ -49,18 +52,7 @@ target_include_directories(
 
 find_package(ReactAndroid REQUIRED CONFIG)
 find_package(fbjni REQUIRED CONFIG)
-find_package (oboe REQUIRED CONFIG)
-
-# set(LINK_LIBRARIES
-#   ReactAndroid::reactnative
-#   ReactAndroid::jsi
-#   fbjni::fbjni
-#   android
-#   log
-#   oboe::oboe
-# )
-
-# target_link_libraries(react-native-audio-api ${LINK_LIBRARIES})
+find_package(oboe REQUIRED CONFIG)
 
 set(LINK_LIBRARIES
   ReactAndroid::jsi
@@ -68,6 +60,10 @@ set(LINK_LIBRARIES
   android
   log
   oboe::oboe
+  kfr
+  kfr_dsp
+  kfr_dft
+  kfr_io
 )
 
 if(ReactAndroid_VERSION_MINOR GREATER_EQUAL 76)
@@ -83,4 +79,3 @@ else()
 endif()
 
 target_link_libraries(react-native-audio-api ${LINK_LIBRARIES} ${RN_VERSION_LINK_LIBRARIES})
-
