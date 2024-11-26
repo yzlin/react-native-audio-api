@@ -1,3 +1,5 @@
+#include "AudioBus.h"
+#include "AudioArray.h"
 #include "OscillatorNode.h"
 #include "BaseAudioContext.h"
 
@@ -11,6 +13,7 @@ OscillatorNode::OscillatorNode(BaseAudioContext *context)
       std::make_shared<AudioParam>(context, 0.0, -MAX_DETUNE, MAX_DETUNE);
   type_ = OscillatorType::SINE;
   periodicWave_ = context_->getBasicWaveForm(type_);
+  isInitialized_ = true;
 }
 
 std::shared_ptr<AudioParam> OscillatorNode::getFrequencyParam() const {
@@ -36,17 +39,18 @@ void OscillatorNode::setPeriodicWave(
   type_ = OscillatorType::CUSTOM;
 }
 
-bool OscillatorNode::processAudio(float *audioData, int32_t numFrames) {
-  if (!isPlaying_) {
-    return false;
+void OscillatorNode::processNode(AudioBus* processingBus, int framesToProcess) {
+  if (!isPlaying()) {
+    processingBus->zero();
+    return;
   }
 
-  auto time = context_->getCurrentTime();
-  auto deltaTime = 1.0 / context_->getSampleRate();
+  double time = context_->getCurrentTime();
+  double deltaTime = 1.0 / context_->getSampleRate();
 
-  for (int i = 0; i < numFrames; ++i) {
+  for (int i = 0; i < framesToProcess; i += 1) {
     auto detuneRatio =
-        std::pow(2.0f, detuneParam_->getValueAtTime(time) / 1200.0f);
+      std::pow(2.0f, detuneParam_->getValueAtTime(time) / 1200.0f);
     auto detunedFrequency =
         round(frequencyParam_->getValueAtTime(time) * detuneRatio);
     auto phaseIncrement = detunedFrequency * periodicWave_->getScale();
@@ -54,8 +58,8 @@ bool OscillatorNode::processAudio(float *audioData, int32_t numFrames) {
     float sample =
         periodicWave_->getSample(detunedFrequency, phase_, phaseIncrement);
 
-    for (int j = 0; j < channelCount_; j++) {
-      audioData[i * channelCount_ + j] = sample;
+    for (int j = 0; j < processingBus->getNumberOfChannels(); j += 1) {
+      (*processingBus->getChannel(j))[i] = sample;
     }
 
     phase_ += phaseIncrement;
@@ -66,7 +70,6 @@ bool OscillatorNode::processAudio(float *audioData, int32_t numFrames) {
 
     time += deltaTime;
   }
-
-  return true;
 }
+
 } // namespace audioapi

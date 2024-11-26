@@ -5,9 +5,10 @@
 
 #include "AudioNode.h"
 #include "AudioParam.h"
-#include "VectorMath.h"
 
 namespace audioapi {
+
+class AudioBus;
 
 class StereoPannerNode : public AudioNode {
  public:
@@ -16,7 +17,7 @@ class StereoPannerNode : public AudioNode {
   [[nodiscard]] std::shared_ptr<AudioParam> getPanParam() const;
 
  protected:
-  bool processAudio(float *audioData, int32_t numFrames) override;
+  void processNode(AudioBus* processingBus, int framesToProcess) override;
 
  private:
   std::shared_ptr<AudioParam> panParam_;

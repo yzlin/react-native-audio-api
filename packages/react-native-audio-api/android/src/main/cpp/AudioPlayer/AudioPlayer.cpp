@@ -1,10 +1,16 @@
+
+#include "AudioBus.h"
+#include "Constants.h"
+#include "AudioArray.h"
 #include "AudioPlayer.h"
 #include "AudioContext.h"
 
 namespace audioapi {
-AudioPlayer::AudioPlayer(const std::function<void(float *, int)> &renderAudio)
+
+AudioPlayer::AudioPlayer(const std::function<void(AudioBus*, int)> &renderAudio)
     : renderAudio_(renderAudio) {
   AudioStreamBuilder builder;
+
   builder.setSharingMode(SharingMode::Exclusive)
       ->setFormat(AudioFormat::Float)
       ->setFormatConversionAllowed(true)
@@ -13,10 +19,16 @@ AudioPlayer::AudioPlayer(const std::function<void(float *, int)> &renderAudio)
       ->setSampleRateConversionQuality(SampleRateConversionQuality::Medium)
       ->setDataCallback(this)
       ->openStream(mStream_);
+
+  mBus_ = std::make_shared<AudioBus>(getSampleRate(), getBufferSizeInFrames(), CHANNEL_COUNT);
 }
 
 int AudioPlayer::getSampleRate() const {
   return mStream_->getSampleRate();
+}
+
+int AudioPlayer::getBufferSizeInFrames() const {
+  return mStream_->getBufferSizeInFrames();
 }
 
 void AudioPlayer::start() {
@@ -38,8 +50,17 @@ DataCallbackResult AudioPlayer::onAudioReady(
     void *audioData,
     int32_t numFrames) {
   auto buffer = static_cast<float *>(audioData);
-  renderAudio_(buffer, numFrames);
+
+  renderAudio_(mBus_.get(), numFrames);
+
+  // TODO: optimize this with SIMD?
+  for (int32_t i = 0; i < numFrames; i += 1) {
+    for (int channel = 0; channel < CHANNEL_COUNT; channel += 1) {
+      buffer[i * CHANNEL_COUNT + channel] = mBus_->getChannel(channel)->getData()[i];
+    }
+  }
 
   return DataCallbackResult::Continue;
 }
+
 } // namespace audioapi

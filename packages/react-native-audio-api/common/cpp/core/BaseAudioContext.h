@@ -1,31 +1,32 @@
 #pragma once
 
-#include <functional>
 #include <memory>
 #include <string>
-#include <utility>
 #include <vector>
+#include <utility>
+#include <functional>
 
-#include "AudioBuffer.h"
-#include "AudioBufferSourceNode.h"
-#include "AudioDestinationNode.h"
-#include "AudioScheduledSourceNode.h"
-#include "BiquadFilterNode.h"
-#include "Constants.h"
 #include "ContextState.h"
-#include "GainNode.h"
-#include "OscillatorNode.h"
 #include "OscillatorType.h"
-#include "PeriodicWave.h"
-#include "StereoPannerNode.h"
-
-#ifdef ANDROID
-#include "AudioPlayer.h"
-#else
-#include "IOSAudioPlayer.h"
-#endif
 
 namespace audioapi {
+
+class AudioBus;
+class GainNode;
+class AudioBuffer;
+class PeriodicWave;
+class OscillatorNode;
+class StereoPannerNode;
+class AudioNodeManager;
+class BiquadFilterNode;
+class AudioDestinationNode;
+class AudioBufferSourceNode;
+
+#ifdef ANDROID
+class AudioPlayer;
+#else
+class IOSAudioPlayer;
+#endif
 
 class BaseAudioContext {
  public:
@@ -33,6 +34,8 @@ class BaseAudioContext {
   std::string getState();
   [[nodiscard]] int getSampleRate() const;
   [[nodiscard]] double getCurrentTime() const;
+  [[nodiscard]] int getBufferSizeInFrames() const;
+  [[nodiscard]] std::size_t getCurrentSampleFrame() const;
 
   std::shared_ptr<AudioDestinationNode> getDestination();
   std::shared_ptr<OscillatorNode> createOscillator();
@@ -40,46 +43,38 @@ class BaseAudioContext {
   std::shared_ptr<StereoPannerNode> createStereoPanner();
   std::shared_ptr<BiquadFilterNode> createBiquadFilter();
   std::shared_ptr<AudioBufferSourceNode> createBufferSource();
-  static std::shared_ptr<AudioBuffer>
-  createBuffer(int numberOfChannels, int length, int sampleRate);
+  static std::shared_ptr<AudioBuffer> createBuffer(int numberOfChannels, int length, int sampleRate);
   std::shared_ptr<PeriodicWave> createPeriodicWave(
       float *real,
       float *imag,
       bool disableNormalization,
       int length);
-
-  std::function<void(float *, int)> renderAudio();
   std::shared_ptr<PeriodicWave> getBasicWaveForm(OscillatorType type);
 
+  std::function<void(AudioBus *, int)> renderAudio();
+
+  AudioNodeManager* getNodeManager();
+
  protected:
+  static std::string toString(ContextState state);
   std::shared_ptr<AudioDestinationNode> destination_;
+
 #ifdef ANDROID
   std::shared_ptr<AudioPlayer> audioPlayer_;
 #else
   std::shared_ptr<IOSAudioPlayer> audioPlayer_;
 #endif
-  ContextState state_ = ContextState::RUNNING;
+
   int sampleRate_;
-  double contextStartTime_;
+  int bufferSizeInFrames_;
+  ContextState state_ = ContextState::RUNNING;
+  std::shared_ptr<AudioNodeManager> nodeManager_;
 
  private:
   std::shared_ptr<PeriodicWave> cachedSineWave_ = nullptr;
   std::shared_ptr<PeriodicWave> cachedSquareWave_ = nullptr;
   std::shared_ptr<PeriodicWave> cachedSawtoothWave_ = nullptr;
   std::shared_ptr<PeriodicWave> cachedTriangleWave_ = nullptr;
-
-  static std::string toString(ContextState state) {
-    switch (state) {
-      case ContextState::SUSPENDED:
-        return "suspended";
-      case ContextState::RUNNING:
-        return "running";
-      case ContextState::CLOSED:
-        return "closed";
-      default:
-        throw std::invalid_argument("Unknown context state");
-    }
-  }
 };
 
 } // namespace audioapi

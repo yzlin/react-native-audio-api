@@ -3,14 +3,14 @@
 #include <memory>
 #include <string>
 #include <vector>
+
+#include "Constants.h"
 #include "ChannelCountMode.h"
 #include "ChannelInterpretation.h"
-#include "Constants.h"
-
-// channelCount always equal to 2
 
 namespace audioapi {
 
+class AudioBus;
 class BaseAudioContext;
 
 class AudioNode : public std::enable_shared_from_this<AudioNode> {
@@ -25,47 +25,50 @@ class AudioNode : public std::enable_shared_from_this<AudioNode> {
   void connect(const std::shared_ptr<AudioNode> &node);
   void disconnect(const std::shared_ptr<AudioNode> &node);
 
-  // Change public to protected
-  virtual bool processAudio(float *audioData, int32_t numFrames);
+  bool isEnabled() const;
+  void enable();
+  void disable();
 
  protected:
+  friend class AudioNodeManager;
+  friend class AudioDestinationNode;
+
   BaseAudioContext *context_;
+  std::shared_ptr<AudioBus> audioBus_;
+
+  int channelCount_ = CHANNEL_COUNT;
+
   int numberOfInputs_ = 1;
   int numberOfOutputs_ = 1;
-  int channelCount_ = CHANNEL_COUNT;
+  int numberOfEnabledInputNodes_ = 0;
+
+  bool isInitialized_ = false;
+  bool isEnabled_ = true;
+
+  std::size_t lastRenderedFrame_ { SIZE_MAX };
+
   ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
   ChannelInterpretation channelInterpretation_ =
       ChannelInterpretation::SPEAKERS;
 
-  std::vector<std::shared_ptr<AudioNode>> inputNodes_ = {};
+  std::vector<AudioNode*> inputNodes_ = {};
   std::vector<std::shared_ptr<AudioNode>> outputNodes_ = {};
 
  private:
-  static std::string toString(ChannelCountMode mode) {
-    switch (mode) {
-      case ChannelCountMode::MAX:
-        return "max";
-      case ChannelCountMode::CLAMPED_MAX:
-        return "clamped-max";
-      case ChannelCountMode::EXPLICIT:
-        return "explicit";
-      default:
-        throw std::invalid_argument("Unknown channel count mode");
-    }
-  }
-
-  static std::string toString(ChannelInterpretation interpretation) {
-    switch (interpretation) {
-      case ChannelInterpretation::SPEAKERS:
-        return "speakers";
-      case ChannelInterpretation::DISCRETE:
-        return "discrete";
-      default:
-        throw std::invalid_argument("Unknown channel interpretation");
-    }
-  }
+  static std::string toString(ChannelCountMode mode);
+  static std::string toString(ChannelInterpretation interpretation);
 
   void cleanup();
+  AudioBus* processAudio(AudioBus* outputBus, int framesToProcess);
+  virtual void processNode(AudioBus* processingBus, int framesToProcess) = 0;
+
+  void connectNode(const std::shared_ptr<AudioNode> &node);
+  void disconnectNode(const std::shared_ptr<AudioNode> &node);
+
+  void onInputEnabled();
+  void onInputDisabled();
+  void onInputConnected(AudioNode *node);
+  void onInputDisconnected(AudioNode *node);
 };
 
 } // namespace audioapi

@@ -5,11 +5,13 @@
 #include <string>
 
 #include "AudioParam.h"
-#include "AudioScheduledSourceNode.h"
-#include "OscillatorType.h"
 #include "PeriodicWave.h"
+#include "OscillatorType.h"
+#include "AudioScheduledSourceNode.h"
 
 namespace audioapi {
+
+class AudioBus;
 
 class OscillatorNode : public AudioScheduledSourceNode {
  public:
@@ -22,7 +24,7 @@ class OscillatorNode : public AudioScheduledSourceNode {
   void setPeriodicWave(const std::shared_ptr<PeriodicWave> &periodicWave);
 
  protected:
-  bool processAudio(float *audioData, int32_t numFrames) override;
+  void processNode(AudioBus *processingBus, int framesToProcess) override;
 
  private:
   std::shared_ptr<AudioParam> frequencyParam_;

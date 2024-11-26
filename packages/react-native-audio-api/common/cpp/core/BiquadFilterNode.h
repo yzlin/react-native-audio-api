@@ -14,6 +14,8 @@
 
 namespace audioapi {
 
+class AudioBus;
+
 class BiquadFilterNode : public AudioNode {
  public:
   explicit BiquadFilterNode(BaseAudioContext *context);
@@ -30,7 +32,7 @@ class BiquadFilterNode : public AudioNode {
       std::vector<float> &phaseResponseOutput);
 
  protected:
-  bool processAudio(float *audioData, int32_t numFrames) override;
+  void processNode(AudioBus *processingBus, int framesToProcess) override;
 
  private:
   std::shared_ptr<AudioParam> frequencyParam_;

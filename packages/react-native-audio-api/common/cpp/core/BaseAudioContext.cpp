@@ -1,4 +1,22 @@
+#ifdef ANDROID
+#include "AudioPlayer.h"
+#else
+#include "IOSAudioPlayer.h"
+#endif
+
 #include "BaseAudioContext.h"
+
+#include "GainNode.h"
+#include "AudioBus.h"
+#include "AudioArray.h"
+#include "AudioBuffer.h"
+#include "ContextState.h"
+#include "OscillatorNode.h"
+#include "StereoPannerNode.h"
+#include "BiquadFilterNode.h"
+#include "AudioNodeManager.h"
+#include "AudioDestinationNode.h"
+#include "AudioBufferSourceNode.h"
 
 namespace audioapi {
 
@@ -8,17 +26,13 @@ BaseAudioContext::BaseAudioContext() {
 #else
   audioPlayer_ = std::make_shared<IOSAudioPlayer>(this->renderAudio());
 #endif
-  destination_ = std::make_shared<AudioDestinationNode>(this);
 
   sampleRate_ = audioPlayer_->getSampleRate();
-
-  auto now = std::chrono::high_resolution_clock ::now();
-  contextStartTime_ =
-      static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                              now.time_since_epoch())
-                              .count());
+  bufferSizeInFrames_ = audioPlayer_->getBufferSizeInFrames();
 
   audioPlayer_->start();
+  nodeManager_ = std::make_shared<AudioNodeManager>();
+  destination_ = std::make_shared<AudioDestinationNode>(this);
 }
 
 std::string BaseAudioContext::getState() {
@@ -29,13 +43,16 @@ int BaseAudioContext::getSampleRate() const {
   return sampleRate_;
 }
 
+int BaseAudioContext::getBufferSizeInFrames() const {
+  return bufferSizeInFrames_;
+}
+
+std::size_t BaseAudioContext::getCurrentSampleFrame() const {
+  return destination_->getCurrentSampleFrame();
+}
+
 double BaseAudioContext::getCurrentTime() const {
-  auto now = std::chrono::high_resolution_clock ::now();
-  auto currentTime =
-      static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                              now.time_since_epoch())
-                              .count());
-  return (currentTime - contextStartTime_) / 1e9;
+  return destination_->getCurrentTime();
 }
 
 std::shared_ptr<AudioDestinationNode> BaseAudioContext::getDestination() {
@@ -78,18 +95,34 @@ std::shared_ptr<PeriodicWave> BaseAudioContext::createPeriodicWave(
       sampleRate_, real, imag, length, disableNormalization);
 }
 
-std::function<void(float *, int)> BaseAudioContext::renderAudio() {
+std::function<void(AudioBus *, int)> BaseAudioContext::renderAudio() {
   if (state_ == ContextState::CLOSED) {
-    return [](float *, int) {};
+    return [](AudioBus *, int) {};
   }
 
-  return [this](float *data, int frames) {
+  return [this](AudioBus* data, int frames) {
     destination_->renderAudio(data, frames);
   };
 }
 
-std::shared_ptr<PeriodicWave> BaseAudioContext::getBasicWaveForm(
-    OscillatorType type) {
+AudioNodeManager* BaseAudioContext::getNodeManager() {
+  return nodeManager_.get();
+}
+
+std::string BaseAudioContext::toString(ContextState state) {
+  switch (state) {
+    case ContextState::SUSPENDED:
+      return "suspended";
+    case ContextState::RUNNING:
+      return "running";
+    case ContextState::CLOSED:
+      return "closed";
+    default:
+      throw std::invalid_argument("Unknown context state");
+  }
+}
+
+std::shared_ptr<PeriodicWave> BaseAudioContext::getBasicWaveForm(OscillatorType type) {
   switch (type) {
     case OscillatorType::SINE:
       if (cachedSineWave_ == nullptr) {
@@ -116,9 +149,9 @@ std::shared_ptr<PeriodicWave> BaseAudioContext::getBasicWaveForm(
       }
       return cachedTriangleWave_;
     case OscillatorType::CUSTOM:
-      throw std::invalid_argument(
-          "You can't get a custom wave form. You need to create it.");
+      throw std::invalid_argument("You can't get a custom wave form. You need to create it.");
       break;
   }
 }
+
 } // namespace audioapi

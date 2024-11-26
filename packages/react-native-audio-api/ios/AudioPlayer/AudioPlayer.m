@@ -42,8 +42,6 @@
                                                                                     frameCount:frameCount
                                                                                     outputData:outputData];
                                                 }];
-
-    self.buffer = nil;
   }
 
   return self;
@@ -54,10 +52,24 @@
   return [self.audioSession sampleRate];
 }
 
+- (int)getBufferSizeInFrames
+{
+  // Note: might be important in the future.
+  // For some reason audioSession.IOBufferDuration is always 0.01, which for sample rate of 48k
+  // gives exactly 480 frames, while at the same time frameCount requested by AVAudioSourceEngine
+  // might vary f.e. between 555-560.
+  // preferredIOBufferDuration seems to be double the value (resulting in 960 frames),
+  // which is safer to base our internal AudioBus sizes.
+  // Buut no documentation => no guarantee :)
+  // If something is crackling when it should play silence, start here 📻
+  return (int)(self.audioSession.preferredIOBufferDuration * self.audioSession.sampleRate);
+}
+
 - (void)start
 {
   [self.audioEngine attachNode:self.sourceNode];
   [self.audioEngine connect:self.sourceNode to:self.audioEngine.mainMixerNode format:self.format];
+
 
   if (!self.audioEngine.isRunning) {
     NSError *error = nil;
@@ -88,8 +100,6 @@
   self.audioEngine = nil;
   self.audioSession = nil;
   self.renderAudio = nil;
-
-  free(_buffer);
 }
 
 - (OSStatus)renderCallbackWithIsSilence:(BOOL *)isSilence
@@ -101,19 +111,7 @@
     return noErr; // Ensure we have stereo output
   }
 
-  if (!self.buffer) {
-    self.buffer = malloc(frameCount * 2 * sizeof(float));
-  }
-
-  float *leftBuffer = (float *)outputData->mBuffers[0].mData;
-  float *rightBuffer = (float *)outputData->mBuffers[1].mData;
-
-  self.renderAudio(self.buffer, frameCount);
-
-  for (int frame = 0; frame < frameCount; frame += 1) {
-    leftBuffer[frame] = self.buffer[frame * 2];
-    rightBuffer[frame] = self.buffer[frame * 2 + 1];
-  }
+  self.renderAudio(outputData, frameCount);
 
   return noErr;
 }

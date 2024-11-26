@@ -26,6 +26,7 @@ class HiHat implements SoundEngine {
       const oscillator = this.audioContext.createOscillator();
       oscillator.type = 'square';
       oscillator.frequency.value = this.tone * ratio;
+
       const bandpassFilter = this.audioContext.createBiquadFilter();
       const highpassFilter = this.audioContext.createBiquadFilter();
       const gain = this.audioContext.createGain();
@@ -46,6 +47,7 @@ class HiHat implements SoundEngine {
       bandpassFilter.connect(highpassFilter);
       highpassFilter.connect(gain);
       gain.connect(this.audioContext.destination!);
+
       oscillator.start(time);
       oscillator.stop(time + this.decay);
     });

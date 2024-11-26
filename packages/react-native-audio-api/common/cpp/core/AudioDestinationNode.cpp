@@ -1,48 +1,45 @@
-#include "AudioDestinationNode.h"
+#include "AudioBus.h"
+#include "AudioNode.h"
+#include "VectorMath.h"
+#include "AudioNodeManager.h"
 #include "BaseAudioContext.h"
+#include "AudioDestinationNode.h"
 
 namespace audioapi {
 
 AudioDestinationNode::AudioDestinationNode(BaseAudioContext *context)
-    : AudioNode(context) {
+    : AudioNode(context), currentSampleFrame_(0) {
   numberOfOutputs_ = 0;
   numberOfInputs_ = INT_MAX;
   channelCountMode_ = ChannelCountMode::EXPLICIT;
+  isInitialized_ = true;
 }
 
-void AudioDestinationNode::renderAudio(float *audioData, int32_t numFrames) {
-  processAudio(audioData, numFrames);
+std::size_t AudioDestinationNode::getCurrentSampleFrame() const {
+  return currentSampleFrame_;
 }
 
-bool AudioDestinationNode::processAudio(float *audioData, int32_t numFrames) {
-  int numSamples = numFrames * CHANNEL_COUNT;
-
-  if (mixingBuffer == nullptr) {
-    mixingBuffer = std::make_unique<float[]>(numSamples);
-  }
-
-  memset(audioData, 0.0f, sizeof(float) * numSamples);
-
-  for (auto &node : inputNodes_) {
-    if (node && node->processAudio(mixingBuffer.get(), numFrames)) {
-      normalize(mixingBuffer.get(), numFrames);
-      VectorMath::add(audioData, mixingBuffer.get(), audioData, numSamples);
-    }
-  }
-
-  return true;
+double AudioDestinationNode::getCurrentTime() const {
+  return static_cast<double>(currentSampleFrame_) / context_->getSampleRate();
 }
 
-void AudioDestinationNode::normalize(float *audioData, int32_t numFrames) {
-  auto maxValue = std::max(
-      1.0f, VectorMath::maximumMagnitude(audioData, numFrames * channelCount_));
+void AudioDestinationNode::renderAudio(AudioBus *destinationBus, int32_t numFrames) {
+  context_->getNodeManager()->preProcessGraph();
+  destinationBus->zero();
 
-  if (maxValue == 1.0f) {
+  if (!numFrames) {
     return;
   }
 
-  VectorMath::multiplyByScalar(
-      audioData, 1.0f / maxValue, audioData, numFrames * channelCount_);
+  AudioBus* processedBus = processAudio(destinationBus, numFrames);
+
+  if (processedBus && processedBus != destinationBus) {
+    destinationBus->copy(processedBus);
+  }
+
+  destinationBus->normalize();
+
+  currentSampleFrame_ += numFrames;
 }
 
 } // namespace audioapi

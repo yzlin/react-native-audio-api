@@ -32,6 +32,12 @@
 
 namespace audioapi::VectorMath {
 
+void multiplyByScalarThenAddToOutput(
+    const float *inputVector,
+    float scalar,
+    float *outputVector,
+    size_t numberOfElementsToProcess);
+
 void multiplyByScalar(
     const float *inputVector,
     float scalar,
@@ -47,7 +53,7 @@ void add(
     const float *inputVector2,
     float *outputVector,
     size_t numberOfElementsToProcess);
-void substract(
+void subtract(
     const float *inputVector1,
     const float *inputVector2,
     float *outputVector,

@@ -11,19 +11,23 @@ typedef struct objc_object AudioPlayer;
 namespace audioapi {
 
 class AudioContext;
+class AudioBus;
 
 class IOSAudioPlayer {
  protected:
-  AudioPlayer *audioPlayer_;
-  std::function<void(float *, int)> renderAudio_;
+  AudioBus* audioBus_;
+  AudioPlayer* audioPlayer_;
+  std::function<void(AudioBus*, int)> renderAudio_;
 
  public:
-  explicit IOSAudioPlayer(const std::function<void(float *, int)> &renderAudio);
+  explicit IOSAudioPlayer(const std::function<void(AudioBus*, int)> &renderAudio);
   ~IOSAudioPlayer();
 
   int getSampleRate() const;
+  int getBufferSizeInFrames() const;
+
   void start();
   void stop();
-  void renderAudio(float *audioData, int32_t numFrames);
+
 };
 } // namespace audioapi
