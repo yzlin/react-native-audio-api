@@ -35,8 +35,6 @@ file(GLOB_RECURSE SOURCE_FILES
   "../common/cpp/types/*.h"
 )
 
-add_subdirectory(../external/kfr ${CMAKE_CURRENT_BINARY_DIR}/kfr-build)
-
 add_library(react-native-audio-api SHARED ${SOURCE_FILES})
 
 file(GLOB DIRS CONFIGURE_DEPENDS "src/main/cpp/**" "../common/cpp/**")
@@ -48,7 +46,10 @@ target_include_directories(
   "${REACT_NATIVE_DIR}/ReactCommon/jsi"
   "${REACT_NATIVE_DIR}/ReactAndroid/src/main/jni/react/jni"
   "${REACT_NATIVE_DIR}/ReactAndroid/src/main/jni/third-party/folly"
+  "${CMAKE_CURRENT_SOURCE_DIR}/libs/include/fftw3"
 )
+
+set(fftw3 ${CMAKE_CURRENT_SOURCE_DIR}/libs/fftw3/${ANDROID_ABI}/libfftw3.a)
 
 find_package(ReactAndroid REQUIRED CONFIG)
 find_package(fbjni REQUIRED CONFIG)
@@ -60,10 +61,7 @@ set(LINK_LIBRARIES
   android
   log
   oboe::oboe
-  kfr
-  kfr_dsp
-  kfr_dft
-  kfr_io
+  ${fftw3}
 )
 
 if(ReactAndroid_VERSION_MINOR GREATER_EQUAL 76)
