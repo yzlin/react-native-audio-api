@@ -74,7 +74,6 @@ std::shared_ptr<PeriodicWave> BaseAudioContext::createPeriodicWave(
     float *imag,
     bool disableNormalization,
     int length) {
-  // add normalization
   return std::make_shared<PeriodicWave>(
       sampleRate_, real, imag, length, disableNormalization);
 }
