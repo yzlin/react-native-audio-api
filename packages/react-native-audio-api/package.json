@@ -45,7 +45,9 @@
   "keywords": [
     "react-native",
     "audio",
-    "audio-api"
+    "audio api",
+    "web audio api",
+    "react"
   ],
   "repository": {
     "type": "git",
