@@ -1,9 +1,5 @@
 <img src="./docs/assets/react-native-audio-api-gh-cover.png?v0.0.1" alt="React Native Audio API" width="100%">
 
-### ⚠️ Early version warning!
-
-This library is at a very early stage of development. There are known performance issues and the library might not yet suitable for real production applications.
-
 ### React Native Audio API
 
 `react-native-audio-api` provides system for controlling audio in React Native environment compatible with Web Audio API specification,
@@ -41,7 +37,7 @@ Our current coverage of Web Audio API specification can be found here: [Web Audi
 
 </div>
 
-The source code for the example application is under the [`/apps/common-app`](./apps/common-app/) directory. If you want to play with the API but don't feel like trying it on a real app, you can run the example project. Check [Example README](./apps/common-example/README.md) for installation instructions.
+The source code for the example application is under the [`/apps/common-app`](./apps/common-app/) directory. If you want to play with the API but don't feel like trying it on a real app, you can run the example project. Check [Example README](./apps/fabric-example/README.md) for installation instructions.
 
 ## Your feedback
 
@@ -63,4 +59,4 @@ This project has been built and is maintained thanks to the support from [Softwa
 
 ## react-native-audio-api is created by Software Mansion
 
-Since 2012 [Software Mansion](https://swmansion.com) is a software agency with experience in building web and mobile apps. We are Core React Native Contributors and experts in dealing with all kinds of React Native issues. We can help you build your next dream product – [Hire us](https://swmansion.com/contact/projects?utm_source=audioapid&utm_medium=readme).
+Since 2012 [Software Mansion](https://swmansion.com) is a software agency with experience in building web and mobile apps. We are Core React Native Contributors and experts in dealing with all kinds of React Native issues. We can help you build your next dream product – [Hire us](https://swmansion.com/contact/projects?utm_source=audioapi&utm_medium=readme).
