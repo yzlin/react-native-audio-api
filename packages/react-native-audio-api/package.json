@@ -1,6 +1,6 @@
 {
   "name": "react-native-audio-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "react-native-audio-api provides system for controlling audio in React Native environment compatible with Web Audio API specification",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -45,7 +45,9 @@
   "keywords": [
     "react-native",
     "audio",
-    "audio-api"
+    "audio api",
+    "web audio api",
+    "react"
   ],
   "repository": {
     "type": "git",
