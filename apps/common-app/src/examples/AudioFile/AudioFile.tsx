@@ -35,6 +35,7 @@ const AudioFile: FC = () => {
         type: 'audio/*',
         multiple: false,
       });
+
       if (result.canceled === false) {
         audioBufferSourceNodeRef.current?.stop();
         setIsPlaying(false);

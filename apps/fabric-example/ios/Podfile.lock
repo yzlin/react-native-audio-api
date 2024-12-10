@@ -1656,7 +1656,7 @@ PODS:
     - React-logger (= 0.76.0)
     - React-perflogger (= 0.76.0)
     - React-utils (= 0.76.0)
-  - RNAudioAPI (0.3.0-rc1):
+  - RNAudioAPI (0.3.0-rc2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2152,13 +2152,13 @@ SPEC CHECKSUMS:
   React-utils: d9624101245ebaab39c9f1bd786132da0b4f27ff
   ReactCodegen: dbfef1fef26f42c900bb1884fa149d49d501d64d
   ReactCommon: 429ca28cd813c31359c73ffac6dc24f93347d522
-  RNAudioAPI: 988ab6ec4fc80771859b0dd0dd86ea1571ccde09
+  RNAudioAPI: 837e19b456700c09bfd3d3c0068b82d2a11c68d0
   RNGestureHandler: 0e5ae8d72ef4afb855e98dcdbe60f27d938abe13
   RNReanimated: 006a5d3961bf09c1e96d62ed436e02b2e43b89bb
   RNScreens: e389d6a6a66a4f0d3662924ecae803073ccce8ec
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: f8ec45ce98bba1bc93dd28f2ee37215180e6d2b6
+  Yoga: 1d66db49f38fd9e576a1d7c3b081e46ab4c28b9e
 
 PODFILE CHECKSUM: d4b0da00bac00e3eab4bc0a377fa848fc7bb5276
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
