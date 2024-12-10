@@ -11,6 +11,7 @@ import { ActivityIndicator } from 'react-native';
 
 const AudioFile: FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioBufferSourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
@@ -39,9 +40,10 @@ const AudioFile: FC = () => {
       if (result.canceled === false) {
         audioBufferSourceNodeRef.current?.stop();
         setIsPlaying(false);
-        setAudioBuffer(null);
 
+        setIsLoading(true);
         await fetchAudioBuffer(result.assets[0].uri.replace('file://', ''));
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error picking file:', error);
@@ -87,12 +89,17 @@ const AudioFile: FC = () => {
 
   return (
     <Container centered>
-      <Button title={isPlaying ? 'Stop' : 'Play'} onPress={handlePress} />
-      {!audioBuffer && <ActivityIndicator color="#FFFFFF" />}
-      <Spacer.Vertical size={20} />
       <Button
         title="Set audio source from file"
         onPress={handleSetAudioSourceFromFile}
+        width={200}
+      />
+      {isLoading && <ActivityIndicator color="#FFFFFF" />}
+      <Spacer.Vertical size={20} />
+      <Button
+        title={isPlaying ? 'Stop' : 'Play'}
+        onPress={handlePress}
+        disabled={!audioBuffer ? true : false}
       />
     </Container>
   );
