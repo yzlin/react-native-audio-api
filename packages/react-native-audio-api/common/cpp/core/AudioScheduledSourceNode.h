@@ -1,13 +1,13 @@
 #pragma once
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <thread>
-#include <limits>
-#include <algorithm>
 
 #include "AudioNode.h"
 

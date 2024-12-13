@@ -2,10 +2,10 @@
 
 #include <jsi/jsi.h>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <string>
 
 #define JSI_HOST_FUNCTION(NAME)  \
   jsi::Value NAME(               \
@@ -68,10 +68,6 @@ class JsiHostObject : public jsi::HostObject {
   template <typename... Args>
   void addFunctions(Args... args) {
     (propertyFunctions_->insert(args), ...);
-  }
-
-  JSI_PROPERTY_GETTER(then) {
-    return jsi::Value::undefined();
   }
 
  protected:

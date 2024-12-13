@@ -294,6 +294,7 @@ export class BiquadFilterNode extends AudioNode {
 }
 
 export class PeriodicWave {
+  /** @internal */
   readonly periodicWave: globalThis.PeriodicWave;
 
   constructor(periodicWave: globalThis.PeriodicWave) {

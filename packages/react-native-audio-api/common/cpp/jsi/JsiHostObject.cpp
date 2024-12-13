@@ -12,8 +12,6 @@ JsiHostObject::JsiHostObject() {
   propertySetters_ = std::make_unique<std::unordered_map<
       std::string,
       void (JsiHostObject::*)(jsi::Runtime &, const jsi::Value &)>>();
-
-  propertyGetters_->insert(JSI_EXPORT_PROPERTY_GETTER(JsiHostObject, then));
 }
 
 std::vector<jsi::PropNameID> JsiHostObject::getPropertyNames(jsi::Runtime &rt) {
