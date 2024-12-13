@@ -4,17 +4,18 @@
 #include <jsi/jsi.h>
 #include <functional>
 
-namespace JsiPromise {
+namespace audioapi {
 
 using namespace facebook;
 
 jsi::Value PromiseVendor::createPromise(
-    std::function<void(std::shared_ptr<Promise>)> func) {
-  if (_runtime == nullptr) {
-    throw new std::runtime_error("Runtime was null!");
+    const std::function<void(std::shared_ptr<Promise>)> &function) {
+  if (runtime_ == nullptr) {
+    throw std::runtime_error("Runtime was null!");
   }
-  auto &runtime = *_runtime;
-  auto callInvoker = _callInvoker;
+
+  auto &runtime = *runtime_;
+  auto callInvoker = callInvoker_;
 
   // get Promise constructor
   auto promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
@@ -24,7 +25,7 @@ jsi::Value PromiseVendor::createPromise(
       runtime,
       jsi::PropNameID::forUtf8(runtime, "runPromise"),
       2,
-      [callInvoker, func](
+      [callInvoker, function](
           jsi::Runtime &runtime,
           const jsi::Value &thisValue,
           const jsi::Value *arguments,
@@ -52,7 +53,7 @@ jsi::Value PromiseVendor::createPromise(
         };
 
         auto promise = std::make_shared<Promise>(resolveWrapper, rejectWrapper);
-        func(promise);
+        function(promise);
 
         return jsi::Value::undefined();
       });
@@ -61,4 +62,4 @@ jsi::Value PromiseVendor::createPromise(
   return promiseCtor.callAsConstructor(runtime, runPromise);
 }
 
-} // namespace JsiPromise
+} // namespace audioapi

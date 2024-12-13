@@ -4,9 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "AudioContextWrapper.h"
+#include "AudioContext.h"
 #include "BaseAudioContextHostObject.h"
-#include "JsiPromise.h"
 
 namespace audioapi {
 using namespace facebook;
@@ -14,26 +13,16 @@ using namespace facebook;
 class AudioContextHostObject : public BaseAudioContextHostObject {
  public:
   explicit AudioContextHostObject(
-      const std::shared_ptr<AudioContextWrapper> &wrapper,
-      std::shared_ptr<JsiPromise::PromiseVendor> promiseVendor);
-
-  jsi::Value get(jsi::Runtime &runtime, const jsi::PropNameID &name) override;
-
-  void set(
-      jsi::Runtime &runtime,
-      const jsi::PropNameID &name,
-      const jsi::Value &value) override;
-
-  std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
-
-  static std::shared_ptr<AudioContextHostObject> createFromWrapper(
-      const std::shared_ptr<AudioContextWrapper> &wrapper,
-      std::shared_ptr<JsiPromise::PromiseVendor> promiseVendor) {
-    return std::make_shared<AudioContextHostObject>(wrapper, promiseVendor);
+      const std::shared_ptr<AudioContext> &audioContext,
+      const std::shared_ptr<PromiseVendor> &promiseVendor)
+      : BaseAudioContextHostObject(audioContext, promiseVendor) {
+    addFunctions(JSI_EXPORT_FUNCTION(AudioContextHostObject, close));
   }
 
- private:
-  std::shared_ptr<AudioContextWrapper>
-  getAudioContextWrapperFromBaseAudioContextWrapper();
+  JSI_HOST_FUNCTION(close) {
+    auto audioContext = std::static_pointer_cast<AudioContext>(context_);
+    audioContext->close();
+    return jsi::Value::undefined();
+  }
 };
 } // namespace audioapi

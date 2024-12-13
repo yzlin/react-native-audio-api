@@ -11,17 +11,18 @@
 namespace audioapi {
 
 AudioBufferSourceNode::AudioBufferSourceNode(BaseAudioContext *context)
-    : AudioScheduledSourceNode(context), loop_(false), vReadIndex_(0.0), loopStart_(0), loopEnd_(0) {
+    : AudioScheduledSourceNode(context),
+      loop_(false),
+      loopStart_(0),
+      loopEnd_(0),
+      vReadIndex_(0.0) {
   numberOfInputs_ = 0;
   buffer_ = std::shared_ptr<AudioBuffer>(nullptr);
 
-  detuneParam_ = std::make_shared<AudioParam>(context, 0.0, -MAX_DETUNE, MAX_DETUNE);
+  detuneParam_ =
+      std::make_shared<AudioParam>(context, 0.0, -MAX_DETUNE, MAX_DETUNE);
   playbackRateParam_ = std::make_shared<AudioParam>(
-    context,
-    1.0,
-    MOST_NEGATIVE_SINGLE_FLOAT,
-    MOST_POSITIVE_SINGLE_FLOAT
-  );
+      context, 1.0, MOST_NEGATIVE_SINGLE_FLOAT, MOST_POSITIVE_SINGLE_FLOAT);
 
   isInitialized_ = true;
 }
@@ -42,7 +43,8 @@ std::shared_ptr<AudioParam> AudioBufferSourceNode::getDetuneParam() const {
   return detuneParam_;
 }
 
-std::shared_ptr<AudioParam> AudioBufferSourceNode::getPlaybackRateParam() const {
+std::shared_ptr<AudioParam> AudioBufferSourceNode::getPlaybackRateParam()
+    const {
   return playbackRateParam_;
 }
 
@@ -71,13 +73,16 @@ void AudioBufferSourceNode::setBuffer(
   }
 
   buffer_ = buffer;
-  alignedBus_ = std::make_shared<AudioBus>(context_->getSampleRate(), buffer_->getLength());
+  alignedBus_ = std::make_shared<AudioBus>(
+      context_->getSampleRate(), buffer_->getLength());
 
   alignedBus_->zero();
   alignedBus_->sum(buffer_->bus_.get());
 }
 
-void AudioBufferSourceNode::processNode(AudioBus *processingBus, int framesToProcess) {
+void AudioBufferSourceNode::processNode(
+    AudioBus *processingBus,
+    int framesToProcess) {
   size_t startOffset = 0;
   size_t offsetLength = 0;
 
@@ -85,15 +90,18 @@ void AudioBufferSourceNode::processNode(AudioBus *processingBus, int framesToPro
   float playbackRate = getPlaybackRateValue(startOffset);
 
   // No audio data to fill, zero the output and return.
-  if (!isPlaying() || !alignedBus_ || alignedBus_->getSize() == 0 || !playbackRate) {
+  if (!isPlaying() || !alignedBus_ || alignedBus_->getSize() == 0 ||
+      !playbackRate) {
     processingBus->zero();
     return;
   }
 
   if (std::fabs(playbackRate) == 1.0) {
-    processWithoutInterpolation(processingBus, startOffset, offsetLength, playbackRate);
+    processWithoutInterpolation(
+        processingBus, startOffset, offsetLength, playbackRate);
   } else {
-    processWithInterpolation(processingBus, startOffset, offsetLength, playbackRate);
+    processWithInterpolation(
+        processingBus, startOffset, offsetLength, playbackRate);
   }
 }
 
@@ -102,18 +110,17 @@ void AudioBufferSourceNode::processNode(AudioBus *processingBus, int framesToPro
  */
 
 void AudioBufferSourceNode::processWithoutInterpolation(
-  AudioBus *processingBus,
-  size_t startOffset,
-  size_t offsetLength,
-  float playbackRate
-) {
+    AudioBus *processingBus,
+    size_t startOffset,
+    size_t offsetLength,
+    float playbackRate) {
   size_t direction = playbackRate < 0 ? -1 : 1;
 
-  size_t readIndex = static_cast<size_t>(vReadIndex_);
+  auto readIndex = static_cast<size_t>(vReadIndex_);
   size_t writeIndex = startOffset;
 
-  size_t frameStart = static_cast<size_t>(getVirtualStartFrame());
-  size_t frameEnd = static_cast<size_t>(getVirtualEndFrame());
+  auto frameStart = static_cast<size_t>(getVirtualStartFrame());
+  auto frameEnd = static_cast<size_t>(getVirtualEndFrame());
   size_t frameDelta = frameEnd - frameStart;
 
   size_t framesLeft = offsetLength;
@@ -125,15 +132,17 @@ void AudioBufferSourceNode::processWithoutInterpolation(
   while (framesLeft > 0) {
     size_t framesToEnd = frameEnd - readIndex;
     size_t framesToCopy = std::min(framesToEnd, framesLeft);
-    framesToCopy = std::max(framesToCopy, 0ul);
+    framesToCopy = framesToCopy > 0 ? framesToCopy : 0;
 
     // Direction is forward, we can normally copy the data
     if (direction == 1) {
-      processingBus->copy(alignedBus_.get(), readIndex, writeIndex, framesToCopy);
+      processingBus->copy(
+          alignedBus_.get(), readIndex, writeIndex, framesToCopy);
     } else {
       for (int i = 0; i < framesToCopy; i += 1) {
         for (int j = 0; j < processingBus->getNumberOfChannels(); j += 1) {
-          (*processingBus->getChannel(j))[writeIndex + i] = (*alignedBus_->getChannel(j))[readIndex - i];
+          (*processingBus->getChannel(j))[writeIndex + i] =
+              (*alignedBus_->getChannel(j))[readIndex - i];
         }
       }
     }
@@ -159,11 +168,10 @@ void AudioBufferSourceNode::processWithoutInterpolation(
 }
 
 void AudioBufferSourceNode::processWithInterpolation(
-  AudioBus *processingBus,
-  size_t startOffset,
-  size_t offsetLength,
-  float playbackRate
-) {
+    AudioBus *processingBus,
+    size_t startOffset,
+    size_t offsetLength,
+    float playbackRate) {
   size_t direction = playbackRate < 0 ? -1 : 1;
 
   size_t writeIndex = startOffset;
@@ -172,18 +180,19 @@ void AudioBufferSourceNode::processWithInterpolation(
   double vFrameEnd = getVirtualEndFrame();
   double vFrameDelta = vFrameEnd - vFrameStart;
 
-  size_t frameStart = static_cast<size_t>(vFrameStart);
-  size_t frameEnd = static_cast<size_t>(vFrameEnd);
+  auto frameStart = static_cast<size_t>(vFrameStart);
+  auto frameEnd = static_cast<size_t>(vFrameEnd);
 
   size_t framesLeft = offsetLength;
 
   // Wrap to the start of the loop if necessary
   if (loop_ && (vReadIndex_ >= vFrameEnd || vReadIndex_ < vFrameStart)) {
-    vReadIndex_ = vFrameStart + std::fmod(vReadIndex_ - vFrameStart, vFrameDelta);
+    vReadIndex_ =
+        vFrameStart + std::fmod(vReadIndex_ - vFrameStart, vFrameDelta);
   }
 
   while (framesLeft > 0) {
-    size_t readIndex = static_cast<size_t>(vReadIndex_);
+    auto readIndex = static_cast<size_t>(vReadIndex_);
     size_t nextReadIndex = readIndex + 1;
     float factor = vReadIndex_ - readIndex;
 
@@ -192,15 +201,11 @@ void AudioBufferSourceNode::processWithInterpolation(
     }
 
     for (int i = 0; i < processingBus->getNumberOfChannels(); i += 1) {
-      float* destination = processingBus->getChannel(i)->getData();
-      const float* source = alignedBus_->getChannel(i)->getData();
+      float *destination = processingBus->getChannel(i)->getData();
+      const float *source = alignedBus_->getChannel(i)->getData();
 
       destination[writeIndex] = AudioUtils::linearInterpolate(
-        source,
-        readIndex,
-        nextReadIndex,
-        factor
-      );
+          source, readIndex, nextReadIndex, factor);
     }
 
     writeIndex += 1;
@@ -220,19 +225,19 @@ void AudioBufferSourceNode::processWithInterpolation(
   }
 }
 
-float AudioBufferSourceNode::getPlaybackRateValue(size_t& startOffset) {
-  double time = context_->getCurrentTime() + startOffset / context_->getSampleRate();
+float AudioBufferSourceNode::getPlaybackRateValue(size_t &startOffset) {
+  double time =
+      context_->getCurrentTime() + startOffset / context_->getSampleRate();
 
-  return playbackRateParam_->getValueAtTime(time)
-    * std::pow(2.0f, detuneParam_->getValueAtTime(time) / 1200.0f);
+  return playbackRateParam_->getValueAtTime(time) *
+      std::pow(2.0f, detuneParam_->getValueAtTime(time) / 1200.0f);
 }
 
 double AudioBufferSourceNode::getVirtualStartFrame() {
   double loopStartFrame = loopStart_ * context_->getSampleRate();
 
-  return loop_ && loopStartFrame >= 0 && loopStart_ < loopEnd_
-    ? loopStartFrame
-    : 0.0;
+  return loop_ && loopStartFrame >= 0 && loopStart_ < loopEnd_ ? loopStartFrame
+                                                               : 0.0;
 }
 
 double AudioBufferSourceNode::getVirtualEndFrame() {
@@ -240,8 +245,8 @@ double AudioBufferSourceNode::getVirtualEndFrame() {
   double loopEndFrame = loopEnd_ * context_->getSampleRate();
 
   return loop_ && loopEndFrame > 0 && loopStart_ < loopEnd_
-    ? std::min(loopEndFrame, inputBufferLength)
-    : inputBufferLength;
+      ? std::min(loopEndFrame, inputBufferLength)
+      : inputBufferLength;
 }
 
 } // namespace audioapi

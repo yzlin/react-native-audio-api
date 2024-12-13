@@ -6,6 +6,8 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <limits>
+#include <algorithm>
 
 #include "AudioNode.h"
 
@@ -26,7 +28,11 @@ class AudioScheduledSourceNode : public AudioNode {
 
  protected:
   std::atomic<PlaybackState> playbackState_;
-  void updatePlaybackInfo(AudioBus *processingBus, int framesToProcess, size_t& startOffset, size_t& nonSilentFramesToProcess);
+  void updatePlaybackInfo(
+      AudioBus *processingBus,
+      int framesToProcess,
+      size_t &startOffset,
+      size_t &nonSilentFramesToProcess);
 
  private:
   double startTime_;

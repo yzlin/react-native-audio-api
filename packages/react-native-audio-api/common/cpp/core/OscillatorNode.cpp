@@ -45,7 +45,6 @@ void OscillatorNode::processNode(AudioBus *processingBus, int framesToProcess) {
 
   updatePlaybackInfo(processingBus, framesToProcess, startOffset, offsetLength);
 
-
   if (!isPlaying()) {
     processingBus->zero();
     return;

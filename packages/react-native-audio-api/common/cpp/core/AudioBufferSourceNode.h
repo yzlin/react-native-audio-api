@@ -49,7 +49,7 @@ class AudioBufferSourceNode : public AudioScheduledSourceNode {
   std::shared_ptr<AudioBuffer> buffer_;
   std::shared_ptr<AudioBus> alignedBus_;
 
-  float getPlaybackRateValue(size_t& startOffset);
+  float getPlaybackRateValue(size_t &startOffset);
 
   double getVirtualStartFrame();
   double getVirtualEndFrame();

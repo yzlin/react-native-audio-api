@@ -21,12 +21,12 @@ file(GLOB_RECURSE SOURCE_FILES
   "../common/cpp/*.h"
   "../common/cpp/core/*.cpp"
   "../common/cpp/core/*.h"
-  "../common/cpp/wrappers/*.cpp"
-  "../common/cpp/wrappers/*.h"
   "../common/cpp/HostObjects/*.cpp"
   "../common/cpp/HostObjects/*.h"
   "../common/cpp/utils/*.cpp"
   "../common/cpp/utils/*.h"
+  "../common/cpp/jsi/*.h"
+  "../common/cpp/jsi/*.cpp"
   "../common/cpp/types/*.h"
 )
 
