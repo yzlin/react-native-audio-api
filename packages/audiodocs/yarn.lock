@@ -10031,6 +10031,11 @@ react-loadable-ssr-addon-v5-slorber@^1.0.1:
     "@types/react" "*"
     prop-types "^15.6.2"
 
+react-native-audio-api@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-audio-api/-/react-native-audio-api-0.3.1.tgz#033b8567c13659a8745dc0605dca53a9ee799d22"
+  integrity sha512-WFO/t7VSHen9hvQYvotzi2iloNCYcQ9O/K0nHX++6ibYJaQ7/65Et5zImIcugJtUAjn6Jft/L+Yep5ovZI6bDA==
+
 react-native-codegen@^0.71.6:
   version "0.71.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.71.6.tgz#481a610c3af9135b09e1e031da032e7270e0cc1b"
