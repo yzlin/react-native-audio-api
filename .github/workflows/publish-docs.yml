@@ -22,9 +22,8 @@ jobs:
       - name: Setup Yarn
         uses: mskelton/setup-yarn@v2
 
-
       - name: Install dependencies and build the docs
-        run: | 
+        run: |
           cd packages/audiodocs
           yarn
           yarn build
@@ -32,7 +31,7 @@ jobs:
       - name: Upload build files
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build
+          path: packages/audiodocs/build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
