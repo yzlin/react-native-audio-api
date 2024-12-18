@@ -62,6 +62,12 @@
     "typescript-eslint": "^8.18.0",
     "webpack-cli": "^5.0.1"
   },
+  "resolutions": {
+    "@babel/traverse": "^7.23.2",
+    "mermaid": "^10.9.3",
+    "trim": "^1.0.1",
+    "dompurify": "^2.5.4"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
