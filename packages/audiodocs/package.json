@@ -33,7 +33,6 @@
     "@vercel/og": "^0.6.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-expo": "^9.2.2",
-    "babel-preset-react-native": "^4.0.1",
     "clsx": "^1.2.1",
     "raf": "^3.4.1",
     "raw-loader": "^4.0.2",
@@ -66,7 +65,9 @@
     "@babel/traverse": "^7.23.2",
     "mermaid": "^10.9.3",
     "trim": "^1.0.1",
-    "dompurify": "^2.5.4"
+    "dompurify": "^2.5.4",
+    "got": "^11.8.5",
+    "axios": "^0.28.0"
   },
   "browserslist": {
     "production": [
