@@ -1,28 +1,13 @@
 :root {
+  --swm-logo-height: 45px;
   --swm-expandable-transition: transform 200ms ease;
 }
 
 .navbar {
   min-width: 360px;
   z-index: 100;
+  background-color: var(--ifm-navbar-background-color);
 }
-
-:root {
-  /* --swm-logo-title-width: 177px; */
-  --swm-logo-height: 45px;
-}
-
-/* .navbar img[alt='react-native-audio-api'] {
-  height: 40px;
-}
-
-.theme-doc-sidebar-container img[alt='react-native-audio-api'] {
-  height: 40px;
-}
-
-.theme-doc-sidebar-container img {
-  height: 40px;
-} */
 
 .navbar__title {
   display: flex;
@@ -40,14 +25,6 @@
 .docusaurus-mermaid-container {
   display: flex;
   justify-content: center;
-}
-
-[class*="navbar__logo"] {
-  width: 180px;
-}
-
-.navbar__items :nth-child(2) {
-  margin-left: auto
 }
 
 table {
