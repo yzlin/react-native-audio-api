@@ -7,6 +7,32 @@
   z-index: 100;
 }
 
+:root {
+  /* --swm-logo-title-width: 177px; */
+  --swm-logo-height: 45px;
+}
+
+/* .navbar img[alt='react-native-audio-api'] {
+  height: 40px;
+}
+
+.theme-doc-sidebar-container img[alt='react-native-audio-api'] {
+  height: 40px;
+}
+
+.theme-doc-sidebar-container img {
+  height: 40px;
+} */
+
+.navbar__title {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__title img {
+  height: 45px !important;
+}
+
 .footer {
   z-index: 100;
 }
