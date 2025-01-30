@@ -1,9 +1,3 @@
-#ifdef ANDROID
-#include "AudioPlayer.h"
-#else
-#include "IOSAudioPlayer.h"
-#endif
-
 #include "BaseAudioContext.h"
 
 #include "AnalyserNode.h"
@@ -22,29 +16,11 @@
 
 namespace audioapi {
 
-BaseAudioContext::BaseAudioContext() {
-#ifdef ANDROID
-  audioPlayer_ = std::make_shared<AudioPlayer>(this->renderAudio());
-#else
-  audioPlayer_ = std::make_shared<IOSAudioPlayer>(this->renderAudio());
-#endif
-
-  audioDecoder_ = std::make_shared<AudioDecoder>(audioPlayer_->getSampleRate());
-
-  sampleRate_ = audioPlayer_->getSampleRate();
-  bufferSizeInFrames_ = audioPlayer_->getBufferSizeInFrames();
+BaseAudioContext::BaseAudioContext() : sampleRate_(DEFAULT_SAMPLE_RATE) {
+  audioDecoder_ = std::make_shared<AudioDecoder>(sampleRate_);
 
   nodeManager_ = std::make_shared<AudioNodeManager>();
   destination_ = std::make_shared<AudioDestinationNode>(this);
-}
-
-BaseAudioContext::~BaseAudioContext() {
-  if (isRunning()) {
-    return;
-  }
-
-  state_ = ContextState::CLOSED;
-  audioPlayer_->stop();
 }
 
 std::string BaseAudioContext::getState() {
@@ -53,10 +29,6 @@ std::string BaseAudioContext::getState() {
 
 int BaseAudioContext::getSampleRate() const {
   return sampleRate_;
-}
-
-int BaseAudioContext::getBufferSizeInFrames() const {
-  return bufferSizeInFrames_;
 }
 
 std::size_t BaseAudioContext::getCurrentSampleFrame() const {
@@ -115,16 +87,6 @@ std::shared_ptr<AudioBuffer> BaseAudioContext::decodeAudioDataSource(
     const std::string &path) {
   auto audioBus = audioDecoder_->decodeWithFilePath(path);
   return std::make_shared<AudioBuffer>(audioBus);
-}
-
-std::function<void(AudioBus *, int)> BaseAudioContext::renderAudio() {
-  if (!isRunning()) {
-    return [](AudioBus *, int) {};
-  }
-
-  return [this](AudioBus *data, int frames) {
-    destination_->renderAudio(data, frames);
-  };
 }
 
 AudioNodeManager *BaseAudioContext::getNodeManager() {
