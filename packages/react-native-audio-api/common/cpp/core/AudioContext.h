@@ -14,6 +14,7 @@ class IOSAudioPlayer;
 class AudioContext : public BaseAudioContext {
  public:
   AudioContext();
+  explicit AudioContext(int sampleRate);
   ~AudioContext() override;
 
   void close();
