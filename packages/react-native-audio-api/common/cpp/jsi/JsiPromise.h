@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <functional>
 
 namespace audioapi {
 

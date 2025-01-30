@@ -1,6 +1,7 @@
 #pragma once
 
 #include <oboe/Oboe.h>
+#include <functional>
 #include <memory>
 
 namespace audioapi {
