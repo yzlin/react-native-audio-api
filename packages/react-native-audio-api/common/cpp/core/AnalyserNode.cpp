@@ -80,7 +80,7 @@ void AnalyserNode::getByteFrequencyData(uint8_t *data, int length) {
   doFFTAnalysis();
 
   auto magnitudeBufferData = magnitudeBuffer_->getData();
-    length = std::min(static_cast<int>(magnitudeBuffer_->getSize()), length);
+  length = std::min(static_cast<int>(magnitudeBuffer_->getSize()), length);
 
   const auto rangeScaleFactor =
       maxDecibels_ == minDecibels_ ? 1 : 1 / (maxDecibels_ - minDecibels_);
@@ -103,7 +103,7 @@ void AnalyserNode::getByteFrequencyData(uint8_t *data, int length) {
 }
 
 void AnalyserNode::getFloatTimeDomainData(float *data, int length) {
-  auto size = fftSize_ ? fftSize_ < length : length;
+  auto size = std::min(fftSize_, length);
 
   for (int i = 0; i < size; i++) {
     data[i] = inputBuffer_->getData()
@@ -113,7 +113,7 @@ void AnalyserNode::getFloatTimeDomainData(float *data, int length) {
 }
 
 void AnalyserNode::getByteTimeDomainData(uint8_t *data, int length) {
-  auto size = fftSize_ ? fftSize_ < length : length;
+  auto size = std::min(fftSize_, length);
 
   for (int i = 0; i < size; i++) {
     auto value = inputBuffer_->getData()
@@ -148,7 +148,7 @@ void AnalyserNode::processNode(
 
   if (vWriteIndex_ + framesToProcess > inputBuffer_->getSize()) {
     auto framesToCopy =
-        static_cast<int>(inputBuffer_->getSize() - vWriteIndex_);
+        static_cast<int>(inputBuffer_->getSize()) - vWriteIndex_;
     memcpy(
         inputBuffer_->getData() + vWriteIndex_,
         downMixBus_->getChannel(0)->getData(),
@@ -229,8 +229,7 @@ void AnalyserNode::applyWindow(float *data, int length) {
 
   for (int i = 0; i < length; ++i) {
     auto x = static_cast<float>(i) / static_cast<float>(length);
-    auto window = a0 - a1 * cos(2 * static_cast<float>(M_PI) * x) +
-        a2 * cos(4 * static_cast<float>(M_PI) * x);
+    auto window = a0 - a1 * cos(2 * PI * x) + a2 * cos(4 * PI * x);
     data[i] *= window;
   }
 }

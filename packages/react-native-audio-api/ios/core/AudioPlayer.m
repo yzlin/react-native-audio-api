@@ -49,7 +49,7 @@
   return self;
 }
 
-- (instancetype)initWithRenderAudioBlock:(RenderAudioBlock)renderAudio sampleRate:(int)sampleRate
+- (instancetype)initWithRenderAudioBlock:(RenderAudioBlock)renderAudio sampleRate:(float)sampleRate
 {
   if (self = [super init]) {
     self.renderAudio = [renderAudio copy];
@@ -96,7 +96,7 @@
   return self;
 }
 
-- (int)getSampleRate
+- (float)getSampleRate
 {
   return self.sampleRate;
 }
