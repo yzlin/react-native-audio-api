@@ -25,7 +25,7 @@ std::string BaseAudioContext::getState() {
   return BaseAudioContext::toString(state_);
 }
 
-int BaseAudioContext::getSampleRate() const {
+float BaseAudioContext::getSampleRate() const {
   return sampleRate_;
 }
 
@@ -63,8 +63,8 @@ std::shared_ptr<AudioBufferSourceNode> BaseAudioContext::createBufferSource() {
 
 std::shared_ptr<AudioBuffer> BaseAudioContext::createBuffer(
     int numberOfChannels,
-    int length,
-    int sampleRate) {
+    size_t length,
+    float sampleRate) {
   return std::make_shared<AudioBuffer>(numberOfChannels, length, sampleRate);
 }
 
@@ -97,6 +97,10 @@ bool BaseAudioContext::isRunning() const {
 
 bool BaseAudioContext::isClosed() const {
   return state_ == ContextState::CLOSED;
+}
+
+float BaseAudioContext::getNyquistFrequency() const {
+  return sampleRate_ / 2.0f;
 }
 
 std::string BaseAudioContext::toString(ContextState state) {

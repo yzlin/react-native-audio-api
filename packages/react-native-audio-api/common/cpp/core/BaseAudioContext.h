@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cstddef>
 
 #include "ContextState.h"
 #include "OscillatorType.h"
@@ -30,7 +31,7 @@ class BaseAudioContext {
   virtual ~BaseAudioContext() = default;
 
   std::string getState();
-  [[nodiscard]] int getSampleRate() const;
+  [[nodiscard]] float getSampleRate() const;
   [[nodiscard]] double getCurrentTime() const;
   [[nodiscard]] std::size_t getCurrentSampleFrame() const;
   std::shared_ptr<AudioDestinationNode> getDestination();
@@ -41,19 +42,20 @@ class BaseAudioContext {
   std::shared_ptr<BiquadFilterNode> createBiquadFilter();
   std::shared_ptr<AudioBufferSourceNode> createBufferSource();
   static std::shared_ptr<AudioBuffer>
-  createBuffer(int numberOfChannels, int length, int sampleRate);
+  createBuffer(int numberOfChannels, size_t length, float sampleRate);
   std::shared_ptr<PeriodicWave> createPeriodicWave(
       float *real,
       float *imag,
       bool disableNormalization,
       int length);
   std::shared_ptr<AnalyserNode> createAnalyser();
-
   std::shared_ptr<AudioBuffer> decodeAudioDataSource(const std::string &path);
+
   std::shared_ptr<PeriodicWave> getBasicWaveForm(OscillatorType type);
   AudioNodeManager *getNodeManager();
   [[nodiscard]] bool isRunning() const;
   [[nodiscard]] bool isClosed() const;
+  [[nodiscard]] float getNyquistFrequency() const;
 
  protected:
   static std::string toString(ContextState state);
@@ -62,7 +64,7 @@ class BaseAudioContext {
   std::shared_ptr<AudioDecoder> audioDecoder_ {};
 
   // init in AudioContext or OfflineContext constructor
-  int sampleRate_ {};
+  float sampleRate_ {};
   ContextState state_ = ContextState::RUNNING;
   std::shared_ptr<AudioNodeManager> nodeManager_;
 

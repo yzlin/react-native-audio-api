@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstddef>
 
 #include "AudioNode.h"
 
@@ -14,30 +15,30 @@ class AnalyserNode : public AudioNode {
  public:
   explicit AnalyserNode(BaseAudioContext *context);
 
-  size_t getFftSize() const;
-  size_t getFrequencyBinCount() const;
-  double getMinDecibels() const;
-  double getMaxDecibels() const;
+  int getFftSize() const;
+  int getFrequencyBinCount() const;
+  float getMinDecibels() const;
+  float getMaxDecibels() const;
 
-  double getSmoothingTimeConstant() const;
-  void setFftSize(size_t fftSize);
-  void setMinDecibels(double minDecibels);
-  void setMaxDecibels(double maxDecibels);
-  void setSmoothingTimeConstant(double smoothingTimeConstant);
+  float getSmoothingTimeConstant() const;
+  void setFftSize(int fftSize);
+  void setMinDecibels(float minDecibels);
+  void setMaxDecibels(float maxDecibels);
+  void setSmoothingTimeConstant(float smoothingTimeConstant);
 
-  void getFloatFrequencyData(float *data, size_t length);
-  void getByteFrequencyData(uint8_t *data, size_t length);
-  void getFloatTimeDomainData(float *data, size_t length);
-  void getByteTimeDomainData(uint8_t *data, size_t length);
+  void getFloatFrequencyData(float *data, int length);
+  void getByteFrequencyData(uint8_t *data, int length);
+  void getFloatTimeDomainData(float *data, int length);
+  void getByteTimeDomainData(uint8_t *data, int length);
 
  protected:
   void processNode(AudioBus *processingBus, int framesToProcess) override;
 
  private:
-  size_t fftSize_;
-  double minDecibels_;
-  double maxDecibels_;
-  double smoothingTimeConstant_;
+  int fftSize_;
+  float minDecibels_;
+  float maxDecibels_;
+  float smoothingTimeConstant_;
 
   std::unique_ptr<AudioArray> inputBuffer_;
   std::unique_ptr<AudioBus> downMixBus_;
@@ -47,8 +48,8 @@ class AnalyserNode : public AudioNode {
   std::unique_ptr<AudioArray> magnitudeBuffer_;
   bool shouldDoFFTAnalysis_ { true };
 
-    void doFFTAnalysis();
-    static void applyWindow(float *data, size_t length);
+  void doFFTAnalysis();
+  static void applyWindow(float *data, int length);
 };
 
 } // namespace audioapi
