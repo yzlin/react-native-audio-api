@@ -1,53 +1,96 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+} from 'react';
 import * as FileSystem from 'expo-file-system';
 import {
   AudioContext,
-  AnalyserNode,
   AudioBuffer,
   AudioBufferSourceNode,
+  AnalyserNode,
 } from 'react-native-audio-api';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Button, LayoutChangeEvent } from 'react-native';
+import { Canvas as SKCanvas, vec, Line } from '@shopify/react-native-skia';
 
-import FreqTimeChart from './FreqTimeChart';
-import { Container, Button } from '../../components';
-import { layout } from '../../styles';
+interface Size {
+  width: number;
+  height: number;
+}
+
+interface ChartProps {
+  data: number[];
+  dataSize: number;
+}
+
+const FrequencyChart: React.FC<ChartProps> = (props) => {
+  const [size, setSize] = useState<Size>({ width: 0, height: 0 });
+  const { data, dataSize } = props;
+
+  const onCanvasLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+
+    setSize({ width, height });
+  };
+
+  const barWidth = size.width / dataSize;
+
+  const points = useMemo(() => {
+    return data.map((value, index) => {
+      const x = index * barWidth;
+      const y1 = size.height;
+      const y2 = size.height - size.height * (value / 256);
+
+      const hue = (index / dataSize) * 360;
+      const color = `hsl(${hue}, 100%, 50%)`;
+
+      return { x1: x, y1, x2: x, y2, color };
+    });
+  }, [size, data, dataSize]);
+
+  return (
+    <SKCanvas style={{ flex: 1 }} onLayout={onCanvasLayout}>
+      {points.map((point, index) => (
+        <Line
+          key={index}
+          p1={vec(point.x1, point.y1)}
+          p2={vec(point.x2, point.y2)}
+          style="stroke"
+          color={point.color}
+          strokeWidth={barWidth}
+        />
+      ))}
+    </SKCanvas>
+  );
+}
 
 const FFT_SIZE = 512;
-
-const URL =
-  'https://software-mansion-labs.github.io/react-native-audio-api/audio/music/example-music-02.mp3';
 
 const AudioVisualizer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [times, setTimes] = useState<number[]>(new Array(FFT_SIZE).fill(127));
   const [freqs, setFreqs] = useState<number[]>(new Array(FFT_SIZE / 2).fill(0));
 
-  const [startTime, setStartTime] = useState(0);
-  const [offset, setOffset] = useState(0);
-
   const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
   const bufferSourceRef = useRef<AudioBufferSourceNode | null>(null);
   const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
 
   const handlePlayPause = () => {
     if (isPlaying) {
-      const stopTime = audioContextRef.current!.currentTime;
-      bufferSourceRef.current?.stop(stopTime);
-      setOffset((prev) => prev + stopTime - startTime);
+      bufferSourceRef.current?.stop();
     } else {
       if (!audioContextRef.current || !analyserRef.current) {
-        return;
+        return
       }
 
       bufferSourceRef.current = audioContextRef.current.createBufferSource();
       bufferSourceRef.current.buffer = audioBufferRef.current;
       bufferSourceRef.current.connect(analyserRef.current);
 
-      setStartTime(audioContextRef.current.currentTime);
-      bufferSourceRef.current.start(startTime, offset);
+      bufferSourceRef.current.start();
 
       requestAnimationFrame(draw);
     }
@@ -90,7 +133,7 @@ const AudioVisualizer: React.FC = () => {
     const fetchBuffer = async () => {
       setIsLoading(true);
       audioBufferRef.current = await FileSystem.downloadAsync(
-        URL,
+        'https://software-mansion-labs.github.io/react-native-audio-api/audio/music/example-music-02.mp3',
         FileSystem.documentDirectory + 'audio.mp3'
       ).then(({ uri }) => {
         return audioContextRef.current!.decodeAudioDataSource(uri);
@@ -107,16 +150,9 @@ const AudioVisualizer: React.FC = () => {
   }, []);
 
   return (
-    <Container disablePadding>
+    <View style={{ flex: 1}}>
       <View style={{ flex: 0.2 }} />
-      <FreqTimeChart
-        timeData={times}
-        frequencyData={freqs}
-        fftSize={analyserRef.current?.fftSize || FFT_SIZE}
-        frequencyBinCount={
-          analyserRef.current?.frequencyBinCount || FFT_SIZE / 2
-        }
-      />
+      <FrequencyChart data={freqs} dataSize={FFT_SIZE / 2} />
       <View
         style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
         {isLoading && <ActivityIndicator color="#FFFFFF" />}
@@ -124,16 +160,17 @@ const AudioVisualizer: React.FC = () => {
           style={{
             justifyContent: 'center',
             flexDirection: 'row',
-            marginTop: layout.spacing * 2,
+            marginTop: 16,
           }}>
-          <Button
+        <Button
             onPress={handlePlayPause}
             title={isPlaying ? 'Pause' : 'Play'}
             disabled={!audioBufferRef.current}
+            color={'#38acdd'}
           />
         </View>
       </View>
-    </Container>
+    </View>
   );
 };
 

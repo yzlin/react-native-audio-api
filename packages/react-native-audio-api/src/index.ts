@@ -4,6 +4,8 @@ import {
   WindowType,
 } from './core/types';
 
+import { InvalidStateError } from './errors';
+
 export class AudioBuffer {
   readonly length: number;
   readonly duration: number;
@@ -49,11 +51,13 @@ export class AudioBuffer {
       );
     }
 
-    this.buffer.copyFromChannel(
-      new Float32Array(destination),
-      channelNumber,
-      startInChannel
-    );
+    const array = new Float32Array(destination);
+
+    this.buffer.copyFromChannel(array, channelNumber, startInChannel);
+
+    for (let i = 0; i < destination.length; i++) {
+      destination[i] = array[i];
+    }
   }
 
   public copyToChannel(
@@ -147,32 +151,46 @@ export class AnalyserNode extends AudioNode {
   }
 
   public getByteFrequencyData(array: number[]): void {
-    (this.node as globalThis.AnalyserNode).getByteFrequencyData(
-      new Uint8Array(array)
-    );
+    const data = new Uint8Array(array);
+
+    (this.node as globalThis.AnalyserNode).getByteFrequencyData(data);
+
+    for (let i = 0; i < array.length; i++) {
+      array[i] = data[i];
+    }
   }
 
   public getByteTimeDomainData(array: number[]): void {
-    (this.node as globalThis.AnalyserNode).getByteTimeDomainData(
-      new Uint8Array(array)
-    );
+    const data = new Uint8Array(array);
+
+    (this.node as globalThis.AnalyserNode).getByteTimeDomainData(data);
+
+    for (let i = 0; i < array.length; i++) {
+      array[i] = data[i];
+    }
   }
 
   public getFloatFrequencyData(array: number[]): void {
-    (this.node as globalThis.AnalyserNode).getFloatFrequencyData(
-      new Float32Array(array)
-    );
+    const data = new Float32Array(array);
+    (this.node as globalThis.AnalyserNode).getFloatFrequencyData(data);
+
+    for (let i = 0; i < array.length; i++) {
+      array[i] = data[i];
+    }
   }
 
   public getFloatTimeDomainData(array: number[]): void {
-    (this.node as globalThis.AnalyserNode).getFloatTimeDomainData(
-      new Float32Array(array)
-    );
+    const data = new Float32Array(array);
+    (this.node as globalThis.AnalyserNode).getFloatTimeDomainData(data);
+
+    for (let i = 0; i < array.length; i++) {
+      array[i] = data[i];
+    }
   }
 }
 
 export class AudioScheduledSourceNode extends AudioNode {
-  private hasBeenStarted: boolean = false;
+  protected hasBeenStarted: boolean = false;
 
   public start(when: number = 0): void {
     if (when < 0) {
@@ -259,6 +277,29 @@ export class AudioBufferSourceNode extends AudioScheduledSourceNode {
   }
 
   public start(when?: number, offset?: number, duration?: number): void {
+    if (when && when < 0) {
+      throw new RangeError(
+        `when must be a finite non-negative number: ${when}`
+      );
+    }
+
+    if (offset && offset < 0) {
+      throw new RangeError(
+        `offset must be a finite non-negative number: ${when}`
+      );
+    }
+
+    if (duration && duration < 0) {
+      throw new RangeError(
+        `duration must be a finite non-negative number: ${when}`
+      );
+    }
+
+    if (this.hasBeenStarted) {
+      throw new InvalidStateError('Cannot call start more than once');
+    }
+
+    this.hasBeenStarted = true;
     (this.node as globalThis.AudioBufferSourceNode).start(
       when,
       offset,
@@ -370,12 +411,22 @@ export class BiquadFilterNode extends AudioNode {
         `The lengths of the arrays are not the same frequencyArray: ${frequencyArray.length}, magResponseOutput: ${magResponseOutput.length}, phaseResponseOutput: ${phaseResponseOutput.length}`
       );
     }
+    const magData = new Float32Array(magResponseOutput);
+    const phaseData = new Float32Array(phaseResponseOutput);
 
     (this.node as globalThis.BiquadFilterNode).getFrequencyResponse(
       new Float32Array(frequencyArray),
-      new Float32Array(magResponseOutput),
-      new Float32Array(phaseResponseOutput)
+      magData,
+      phaseData
     );
+
+    for (let i = 0; i < magData.length; i++) {
+      magResponseOutput[i] = magData[i];
+    }
+
+    for (let i = 0; i < phaseData.length; i++) {
+      phaseResponseOutput[i] = phaseData[i];
+    }
   }
 }
 
