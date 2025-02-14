@@ -8,25 +8,15 @@
     self.renderAudio = [renderAudio copy];
     self.audioEngine = [[AVAudioEngine alloc] init];
     self.audioEngine.mainMixerNode.outputVolume = 1;
-
+    
     self.audioSession = AVAudioSession.sharedInstance;
-    NSError *error = nil;
-
+    
     // TODO:
     // We will probably want to change it to AVAudioSessionCategoryPlayAndRecord in the future.
     // Eventually we to make this a dynamic setting, if user of the lib wants to use recording features.
     // But setting a recording category might require some setup first, so lets skip it for now :)
-    [self.audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
-
-    if (error != nil) {
-      @throw error;
-    }
-
-    [self.audioSession setActive:true error:&error];
-
-    if (error != nil) {
-      @throw error;
-    }
+    // [self.audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
+    // [self.audioSession setActive:true error:&error];
 
     self.sampleRate = [self.audioSession sampleRate];
 
@@ -57,23 +47,13 @@
     self.audioEngine.mainMixerNode.outputVolume = 1;
 
     self.audioSession = AVAudioSession.sharedInstance;
-    NSError *error = nil;
-
+    
     // TODO:
     // We will probably want to change it to AVAudioSessionCategoryPlayAndRecord in the future.
     // Eventually we to make this a dynamic setting, if user of the lib wants to use recording features.
     // But setting a recording category might require some setup first, so lets skip it for now :)
-    [self.audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
-
-    if (error != nil) {
-      @throw error;
-    }
-
-    [self.audioSession setActive:true error:&error];
-
-    if (error != nil) {
-      @throw error;
-    }
+    // [self.audioSession setCategory:AVAudioSessionCategoryPlayback error:&error];
+    // [self.audioSession setActive:true error:&error];
 
     self.sampleRate = sampleRate;
 
