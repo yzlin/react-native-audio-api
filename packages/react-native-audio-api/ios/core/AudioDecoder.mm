@@ -14,7 +14,7 @@ AudioBus *AudioDecoder::decodeWithFilePath(const std::string &path) const
   ma_result result = ma_decoder_init_file(path.c_str(), &config, &decoder);
   if (result != MA_SUCCESS) {
     NSLog(@"Failed to initialize decoder for file: %s", path.c_str());
-    return new AudioBus(1, 1, 1);
+    return nullptr;
   }
 
   ma_uint64 totalFrameCount;

@@ -96,6 +96,11 @@ std::shared_ptr<AnalyserNode> BaseAudioContext::createAnalyser() {
 std::shared_ptr<AudioBuffer> BaseAudioContext::decodeAudioDataSource(
     const std::string &path) {
   auto audioBus = audioDecoder_->decodeWithFilePath(path);
+
+  if (!audioBus) {
+    return nullptr;
+  }
+
   return std::make_shared<AudioBuffer>(audioBus);
 }
 

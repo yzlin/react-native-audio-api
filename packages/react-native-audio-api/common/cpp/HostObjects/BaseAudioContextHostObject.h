@@ -148,6 +148,11 @@ class BaseAudioContextHostObject : public JsiHostObject {
         auto results = context_->decodeAudioDataSource(sourcePath);
         auto audioBufferHostObject = std::make_shared<AudioBufferHostObject>(results);
 
+        if (!results) {
+          promise->reject("Failed to decode audio data source");
+          return;
+        }
+
         promise->resolve([audioBufferHostObject = std::move(audioBufferHostObject)](jsi::Runtime &runtime) {
           return jsi::Object::createFromHostObject(runtime, audioBufferHostObject);
         });

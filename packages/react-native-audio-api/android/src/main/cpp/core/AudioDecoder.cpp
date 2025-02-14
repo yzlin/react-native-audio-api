@@ -20,7 +20,7 @@ AudioBus *AudioDecoder::decodeWithFilePath(const std::string &path) const {
         "AudioDecoder",
         "Failed to initialize decoder for file: %s",
         path.c_str());
-    return new AudioBus(1, 1, 1);
+    return nullptr;
   }
 
   ma_uint64 totalFrameCount;

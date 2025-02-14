@@ -32,9 +32,14 @@ const AudioFile: FC = () => {
     const buffer = await FileSystem.downloadAsync(
       URL,
       FileSystem.documentDirectory + 'audio.mp3'
-    ).then(({ uri }) => {
-      return audioContextRef.current!.decodeAudioDataSource(uri);
-    });
+    )
+      .then(({ uri }) => {
+        return audioContextRef.current!.decodeAudioDataSource(uri);
+      })
+      .catch((error) => {
+        console.error('Error decoding audio data source:', error);
+        return null;
+      });
 
     setAudioBuffer(buffer);
 

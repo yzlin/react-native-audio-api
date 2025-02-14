@@ -55,9 +55,9 @@ export default class BaseAudioContext {
     length: number,
     sampleRate: number
   ): AudioBuffer {
-    if (numOfChannels < 1 || numOfChannels > 3) {
+    if (numOfChannels < 1 || numOfChannels >= 32) {
       throw new RangeError(
-        `The number of channels provided (${numOfChannels}) is outside the range [1, 2]`
+        `The number of channels provided (${numOfChannels}) is outside the range [1, 32]`
       );
     }
 
@@ -106,8 +106,15 @@ export default class BaseAudioContext {
       sourcePath = sourcePath.replace('file://', '');
     }
 
-    const buffer = await this.context.decodeAudioDataSource(sourcePath);
-
-    return new AudioBuffer(buffer);
+    try {
+      const buffer = await this.context.decodeAudioDataSource(sourcePath);
+      return new AudioBuffer(buffer);
+    } catch (error) {
+      // Handle error gracefully, for example log it or throw it further with a custom message
+      console.error('Error decoding audio data source:', error);
+      throw new Error(
+        `Failed to decode audio data from source: ${sourcePath}.`
+      );
+    }
   }
 }

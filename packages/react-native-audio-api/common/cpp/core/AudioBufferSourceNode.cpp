@@ -17,6 +17,7 @@ AudioBufferSourceNode::AudioBufferSourceNode(BaseAudioContext *context)
       loopEnd_(0),
       vReadIndex_(0.0) {
   buffer_ = std::shared_ptr<AudioBuffer>(nullptr);
+  alignedBus_ = std::shared_ptr<AudioBus>(nullptr);
 
   detuneParam_ = std::make_shared<AudioParam>(0.0, MIN_DETUNE, MAX_DETUNE);
   playbackRateParam_ = std::make_shared<AudioParam>(
@@ -86,7 +87,9 @@ void AudioBufferSourceNode::setBuffer(
 void AudioBufferSourceNode::start(double when, double offset, double duration) {
   AudioScheduledSourceNode::start(when);
 
-  // add assert for buffer
+  if (!buffer_) {
+    return;
+  }
 
   offset = std::min(offset, buffer_->getDuration());
 
