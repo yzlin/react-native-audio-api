@@ -24,16 +24,16 @@
 
     __weak typeof(self) weakSelf = self;
     _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:self.format
-                                                renderBlock:^OSStatus(
-                                                    BOOL *isSilence,
-                                                    const AudioTimeStamp *timestamp,
-                                                    AVAudioFrameCount frameCount,
-                                                    AudioBufferList *outputData) {
-                                                  return [weakSelf renderCallbackWithIsSilence:isSilence
-                                                                                     timestamp:timestamp
-                                                                                    frameCount:frameCount
-                                                                                    outputData:outputData];
-                                                }];
+      renderBlock:^OSStatus(
+          BOOL *isSilence,
+          const AudioTimeStamp *timestamp,
+          AVAudioFrameCount frameCount,
+          AudioBufferList *outputData) {
+        return [weakSelf renderCallbackWithIsSilence:isSilence
+          timestamp:timestamp
+          frameCount:frameCount
+          outputData:outputData];
+      }];
   }
 
   return self;
@@ -61,16 +61,16 @@
 
     __weak typeof(self) weakSelf = self;
     _sourceNode = [[AVAudioSourceNode alloc] initWithFormat:self.format
-                                                renderBlock:^OSStatus(
-                                                    BOOL *isSilence,
-                                                    const AudioTimeStamp *timestamp,
-                                                    AVAudioFrameCount frameCount,
-                                                    AudioBufferList *outputData) {
-                                                  return [weakSelf renderCallbackWithIsSilence:isSilence
-                                                                                     timestamp:timestamp
-                                                                                    frameCount:frameCount
-                                                                                    outputData:outputData];
-                                                }];
+      renderBlock:^OSStatus(
+          BOOL *isSilence,
+          const AudioTimeStamp *timestamp,
+          AVAudioFrameCount frameCount,
+          AudioBufferList *outputData) {
+        return [weakSelf renderCallbackWithIsSilence:isSilence
+          timestamp:timestamp
+          frameCount:frameCount
+          outputData:outputData];
+      }];
   }
 
   return self;
