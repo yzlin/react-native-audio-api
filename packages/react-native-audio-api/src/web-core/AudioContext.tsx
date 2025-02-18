@@ -1,25 +1,27 @@
-import { IBaseAudioContext } from '../interfaces';
 import { ContextState, PeriodicWaveConstraints } from '../types';
-import AudioDestinationNode from './AudioDestinationNode';
-import OscillatorNode from './OscillatorNode';
-import GainNode from './GainNode';
-import StereoPannerNode from './StereoPannerNode';
-import BiquadFilterNode from './BiquadFilterNode';
-import AudioBufferSourceNode from './AudioBufferSourceNode';
-import AudioBuffer from './AudioBuffer';
-import PeriodicWave from './PeriodicWave';
+import { RangeError, InvalidAccessError } from '../errors';
+import BaseAudioContext from './BaseAudioContext';
 import AnalyserNode from './AnalyserNode';
-import { InvalidAccessError } from '../errors';
+import AudioDestinationNode from './AudioDestinationNode';
+import AudioBuffer from './AudioBuffer';
+import AudioBufferSourceNode from './AudioBufferSourceNode';
+import BiquadFilterNode from './BiquadFilterNode';
+import GainNode from './GainNode';
+import OscillatorNode from './OscillatorNode';
+import PeriodicWave from './PeriodicWave';
+import StereoPannerNode from './StereoPannerNode';
 
-export default class BaseAudioContext {
+export default class AudioContext implements BaseAudioContext {
+  readonly context: globalThis.AudioContext;
+
   readonly destination: AudioDestinationNode;
   readonly sampleRate: number;
-  protected readonly context: IBaseAudioContext;
 
-  constructor(context: IBaseAudioContext) {
-    this.context = context;
-    this.destination = new AudioDestinationNode(this, context.destination);
-    this.sampleRate = context.sampleRate;
+  constructor(_sampleRate?: number) {
+    this.context = new window.AudioContext();
+
+    this.sampleRate = this.context.sampleRate;
+    this.destination = new AudioDestinationNode(this, this.context.destination);
   }
 
   public get currentTime(): number {
@@ -27,7 +29,7 @@ export default class BaseAudioContext {
   }
 
   public get state(): ContextState {
-    return this.context.state;
+    return this.context.state as ContextState;
   }
 
   createOscillator(): OscillatorNode {
@@ -89,10 +91,8 @@ export default class BaseAudioContext {
       );
     }
 
-    const disableNormalization = constraints?.disableNormalization ?? false;
-
     return new PeriodicWave(
-      this.context.createPeriodicWave(real, imag, disableNormalization)
+      this.context.createPeriodicWave(real, imag, constraints)
     );
   }
 
@@ -100,21 +100,15 @@ export default class BaseAudioContext {
     return new AnalyserNode(this, this.context.createAnalyser());
   }
 
-  async decodeAudioDataSource(sourcePath: string): Promise<AudioBuffer> {
-    // Remove the file:// prefix if it exists
-    if (sourcePath.startsWith('file://')) {
-      sourcePath = sourcePath.replace('file://', '');
-    }
+  async decodeAudioDataSource(source: string): Promise<AudioBuffer> {
+    const arrayBuffer = await fetch(source).then((response) =>
+      response.arrayBuffer()
+    );
 
-    try {
-      const buffer = await this.context.decodeAudioDataSource(sourcePath);
-      return new AudioBuffer(buffer);
-    } catch (error) {
-      // Handle error gracefully, for example log it or throw it further with a custom message
-      console.error('Error decoding audio data source:', error);
-      throw new Error(
-        `Failed to decode audio data from source: ${sourcePath}.`
-      );
-    }
+    return new AudioBuffer(await this.context.decodeAudioData(arrayBuffer));
+  }
+
+  async close(): Promise<void> {
+    await this.context.close();
   }
 }

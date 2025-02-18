@@ -1,7 +1,5 @@
-import { IAudioNode } from '../interfaces';
-import { ChannelCountMode, ChannelInterpretation } from '../types';
 import BaseAudioContext from './BaseAudioContext';
-import { InvalidAccessError } from '../errors';
+import { ChannelCountMode, ChannelInterpretation } from '../types';
 
 export default class AudioNode {
   readonly context: BaseAudioContext;
@@ -10,9 +8,10 @@ export default class AudioNode {
   readonly channelCount: number;
   readonly channelCountMode: ChannelCountMode;
   readonly channelInterpretation: ChannelInterpretation;
-  protected readonly node: IAudioNode;
 
-  constructor(context: BaseAudioContext, node: IAudioNode) {
+  protected readonly node: globalThis.AudioNode;
+
+  constructor(context: BaseAudioContext, node: globalThis.AudioNode) {
     this.context = context;
     this.node = node;
     this.numberOfInputs = this.node.numberOfInputs;
@@ -24,15 +23,18 @@ export default class AudioNode {
 
   public connect(destination: AudioNode): void {
     if (this.context !== destination.context) {
-      throw new InvalidAccessError(
-        'The AudioNodes are from different BaseAudioContexts'
-      );
+      throw new Error('The AudioNodes are from different BaseAudioContexts');
     }
 
     this.node.connect(destination.node);
   }
 
   public disconnect(destination?: AudioNode): void {
-    this.node.disconnect(destination?.node);
+    if (destination === undefined) {
+      this.node.disconnect();
+      return;
+    }
+
+    this.node.disconnect(destination.node);
   }
 }

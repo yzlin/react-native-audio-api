@@ -21,7 +21,7 @@ AnalyserNode::AnalyserNode(audioapi::BaseAudioContext *context)
   inputBuffer_ = std::make_unique<AudioArray>(MAX_FFT_SIZE * 2);
   magnitudeBuffer_ = std::make_unique<AudioArray>(fftSize_ / 2);
   downMixBus_ = std::make_unique<AudioBus>(
-      context_->getSampleRate(), RENDER_QUANTUM_SIZE, 1);
+      RENDER_QUANTUM_SIZE, 1, context_->getSampleRate());
 
   fftFrame_ = std::make_unique<FFTFrame>(fftSize_);
 
@@ -145,14 +145,10 @@ void AnalyserNode::getByteTimeDomainData(uint8_t *data, int length) {
 void AnalyserNode::processNode(
     audioapi::AudioBus *processingBus,
     int framesToProcess) {
-  if (!isInitialized_) {
-    processingBus->zero();
-    return;
-  }
-
   // Analyser should behave like a sniffer node, it should not modify the
   // processingBus but instead copy the data to its own input buffer.
 
+  // MIXING
   downMixBus_->copy(processingBus);
 
   if (vWriteIndex_ + framesToProcess > inputBuffer_->getSize()) {

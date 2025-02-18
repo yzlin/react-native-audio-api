@@ -20,6 +20,9 @@ AudioBus *AudioDecoder::decodeWithFilePath(const std::string &path) const {
         "AudioDecoder",
         "Failed to initialize decoder for file: %s",
         path.c_str());
+
+    ma_decoder_uninit(&decoder);
+
     return nullptr;
   }
 
@@ -27,7 +30,7 @@ AudioBus *AudioDecoder::decodeWithFilePath(const std::string &path) const {
   ma_decoder_get_length_in_pcm_frames(&decoder, &totalFrameCount);
 
   auto *audioBus =
-      new AudioBus(sampleRate_, static_cast<int>(totalFrameCount), 2);
+      new AudioBus(static_cast<int>(totalFrameCount), 2, sampleRate_);
   auto *buffer = new float[totalFrameCount * 2];
 
   ma_uint64 framesDecoded;
@@ -38,6 +41,12 @@ AudioBus *AudioDecoder::decodeWithFilePath(const std::string &path) const {
         "AudioDecoder",
         "Failed to decode audio file: %s",
         path.c_str());
+
+    delete[] buffer;
+    delete audioBus;
+    ma_decoder_uninit(&decoder);
+
+    return nullptr;
   }
 
   for (int i = 0; i < decoder.outputChannels; ++i) {

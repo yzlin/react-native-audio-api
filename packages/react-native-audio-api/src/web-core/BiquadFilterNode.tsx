@@ -1,9 +1,8 @@
-import { InvalidAccessError } from '../errors';
-import { IBiquadFilterNode } from '../interfaces';
-import AudioNode from './AudioNode';
 import AudioParam from './AudioParam';
+import AudioNode from './AudioNode';
 import BaseAudioContext from './BaseAudioContext';
-import { BiquadFilterType } from '../types';
+import { BiquadFilterType } from '../index.native';
+import { InvalidAccessError } from '../errors';
 
 export default class BiquadFilterNode extends AudioNode {
   readonly frequency: AudioParam;
@@ -11,7 +10,10 @@ export default class BiquadFilterNode extends AudioNode {
   readonly Q: AudioParam;
   readonly gain: AudioParam;
 
-  constructor(context: BaseAudioContext, biquadFilter: IBiquadFilterNode) {
+  constructor(
+    context: BaseAudioContext,
+    biquadFilter: globalThis.BiquadFilterNode
+  ) {
     super(context, biquadFilter);
     this.frequency = new AudioParam(biquadFilter.frequency);
     this.detune = new AudioParam(biquadFilter.detune);
@@ -20,11 +22,11 @@ export default class BiquadFilterNode extends AudioNode {
   }
 
   public get type(): BiquadFilterType {
-    return (this.node as IBiquadFilterNode).type;
+    return (this.node as globalThis.BiquadFilterNode).type;
   }
 
   public set type(value: BiquadFilterType) {
-    (this.node as IBiquadFilterNode).type = value;
+    (this.node as globalThis.BiquadFilterNode).type = value;
   }
 
   public getFrequencyResponse(
@@ -40,10 +42,21 @@ export default class BiquadFilterNode extends AudioNode {
         `The lengths of the arrays are not the same frequencyArray: ${frequencyArray.length}, magResponseOutput: ${magResponseOutput.length}, phaseResponseOutput: ${phaseResponseOutput.length}`
       );
     }
-    (this.node as IBiquadFilterNode).getFrequencyResponse(
-      frequencyArray,
-      magResponseOutput,
-      phaseResponseOutput
+    const magData = new Float32Array(magResponseOutput);
+    const phaseData = new Float32Array(phaseResponseOutput);
+
+    (this.node as globalThis.BiquadFilterNode).getFrequencyResponse(
+      new Float32Array(frequencyArray),
+      magData,
+      phaseData
     );
+
+    for (let i = 0; i < magData.length; i++) {
+      magResponseOutput[i] = magData[i];
+    }
+
+    for (let i = 0; i < phaseData.length; i++) {
+      phaseResponseOutput[i] = phaseData[i];
+    }
   }
 }

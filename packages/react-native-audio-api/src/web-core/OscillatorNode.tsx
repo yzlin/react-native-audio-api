@@ -1,24 +1,23 @@
-import { IOscillatorNode } from '../interfaces';
 import { OscillatorType } from '../types';
-import AudioScheduledSourceNode from './AudioScheduledSourceNode';
-import AudioParam from './AudioParam';
-import BaseAudioContext from './BaseAudioContext';
-import PeriodicWave from './PeriodicWave';
 import { InvalidStateError } from '../errors';
+import AudioScheduledSourceNode from './AudioScheduledSourceNode';
+import BaseAudioContext from './BaseAudioContext';
+import AudioParam from './AudioParam';
+import PeriodicWave from './PeriodicWave';
 
 export default class OscillatorNode extends AudioScheduledSourceNode {
   readonly frequency: AudioParam;
   readonly detune: AudioParam;
 
-  constructor(context: BaseAudioContext, node: IOscillatorNode) {
+  constructor(context: BaseAudioContext, node: globalThis.OscillatorNode) {
     super(context, node);
-    this.frequency = new AudioParam(node.frequency);
+
     this.detune = new AudioParam(node.detune);
-    this.type = node.type;
+    this.frequency = new AudioParam(node.frequency);
   }
 
   public get type(): OscillatorType {
-    return (this.node as IOscillatorNode).type;
+    return (this.node as globalThis.OscillatorNode).type;
   }
 
   public set type(value: OscillatorType) {
@@ -28,10 +27,10 @@ export default class OscillatorNode extends AudioScheduledSourceNode {
       );
     }
 
-    (this.node as IOscillatorNode).type = value;
+    (this.node as globalThis.OscillatorNode).type = value;
   }
 
   public setPeriodicWave(wave: PeriodicWave): void {
-    (this.node as IOscillatorNode).setPeriodicWave(wave.periodicWave);
+    (this.node as globalThis.OscillatorNode).setPeriodicWave(wave.periodicWave);
   }
 }

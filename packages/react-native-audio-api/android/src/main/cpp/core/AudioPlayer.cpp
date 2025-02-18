@@ -1,8 +1,9 @@
+#include <cassert>
 
-#include "AudioPlayer.h"
 #include "AudioArray.h"
 #include "AudioBus.h"
 #include "AudioContext.h"
+#include "AudioPlayer.h"
 #include "Constants.h"
 
 namespace audioapi {
@@ -23,7 +24,7 @@ AudioPlayer::AudioPlayer(
 
   sampleRate_ = static_cast<float>(mStream_->getSampleRate());
   mBus_ = std::make_shared<AudioBus>(
-      sampleRate_, RENDER_QUANTUM_SIZE, CHANNEL_COUNT);
+      RENDER_QUANTUM_SIZE, CHANNEL_COUNT, sampleRate_);
   isInitialized_ = true;
 }
 
@@ -45,7 +46,7 @@ AudioPlayer::AudioPlayer(
 
   sampleRate_ = sampleRate;
   mBus_ = std::make_shared<AudioBus>(
-      sampleRate_, RENDER_QUANTUM_SIZE, CHANNEL_COUNT);
+      RENDER_QUANTUM_SIZE, CHANNEL_COUNT, sampleRate_);
   isInitialized_ = true;
 }
 
@@ -80,11 +81,14 @@ DataCallbackResult AudioPlayer::onAudioReady(
   auto buffer = static_cast<float *>(audioData);
   int processedFrames = 0;
 
+  assert(buffer != nullptr);
+
   while (processedFrames < numFrames) {
     int framesToProcess =
         std::min(numFrames - processedFrames, RENDER_QUANTUM_SIZE);
     renderAudio_(mBus_.get(), framesToProcess);
 
+    // MIXING
     // TODO: optimize this with SIMD?
     for (int i = 0; i < framesToProcess; i++) {
       for (int channel = 0; channel < CHANNEL_COUNT; channel += 1) {

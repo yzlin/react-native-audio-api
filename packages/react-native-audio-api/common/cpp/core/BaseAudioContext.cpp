@@ -1,4 +1,4 @@
-#include "BaseAudioContext.h"
+#include <cassert>
 
 #include "AnalyserNode.h"
 #include "AudioArray.h"
@@ -8,6 +8,7 @@
 #include "AudioDecoder.h"
 #include "AudioDestinationNode.h"
 #include "AudioNodeManager.h"
+#include "BaseAudioContext.h"
 #include "BiquadFilterNode.h"
 #include "ContextState.h"
 #include "GainNode.h"
@@ -30,10 +31,12 @@ float BaseAudioContext::getSampleRate() const {
 }
 
 std::size_t BaseAudioContext::getCurrentSampleFrame() const {
+  assert(destination_ != nullptr);
   return destination_->getCurrentSampleFrame();
 }
 
 double BaseAudioContext::getCurrentTime() const {
+  assert(destination_ != nullptr);
   return destination_->getCurrentTime();
 }
 

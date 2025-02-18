@@ -10,7 +10,7 @@ namespace audioapi {
 IOSAudioPlayer::IOSAudioPlayer(const std::function<void(AudioBus *, int)> &renderAudio)
     : renderAudio_(renderAudio), audioBus_(0)
 {
-  audioBus_ = new AudioBus(getSampleRate(), RENDER_QUANTUM_SIZE, CHANNEL_COUNT);
+  audioBus_ = new AudioBus(RENDER_QUANTUM_SIZE, CHANNEL_COUNT, getSampleRate());
 
   RenderAudioBlock renderAudioBlock = ^(AudioBufferList *outputData, int numFrames) {
     int processedFrames = 0;
@@ -19,6 +19,8 @@ IOSAudioPlayer::IOSAudioPlayer(const std::function<void(AudioBus *, int)> &rende
       int framesToProcess = std::min(numFrames - processedFrames, RENDER_QUANTUM_SIZE);
       renderAudio_(audioBus_, framesToProcess);
 
+      // add assert
+      // MIXING
       // TODO: optimize this with SIMD?
       for (int channel = 0; channel < CHANNEL_COUNT; channel += 1) {
         float *outputChannel = (float *)outputData->mBuffers[channel].mData;
@@ -34,7 +36,7 @@ IOSAudioPlayer::IOSAudioPlayer(const std::function<void(AudioBus *, int)> &rende
   };
 
   audioPlayer_ = [[AudioPlayer alloc] initWithRenderAudioBlock:renderAudioBlock];
-  audioBus_ = new AudioBus([audioPlayer_ getSampleRate], RENDER_QUANTUM_SIZE, CHANNEL_COUNT);
+  audioBus_ = new AudioBus(RENDER_QUANTUM_SIZE, CHANNEL_COUNT, [audioPlayer_ getSampleRate]);
 }
 
 IOSAudioPlayer::IOSAudioPlayer(const std::function<void(AudioBus *, int)> &renderAudio, float sampleRate)
@@ -62,7 +64,7 @@ IOSAudioPlayer::IOSAudioPlayer(const std::function<void(AudioBus *, int)> &rende
   };
 
   audioPlayer_ = [[AudioPlayer alloc] initWithRenderAudioBlock:renderAudioBlock sampleRate:sampleRate];
-  audioBus_ = new AudioBus([audioPlayer_ getSampleRate], RENDER_QUANTUM_SIZE, CHANNEL_COUNT);
+  audioBus_ = new AudioBus(RENDER_QUANTUM_SIZE, CHANNEL_COUNT, [audioPlayer_ getSampleRate]);
 }
 
 IOSAudioPlayer::~IOSAudioPlayer()
