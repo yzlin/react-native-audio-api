@@ -8,17 +8,17 @@ import { Optional, ReadOnly } from '@site/src/components/Badges';
 
 The `BaseAudioContext` interface acts as a supervisor of audio-processing graphs. It provides key processing parameters such as current time, output destination or sample rate.
 Additionally, it is responsible for nodes creation and audio-processing graph's lifecycle management.
-However, `BaseAudioContext` itself cannot be directly utilized, instead its functionalities must be accessed through one of its derived interfaces: [`AudioContext`](/core/audio-context), [`OfflineAudioContext`](/core/offline-audio-context).
+However, `BaseAudioContext` itself cannot be directly utilized, instead its functionalities must be accessed through one of its derived interfaces: [`AudioContext`](/core/audio-context), `OfflineAudioContext`.
 
 #### Audio graph
 
 An audio graph is a structured representation of audio processing elements and their connections within an audio context.
 The graph consists of various types of nodes, each performing specific audio operations, connected in a network that defines the audio signal flow.
 In general we can distinguish four types of nodes:
-- Source nodes (e.g [`AudioBufferSourceNode`](/sources/audio-buffer-source-node), [`OscillatorNode`](/sources/oscillator-node))
-- Effect nodes (e.g [`GainNode`](/effects/gain-node), [`BiquadFilterNode`](/sources/biquad-filter-node))
+- Source nodes (e.g [`AudioBufferSourceNode`](/sources/audio-buffer-source-node), `OscillatorNode`)
+- Effect nodes (e.g [`GainNode`](/effects/gain-node), `BiquadFilterNode`)
 - Analysis nodes (e.g [`AnalyserNode`](/analysis/analyser-node))
-- Destination nodes (e.g [`AudioDestinationNode`](/destinations/audio-destination-node))
+- Destination nodes (e.g `AudioDestinationNode`)
 
 ![](/img/audio-graph.png)
 
@@ -32,7 +32,7 @@ Each call has a system-level audio callback buffer size, which is a varying numb
 but render quantum size does not have to be a divisor of the system-level audio callback buffer size.
 
 :::info
-Concept of system-level audio callback do not apply to [`OfflineAudioContext`](/core/offline-audio-context)
+Concept of system-level audio callback do not apply to `OfflineAudioContext`.
 :::
 
 ## Properties
@@ -40,7 +40,7 @@ Concept of system-level audio callback do not apply to [`OfflineAudioContext`](/
 | Name | Type | Description | |
 | :----: | :----: | :-------- | :-: |
 | `currentTime` | `number` | Double value representing an ever-increasing hardware time in seconds, starting from 0. | <ReadOnly /> |
-| `destination` | [`AudioDestinationNode`](/core/audio-destination-node) | Final output destination associated with the context. | <ReadOnly /> |
+| `destination` | `AudioDestinationNode` | Final output destination associated with the context. | <ReadOnly /> |
 | `sampleRate` | `number` | Float value representing the sample rate (in samples per seconds) used by all nodes in this context. | <ReadOnly /> |
 | `state` | [`ContextState`](/types/context-state) | Enumerated value represents the current state of the context. | <ReadOnly /> |
 
@@ -54,7 +54,7 @@ Above method lets you create [`AnalyserNode`](/analysis/analyser-node).
 
 ### `createBiquadFilter`
 
-Above method lets you create [`BiquadFilterNode`](/effects/biquad-filter-node).
+Above method lets you create `BiquadFilterNode`.
 
 #### Returns `BiquadFilterNode`.
 
@@ -92,13 +92,13 @@ Above method lets you create [`GainNode`](/effects/gain-node).
 
 ### `createOscillator`
 
-Above method lets you create [`OscillatorNode`](/sources/oscillator-node).
+Above method lets you create `OscillatorNode`.
 
 #### Returns `OscillatorNode`.
 
 ### `createPeriodicWave`
 
-Above method lets you create [`PeriodicWave`](/effects/periodic-wave).
+Above method lets you create `PeriodicWave`.
 
 | Parameters | Type | Description |
 | :---: | :---: | :---- |
@@ -116,7 +116,7 @@ Above method lets you create [`PeriodicWave`](/effects/periodic-wave).
 
 ### `createStereoPanner`
 
-Above method lets you create [`StereoPannerNode`](/spatialization/stereo-panner-node).
+Above method lets you create `StereoPannerNode`.
 
 #### Returns `StereoPannerNode`.
 
