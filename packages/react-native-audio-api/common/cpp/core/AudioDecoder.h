@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 namespace audioapi {
@@ -10,7 +11,7 @@ class AudioDecoder {
  public:
   explicit AudioDecoder(float sampleRate) : sampleRate_(sampleRate) {}
 
-  [[nodiscard]] AudioBus *decodeWithFilePath(const std::string &path) const;
+  [[nodiscard]] std::shared_ptr<AudioBus> decodeWithFilePath(const std::string &path) const;
 
  private:
   float sampleRate_;
