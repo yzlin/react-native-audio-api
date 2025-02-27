@@ -9,14 +9,14 @@ namespace audioapi {
 using namespace facebook;
 
 class AudioAPIModuleInstaller {
-public:
+ public:
   static void injectJSIBindings(jsi::Runtime *jsiRuntime, const std::shared_ptr<react::CallInvoker> &jsCallInvoker) {
     auto createAudioContext = getCreateAudioContextFunction(jsiRuntime, jsCallInvoker);
     jsiRuntime->global().setProperty(
         *jsiRuntime, "createAudioContext", createAudioContext);
   }
 
-private:
+ private:
   static jsi::Function getCreateAudioContextFunction(jsi::Runtime *jsiRuntime, const std::shared_ptr<react::CallInvoker> &jsCallInvoker) {
     return jsi::Function::createFromHostFunction(
         *jsiRuntime,
@@ -34,8 +34,8 @@ private:
             auto sampleRate = static_cast<float>(args[0].getNumber());
             audioContext = std::make_shared<AudioContext>(sampleRate);
           }
-              
-              auto promiseVendor = std::make_shared<PromiseVendor>(jsiRuntime, jsCallInvoker);
+
+          auto promiseVendor = std::make_shared<PromiseVendor>(jsiRuntime, jsCallInvoker);
 
           auto audioContextHostObject = std::make_shared<AudioContextHostObject>(
               audioContext, promiseVendor);

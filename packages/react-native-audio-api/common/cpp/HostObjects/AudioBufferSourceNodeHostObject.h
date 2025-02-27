@@ -23,8 +23,7 @@ class AudioBufferSourceNodeHostObject
         JSI_EXPORT_PROPERTY_GETTER(AudioBufferSourceNodeHostObject, loopStart),
         JSI_EXPORT_PROPERTY_GETTER(AudioBufferSourceNodeHostObject, loopEnd),
         JSI_EXPORT_PROPERTY_GETTER(AudioBufferSourceNodeHostObject, detune),
-        JSI_EXPORT_PROPERTY_GETTER(
-            AudioBufferSourceNodeHostObject, playbackRate));
+        JSI_EXPORT_PROPERTY_GETTER(AudioBufferSourceNodeHostObject, playbackRate));
 
     addSetters(
         JSI_EXPORT_PROPERTY_SETTER(AudioBufferSourceNodeHostObject, loop),

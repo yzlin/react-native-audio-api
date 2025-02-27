@@ -13,7 +13,6 @@
     [self setupAndInitAudioSession];
     [self setupAndInitNotificationHandlers];
 
-
     self.sampleRate = [self.audioSession sampleRate];
 
     _format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.sampleRate channels:2];
@@ -139,7 +138,8 @@
 
   [self.audioSession setCategory:AVAudioSessionCategoryPlayback
                             mode:AVAudioSessionModeDefault
-                         options:AVAudioSessionCategoryOptionDuckOthers|AVAudioSessionCategoryOptionAllowBluetooth|AVAudioSessionCategoryOptionAllowAirPlay
+                         options:AVAudioSessionCategoryOptionDuckOthers | AVAudioSessionCategoryOptionAllowBluetooth |
+                         AVAudioSessionCategoryOptionAllowAirPlay
                            error:&error];
 
   if (error != nil) {
