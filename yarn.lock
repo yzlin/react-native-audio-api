@@ -5562,11 +5562,11 @@ __metadata:
     react: "npm:18.3.1"
     react-native: "npm:0.76.5"
     react-native-audio-api: "workspace:*"
-    react-native-dotenv: "npm:^3.4.11"
-    react-native-gesture-handler: "npm:^2.21.2"
-    react-native-reanimated: "npm:^3.16.6"
-    react-native-safe-area-context: "npm:^4.13.1"
-    react-native-screens: "npm:^4.4.0"
+    react-native-dotenv: "npm:3.4.11"
+    react-native-gesture-handler: "npm:2.24.0"
+    react-native-reanimated: "npm:3.17.0"
+    react-native-safe-area-context: "npm:5.1.0"
+    react-native-screens: "npm:4.9.1"
     typescript: "npm:~5.3.0"
   peerDependencies:
     "@react-native-vector-icons/common": "*"
@@ -7315,10 +7315,10 @@ __metadata:
     react-native: "npm:0.76.5"
     react-native-audio-api: "workspace:*"
     react-native-dotenv: "npm:^3.4.11"
-    react-native-gesture-handler: "npm:^2.21.2"
-    react-native-reanimated: "npm:^3.16.6"
-    react-native-safe-area-context: "npm:^4.13.1"
-    react-native-screens: "npm:^4.4.0"
+    react-native-gesture-handler: "npm:2.24.0"
+    react-native-reanimated: "npm:3.17.0"
+    react-native-safe-area-context: "npm:5.1.0"
+    react-native-screens: "npm:4.9.1"
     react-test-renderer: "npm:18.3.1"
     typescript: "npm:~5.3.0"
   languageName: unknown
@@ -12146,7 +12146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -12411,7 +12411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-dotenv@npm:^3.4.11":
+"react-native-dotenv@npm:3.4.11, react-native-dotenv@npm:^3.4.11":
   version: 3.4.11
   resolution: "react-native-dotenv@npm:3.4.11"
   dependencies:
@@ -12422,24 +12422,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:^2.21.2":
-  version: 2.21.2
-  resolution: "react-native-gesture-handler@npm:2.21.2"
+"react-native-gesture-handler@npm:2.24.0":
+  version: 2.24.0
+  resolution: "react-native-gesture-handler@npm:2.24.0"
   dependencies:
     "@egjs/hammerjs": "npm:^2.0.17"
     hoist-non-react-statics: "npm:^3.3.0"
     invariant: "npm:^2.2.4"
-    prop-types: "npm:^15.7.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/b098fdfdda8ac9e834b0165d3f17d09682119fa2bf85ddb19a6f63257825cec073362f93d75b94da3b3581eccbce775d711aa044e9ea1ac888be2c071f9f00fd
+  checksum: 10/e8e97fde1a1a4e776d448870c5a89e53df64836a7a131ba8348712038c4b6ff0a99e59be5702b98d5687a35ba57d260a02a50da9d7702427b62bc7abea2fe687
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:^3.16.6":
-  version: 3.16.6
-  resolution: "react-native-reanimated@npm:3.16.6"
+"react-native-is-edge-to-edge@npm:1.1.6":
+  version: 1.1.6
+  resolution: "react-native-is-edge-to-edge@npm:1.1.6"
+  peerDependencies:
+    react: ">=18.2.0"
+    react-native: ">=0.73.0"
+  checksum: 10/4e07c1e34c01c8d50fd7c1d0460db06f6f0515197405230386a8ffb950cb724b10743af032310d1384df0a90059bfb8992ba2d93344ce86315315f0493feccc2
+  languageName: node
+  linkType: hard
+
+"react-native-reanimated@npm:3.17.0":
+  version: 3.17.0
+  resolution: "react-native-reanimated@npm:3.17.0"
   dependencies:
     "@babel/plugin-transform-arrow-functions": "npm:^7.0.0-0"
     "@babel/plugin-transform-class-properties": "npm:^7.0.0-0"
@@ -12452,34 +12461,35 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.16.7"
     convert-source-map: "npm:^2.0.0"
     invariant: "npm:^2.2.4"
+    react-native-is-edge-to-edge: "npm:1.1.6"
   peerDependencies:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 10/8c545072a96cdb54bfbfd0f7db98ee95263000261c4cbfa8e7f10e16ab1562426fae9c9bda02ce2f3f2b5eda3535d840aca0977cefea70943689bae5408ba763
+  checksum: 10/cf5421ab9991f790bd2671ec3239b018299de898d490226216fe7df63e6f18f7fa276ed9dfabfd2f8728bd856c7f5e43c5933b5e75d88bdb06d241cc906695cb
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:^4.13.1":
-  version: 4.14.1
-  resolution: "react-native-safe-area-context@npm:4.14.1"
+"react-native-safe-area-context@npm:5.1.0":
+  version: 5.1.0
+  resolution: "react-native-safe-area-context@npm:5.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/20f744176b22b67b08b061ac8ea4d56c11539da672e80f766e48a8304a0a19c9ba0c9a903d92b94631888dd827701785b5ac49cec61c2994262708a479701a8d
+  checksum: 10/7ff5fd17733b73d3c9fc5f7afa81c9c45389e5bc13ec2101135bdded9d8f435465582e0874de3f517bfb2c4f3fc7300dfdbc51176bc0ca84240184b2a888d74b
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "react-native-screens@npm:4.4.0"
+"react-native-screens@npm:4.9.1":
+  version: 4.9.1
+  resolution: "react-native-screens@npm:4.9.1"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/a70d036674611b327c01e6c3a147b9d22b59d7e58cfd82a9df5a070fac26af17b65bcd1ec911ec3516c6d9e2782a48577b5ac2f576a196ad5fff1fddcf17bf38
+  checksum: 10/ba1e8f818de5b9e22ecb6e4467686c76742816cfdab999ce5564226481d4451a0314c73d7541a641133ef0c0e9f91b3aa4c4a67c931b17c127489e5fb5aef8e8
   languageName: node
   linkType: hard
 
