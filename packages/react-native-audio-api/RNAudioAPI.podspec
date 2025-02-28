@@ -55,8 +55,8 @@ Pod::Spec.new do |s|
       '"$(PODS_ROOT)/Headers/Public/React-hermes"',
       '"$(PODS_ROOT)/Headers/Public/hermes-engine"',
       "\"$(PODS_ROOT)/#{$config[:react_native_common_dir]}\"",
-      "\"$(PODS_ROOT)/#{$config[:react_native_audioapi_dir_from_pods_root]}/ios\"",
-      "\"$(PODS_ROOT)/#{$config[:react_native_audioapi_dir_from_pods_root]}/common/cpp\"",
+      "\"$(PODS_ROOT)/#{$config[:react_native_audioapi_dir_from_pods_root]}/ios/audioapi/ios\"",
+      "\"$(PODS_ROOT)/#{$config[:react_native_audioapi_dir_from_pods_root]}/common/cpp/audioapi\"",
     ].join(' '),
     'OTHER_CFLAGS' => "$(inherited) #{folly_flags} #{fabric_flags} #{version_flag}"
   }

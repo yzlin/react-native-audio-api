@@ -35,8 +35,7 @@ RCT_EXPORT_MODULE(AudioAPIModule);
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install)
 {
-  auto *cxxBridge = reinterpret_cast<RCTCxxBridge *>(self.bridge);
-  auto jsiRuntime = reinterpret_cast<facebook::jsi::Runtime *>(cxxBridge.runtime);
+  auto jsiRuntime = reinterpret_cast<facebook::jsi::Runtime *>(self.bridge.runtime);
 
 #if defined(RCT_NEW_ARCH_ENABLED)
   auto jsCallInvoker = _callInvoker.callInvoker;
