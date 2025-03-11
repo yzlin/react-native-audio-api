@@ -1,5 +1,9 @@
 import { IBaseAudioContext } from '../interfaces';
-import { ContextState, PeriodicWaveConstraints } from '../types';
+import {
+  ContextState,
+  PeriodicWaveConstraints,
+  AudioBufferSourceNodeOptions,
+} from '../types';
 import AudioDestinationNode from './AudioDestinationNode';
 import OscillatorNode from './OscillatorNode';
 import GainNode from './GainNode';
@@ -46,8 +50,15 @@ export default class BaseAudioContext {
     return new BiquadFilterNode(this, this.context.createBiquadFilter());
   }
 
-  createBufferSource(): AudioBufferSourceNode {
-    return new AudioBufferSourceNode(this, this.context.createBufferSource());
+  createBufferSource(
+    options?: AudioBufferSourceNodeOptions
+  ): AudioBufferSourceNode {
+    const pitchCorrection = options?.pitchCorrection ?? false;
+
+    return new AudioBufferSourceNode(
+      this,
+      this.context.createBufferSource(pitchCorrection)
+    );
   }
 
   createBuffer(
