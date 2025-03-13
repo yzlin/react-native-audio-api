@@ -105,6 +105,18 @@ std::shared_ptr<AudioBuffer> BaseAudioContext::decodeAudioDataSource(
   return std::make_shared<AudioBuffer>(audioBus);
 }
 
+std::shared_ptr<AudioBuffer> BaseAudioContext::decodeAudioData(
+    const void *data,
+    size_t size) {
+  auto audioBus = audioDecoder_->decodeWithMemoryBlock(data, size);
+
+  if (!audioBus) {
+    return nullptr;
+  }
+
+  return std::make_shared<AudioBuffer>(audioBus);
+}
+
 AudioNodeManager *BaseAudioContext::getNodeManager() {
   return nodeManager_.get();
 }
