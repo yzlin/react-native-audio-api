@@ -1,6 +1,7 @@
 #pragma once
 
 #include <audioapi/jsi/JsiHostObject.h>
+#include <audioapi/jsi/AudioArrayBuffer.h>
 #include <audioapi/core/sources/AudioBuffer.h>
 
 #include <jsi/jsi.h>
@@ -48,19 +49,17 @@ class AudioBufferHostObject : public JsiHostObject {
 
   JSI_HOST_FUNCTION(getChannelData) {
     auto channel = static_cast<int>(args[0].getNumber());
-    auto *channelData = audioBuffer_->getChannelData(channel);
+    auto channelData = reinterpret_cast<uint8_t *>(audioBuffer_->getChannelData(channel));
     auto length = static_cast<int>(audioBuffer_->getLength());
     auto size = static_cast<int>(length * sizeof(float));
 
-    auto arrayBufferCtor = runtime.global().getPropertyAsFunction(runtime, "ArrayBuffer");
-    auto arrayBuffer = arrayBufferCtor.callAsConstructor(runtime, size).getObject(runtime).getArrayBuffer(runtime);
+    // reading or writing from this ArrayBuffer could cause a crash
+    // if underlying channelData is deallocated
+    auto audioArrayBuffer = std::make_shared<AudioArrayBuffer>(channelData, size);
+    auto arrayBuffer = jsi::ArrayBuffer(runtime, audioArrayBuffer);
 
     auto float32ArrayCtor = runtime.global().getPropertyAsFunction(runtime, "Float32Array");
     auto float32Array = float32ArrayCtor.callAsConstructor(runtime, arrayBuffer).getObject(runtime);
-
-    auto data = reinterpret_cast<float *>(arrayBuffer.data(runtime));
-
-    memcpy(data, channelData, size);
 
     return float32Array;
   }
