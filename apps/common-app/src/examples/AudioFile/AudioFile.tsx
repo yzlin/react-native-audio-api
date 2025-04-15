@@ -68,6 +68,8 @@ const AudioFile: FC = () => {
         state: 'state_playing',
       });
 
+      AudioManager.observeAudioInterruptions(true);
+
       bufferSourceRef.current = audioContextRef.current.createBufferSource({
         pitchCorrection: true,
       });
@@ -123,9 +125,12 @@ const AudioFile: FC = () => {
 
     AudioManager.enableRemoteCommand('play', true);
     AudioManager.enableRemoteCommand('pause', true);
-    AudioManager.enableRemoteCommand('togglePlayPause', true);
-    AudioManager.enableRemoteCommand('nextTrack', true);
-    AudioManager.enableRemoteCommand('previousTrack', true);
+    AudioManager.enableRemoteCommand('stop', true);
+    AudioManager.enableRemoteCommand('interruption', true, (e) => {
+      console.log('interruption event', e);
+    });
+
+    AudioManager.observeAudioInterruptions(true);
 
     fetchAudioBuffer();
 

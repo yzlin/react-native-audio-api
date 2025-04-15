@@ -1,6 +1,21 @@
-import { SessionOptions, LockScreenInfo, RemoteControl } from './types';
+import {
+  SessionOptions,
+  LockScreenInfo,
+  RemoteControlEventName,
+  InterruptionEventName,
+  RemoteControlEmptyEventType,
+  RemoteControlEventType,
+  OnInterruptionEventType,
+  OnRouteChangeEventType,
+} from './types';
 import { AudioManagerModule, eventEmitter } from '../specs';
 import { EmitterSubscription } from 'react-native';
+
+type AudioManagerEventType =
+  | RemoteControlEmptyEventType
+  | RemoteControlEventType
+  | OnInterruptionEventType
+  | OnRouteChangeEventType;
 
 class AudioManager {
   setLockScreenInfo(info: LockScreenInfo) {
@@ -29,9 +44,9 @@ class AudioManager {
   }
 
   enableRemoteCommand(
-    name: RemoteControl,
+    name: RemoteControlEventName | InterruptionEventName,
     enabled: boolean,
-    callback?: (value?: number) => void
+    callback?: (event: AudioManagerEventType) => void
   ): EmitterSubscription | null {
     AudioManagerModule.enableRemoteCommand(name, enabled);
 
@@ -112,6 +127,14 @@ class AudioManager {
             'onRemoteChangePlaybackPosition',
             callback
           );
+          break;
+
+        case 'interruption':
+          subscription = eventEmitter.addListener('onInterruption', callback);
+          break;
+
+        case 'routeChange':
+          subscription = eventEmitter.addListener('onRouteChange', callback);
           break;
 
         default:
