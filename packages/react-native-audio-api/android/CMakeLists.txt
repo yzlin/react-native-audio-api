@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12.0)
 project(react-native-audio-api)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
 # Detect the processor and SIMD support
@@ -18,7 +19,7 @@ add_compile_options(${folly_FLAGS})
 # -std=c++20 - use C++20 standard
 # -Wall - enable all compiler's warning messages
 string(APPEND CMAKE_CXX_FLAGS
-       "-frtti -std=c++${CMAKE_CXX_STANDARD} -Wall")
+       " -frtti -std=c++${CMAKE_CXX_STANDARD} -Wall")
 
 if(${IS_NEW_ARCHITECTURE_ENABLED})
   string(APPEND CMAKE_CXX_FLAGS " -DRCT_NEW_ARCH_ENABLED")
