@@ -1,4 +1,5 @@
 #import <audioapi/ios/system/AudioEngine.h>
+#import <audioapi/ios/system/AudioSessionManager.h>
 
 @implementation AudioEngine
 
@@ -7,9 +8,11 @@ static AudioEngine *_sharedInstance = nil;
 + (instancetype)sharedInstance
 {
   static dispatch_once_t onceToken;
+
   dispatch_once(&onceToken, ^{
     _sharedInstance = [[self alloc] initPrivate];
   });
+
   return _sharedInstance;
 }
 
@@ -22,11 +25,16 @@ static AudioEngine *_sharedInstance = nil;
 - (instancetype)initPrivate
 {
   if (self = [super init]) {
+    self.tapId = nil;
     self.audioEngine = [[AVAudioEngine alloc] init];
     self.audioEngine.mainMixerNode.outputVolume = 1;
+    self.audioEngine.inputNode.volume = 1;
+    self.inputMixer = [[AVAudioMixerNode alloc] init];
+
     self.sourceNodes = [[NSMutableDictionary alloc] init];
     self.sourceFormats = [[NSMutableDictionary alloc] init];
   }
+
   return self;
 }
 
@@ -37,6 +45,8 @@ static AudioEngine *_sharedInstance = nil;
     [self.audioEngine stop];
   }
 
+  self.tapId = nil;
+  self.inputMixer = nil;
   self.audioEngine = nil;
   self.sourceNodes = nil;
   self.sourceFormats = nil;
@@ -112,16 +122,13 @@ static AudioEngine *_sharedInstance = nil;
   [self.audioEngine attachNode:sourceNode];
   [self.audioEngine connect:sourceNode to:self.audioEngine.mainMixerNode format:format];
 
-  if ([self.sourceNodes count] == 1) {
-    [self startEngine];
-  }
-
+  [self startIfNecessary];
   return sourceNodeId;
 }
 
 - (void)detachSourceNodeWithId:(NSString *)sourceNodeId
 {
-  NSLog(@"[AudioEngine] detaching source nde with ID: %@", sourceNodeId);
+  NSLog(@"[AudioEngine] detaching source node with ID: %@", sourceNodeId);
 
   AVAudioSourceNode *sourceNode = [self.sourceNodes valueForKey:sourceNodeId];
   [self.audioEngine detachNode:sourceNode];
@@ -129,8 +136,74 @@ static AudioEngine *_sharedInstance = nil;
   [self.sourceNodes removeObjectForKey:sourceNodeId];
   [self.sourceFormats removeObjectForKey:sourceNodeId];
 
-  if ([self.sourceNodes count] == 0) {
+  [self stopIfNecessary];
+}
+
+- (NSString *)installInputTap:(AVAudioNodeTapBlock)tapBlock
+                 bufferLength:(int)bufferLength
+        enableVoiceProcessing:(bool)enableVoiceProcessing
+{
+  if (self.tapId != nil) {
+    return nil;
+  }
+
+  NSString *tapId = [[NSUUID UUID] UUIDString];
+  // NSError *error;
+  self.tapId = tapId;
+
+  //  if (enableVoiceProcessing) {
+  //    [[self.audioEngine inputNode] setVoiceProcessingEnabled:true error:&error];
+  //    [[self.audioEngine outputNode] setVoiceProcessingEnabled:true error:&error];
+  //  }
+
+  // if (error != nil) {
+  //   NSLog(@"error while enabing voice processing: %@", [error debugDescription]);
+  // }
+
+  [self startIfNecessary];
+
+  AVAudioInputNode *input = [self.audioEngine inputNode];
+  AVAudioFormat *inputFormat = [input inputFormatForBus:0];
+
+  [self.audioEngine attachNode:self.inputMixer];
+  [self.audioEngine connect:input to:self.inputMixer format:inputFormat];
+
+  [self.inputMixer installTapOnBus:0 bufferSize:bufferLength format:inputFormat block:tapBlock];
+  return tapId;
+}
+
+- (void)removeInputTap:(NSString *)tapId
+{
+  if (self.tapId == nil || self.tapId != tapId) {
+    return;
+  }
+
+  [self.inputMixer removeTapOnBus:0];
+  [self.audioEngine detachNode:self.inputMixer];
+  self.tapId = nil;
+}
+
+- (void)startIfNecessary
+{
+  if ([self isRunning]) {
+    return;
+  }
+
+  if ([self.sourceNodes count] > 0 || self.tapId != nil) {
+    [[AudioSessionManager sharedInstance] setActive:true];
+    [self startEngine];
+  }
+}
+
+- (void)stopIfNecessary
+{
+  if (![self isRunning]) {
+    return;
+  }
+
+  if ([self.sourceNodes count] == 0 && self.tapId == nil) {
     [self stopEngine];
+    [[AudioSessionManager sharedInstance] setActive:false];
   }
 }
 
