@@ -1,6 +1,7 @@
 #include <audioapi/core/AudioNode.h>
 #include <audioapi/core/utils/AudioNodeManager.h>
 #include <audioapi/core/utils/Locker.h>
+#include <audioapi/core/sources/AudioScheduledSourceNode.h>
 
 namespace audioapi {
 
@@ -59,10 +60,12 @@ void AudioNodeManager::prepareNodesForDestruction() {
     auto it = nodes_.begin();
 
     while (it != nodes_.end()) {
-      if (it->use_count() == 1) {
-        nodeDeconstructor_.addNodeForDeconstruction(*it);
-        it->get()->cleanup();
-        it = nodes_.erase(it);
+      std::shared_ptr<AudioScheduledSourceNode> nodePtr = std::dynamic_pointer_cast<AudioScheduledSourceNode>(*it);
+        //we don't want to destroy nodes that are still playing or will be playing
+        if (it->use_count() == 1 && ((nodePtr && (nodePtr->isFinished() || nodePtr->isUnscheduled())) || !nodePtr)) {
+          nodeDeconstructor_.addNodeForDeconstruction(*it);
+          it->get()->cleanup();
+          it = nodes_.erase(it);
       } else {
         ++it;
       }
