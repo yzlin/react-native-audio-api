@@ -57,5 +57,8 @@ class AudioManagerModule(
   @ReactMethod(isBlockingSynchronousMethod = true)
   fun observeAudioInterruptions(enable: Boolean) = MediaSessionManager.observeAudioInterruptions(enable)
 
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  fun observeVolumeChanges(enable: Boolean) = MediaSessionManager.observeVolumeChanges(enable)
+
   override fun getName(): String = NAME
 }

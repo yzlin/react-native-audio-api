@@ -37,6 +37,9 @@ const AudioManagerModule = {
   observeAudioInterruptions(enabled: boolean): void {
     NativeAudioManagerModule.observeAudioInterruptions(enabled);
   },
+  observeVolumeChanges(enabled: boolean): void {
+    NativeAudioManagerModule.observeVolumeChanges(enabled);
+  },
 };
 
 export { eventEmitter, AudioManagerModule };
