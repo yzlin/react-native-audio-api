@@ -5,7 +5,6 @@ import {
   AudioContext,
   AudioBufferSourceNode,
   AudioManager,
-  useSystemVolume,
 } from 'react-native-audio-api';
 
 import { Container, Button, Spacer, Slider } from '../../components';
@@ -124,13 +123,14 @@ const AudioFile: FC = () => {
       duration: 10,
     });
 
-    AudioManager.enableRemoteCommand('play', true);
-    AudioManager.enableRemoteCommand('pause', true);
-    AudioManager.enableRemoteCommand('stop', true);
-    AudioManager.enableRemoteCommand('interruption', true);
+    AudioManager.enableRemoteCommand('play');
+    AudioManager.enableRemoteCommand('pause');
+    AudioManager.enableRemoteCommand('stop');
 
+    AudioManager.enableRemoteEvent('interruption', (event) => {
+      console.log('Interruption event:', event);
+    });
     AudioManager.observeAudioInterruptions(true);
-    AudioManager.observeVolumeChanges(true);
 
     fetchAudioBuffer();
 

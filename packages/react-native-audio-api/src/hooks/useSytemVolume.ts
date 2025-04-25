@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import AudioManager from './AudioManager';
+import AudioManager from '../system/AudioManager';
 
 export default function useSystemVolume() {
   const [volume, setVolume] = useState(0);
 
   useEffect(() => {
-    AudioManager.enableRemoteCommand('volumeChange', true, (e) => {
+    AudioManager.observeVolumeChanges(true);
+    const listener = AudioManager.enableRemoteEvent('volumeChange', (e) => {
       setVolume(parseFloat(e.value.toFixed(2)));
     });
     return () => {
-      AudioManager.enableRemoteCommand('volumeChange', false);
+      listener?.remove();
+      AudioManager.observeVolumeChanges(false);
     };
   }, []);
 

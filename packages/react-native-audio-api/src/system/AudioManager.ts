@@ -3,6 +3,7 @@ import {
   LockScreenInfo,
   RemoteEventName,
   RemoteEventCallback,
+  RemoteCommandName,
 } from './types';
 import { AudioManagerModule, eventEmitter } from '../specs';
 import { EmitterSubscription } from 'react-native';
@@ -36,109 +37,34 @@ class AudioManager {
     AudioManagerModule.observeVolumeChanges(enabled);
   }
 
-  enableRemoteCommand<Name extends RemoteEventName>(
+  enableRemoteCommand<Name extends RemoteCommandName>(name: Name): void {
+    AudioManagerModule.enableRemoteCommand(name, true);
+  }
+
+  enableRemoteEvent<Name extends RemoteEventName>(
     name: Name,
-    enabled: boolean,
     callback?: RemoteEventCallback<Name>
   ): EmitterSubscription | null {
-    AudioManagerModule.enableRemoteCommand(name, enabled);
-
     let subscription = null;
-
-    if (enabled && callback) {
-      switch (name) {
-        case 'play':
-          subscription = eventEmitter.addListener('onRemotePlay', callback);
-          break;
-
-        case 'pause':
-          subscription = eventEmitter.addListener('onRemotePause', callback);
-          break;
-
-        case 'stop':
-          subscription = eventEmitter.addListener('onRemoteStop', callback);
-          break;
-
-        case 'togglePlayPause':
-          subscription = eventEmitter.addListener(
-            'onRemoteTogglePlayPause',
-            callback
-          );
-          break;
-
-        case 'changePlaybackRate':
-          subscription = eventEmitter.addListener(
-            'onRemoteChangePlaybackRate',
-            callback
-          );
-          break;
-
-        case 'nextTrack':
-          subscription = eventEmitter.addListener(
-            'onRemoteNextTrack',
-            callback
-          );
-          break;
-
-        case 'previousTrack':
-          subscription = eventEmitter.addListener(
-            'onRemotePreviousTrack',
-            callback
-          );
-          break;
-
-        case 'skipForward':
-          subscription = eventEmitter.addListener(
-            'onRemoteSkipForward',
-            callback
-          );
-          break;
-
-        case 'skipBackward':
-          subscription = eventEmitter.addListener(
-            'onRemoteSkipBackward',
-            callback
-          );
-          break;
-
-        case 'seekForward':
-          subscription = eventEmitter.addListener(
-            'onRemoteSeekForward',
-            callback
-          );
-          break;
-
-        case 'seekBackward':
-          subscription = eventEmitter.addListener(
-            'onRemoteSeekBackward',
-            callback
-          );
-          break;
-
-        case 'changePlaybackPosition':
-          subscription = eventEmitter.addListener(
-            'onRemoteChangePlaybackPosition',
-            callback
-          );
-          break;
-
-        case 'interruption':
-          subscription = eventEmitter.addListener('onInterruption', callback);
-          break;
-
-        case 'routeChange':
-          subscription = eventEmitter.addListener('onRouteChange', callback);
-          break;
-
-        case 'volumeChange':
-          subscription = eventEmitter.addListener('onVolumeChange', callback);
-          break;
-
-        default:
-          console.error('Unsupported RemoteControl action:', name);
-      }
+    if (!callback) {
+      return null;
     }
+    switch (name) {
+      case 'interruption':
+        subscription = eventEmitter.addListener('onInterruption', callback);
+        break;
 
+      case 'routeChange':
+        subscription = eventEmitter.addListener('onRouteChange', callback);
+        break;
+
+      case 'volumeChange':
+        subscription = eventEmitter.addListener('onVolumeChange', callback);
+        break;
+
+      default:
+        console.error('Unsupported RemoteControl action:', name);
+    }
     return subscription;
   }
 }
