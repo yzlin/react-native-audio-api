@@ -15,9 +15,7 @@ check out the [Getting Started](https://docs.swmansion.com/react-native-audio-ap
 
 ## Roadmap
 
-### Sound synthesis and system audio [![Released in 0.1.0](https://img.shields.io/badge/Released_in-0.1.0-blue
-
-)](https://github.com/software-mansion/react-native-audio-api/releases/tag/0.1.0)
+### Sound synthesis and system audio [![Released in 0.1.0](https://img.shields.io/badge/Released_in-0.1.0-blue)](https://github.com/software-mansion/react-native-audio-api/releases/tag/0.1.0)
 
 Access to devices audio engines and threads, basic nodes for sound synthesis, simple effects and audio graph implementation
 
