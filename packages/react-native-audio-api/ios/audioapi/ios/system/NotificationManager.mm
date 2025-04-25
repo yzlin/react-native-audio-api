@@ -60,6 +60,7 @@ static NSString *VolumeObservationContext = @"VolumeObservationContext";
   self.audioInterruptionsObserved = enabled;
 }
 
+// WARNING: this does not work in a simulator environment, test it on a real device
 - (void)observeVolumeChanges:(BOOL)enabled
 {
   if (self.volumeChangesObserved == enabled) {
