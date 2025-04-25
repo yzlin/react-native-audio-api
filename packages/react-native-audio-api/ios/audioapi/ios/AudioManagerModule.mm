@@ -59,6 +59,11 @@ RCT_EXPORT_METHOD(observeAudioInterruptions : (BOOL)enabled)
   [self.notificationManager observeAudioInterruptions:enabled];
 }
 
+RCT_EXPORT_METHOD(observeVolumeChanges : (BOOL)enabled)
+{
+  [self.notificationManager observeVolumeChanges:(BOOL)enabled];
+}
+
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getDevicePreferredSampleRate)
 {
   return [self.audioSessionManager getDevicePreferredSampleRate];
@@ -80,7 +85,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getDevicePreferredSampleRate)
     @"onRemoteSeekBackward",
     @"onRemoteChangePlaybackPosition",
     @"onInterruption",
-    @"onRouteChange"
+    @"onRouteChange",
+    @"onVolumeChange"
   ];
 }
 
