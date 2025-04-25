@@ -14,7 +14,9 @@ class VolumeChangeListener(
     context: Context?,
     intent: Intent?,
   ) {
-    eventEmitter.onVolumeChange(mapOf("value" to audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)))
+    val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toDouble()
+    val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toDouble()
+    eventEmitter.onVolumeChange(mapOf("value" to currentVolume / maxVolume))
   }
 
   fun getIntentFilter(): IntentFilter {

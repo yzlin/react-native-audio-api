@@ -6,7 +6,7 @@ export default function useSystemVolume() {
 
   useEffect(() => {
     AudioManager.enableRemoteCommand('volumeChange', true, (e) => {
-      setVolume(e.value);
+      setVolume(parseFloat(e.value.toFixed(2)));
     });
     return () => {
       AudioManager.enableRemoteCommand('volumeChange', false);
