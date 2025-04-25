@@ -29,6 +29,7 @@ object MediaSessionManager {
   private lateinit var lockScreenManager: LockScreenManager
   lateinit var eventEmitter: MediaSessionEventEmitter
   private lateinit var audioFocusListener: AudioFocusListener
+  private lateinit var volumeChangeListener: VolumeChangeListener
   private lateinit var mediaReceiver: MediaReceiver
 
   private val connection =
@@ -90,6 +91,7 @@ object MediaSessionManager {
     }
 
     this.audioFocusListener = AudioFocusListener(audioManager, eventEmitter, lockScreenManager)
+    this.volumeChangeListener = VolumeChangeListener(audioManager, eventEmitter)
 
     val myIntent = Intent(reactContext, MediaNotificationManager.NotificationService::class.java)
 
@@ -129,6 +131,19 @@ object MediaSessionManager {
       audioFocusListener.requestAudioFocus()
     } else {
       audioFocusListener.abandonAudioFocus()
+    }
+  }
+
+  fun observeVolumeChanges(observe: Boolean) {
+    if (observe) {
+      ContextCompat.registerReceiver(
+        reactContext,
+        volumeChangeListener,
+        volumeChangeListener.getIntentFilter(),
+        ContextCompat.RECEIVER_NOT_EXPORTED,
+      )
+    } else {
+      reactContext.unregisterReceiver(volumeChangeListener)
     }
   }
 

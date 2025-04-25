@@ -51,33 +51,40 @@ export interface LockScreenInfo extends BaseLockScreenInfo {
   elapsedTime?: number;
 }
 
-export type RemoteControlEventName =
-  | 'play'
-  | 'pause'
-  | 'stop'
-  | 'togglePlayPause'
-  | 'changePlaybackRate'
-  | 'nextTrack'
-  | 'previousTrack'
-  | 'skipForward'
-  | 'skipBackward'
-  | 'seekForward'
-  | 'seekBackward'
-  | 'changePlaybackPosition';
+interface RemoteControlEmptyEventType {}
 
-export type InterruptionEventName = 'interruption' | 'routeChange';
-
-export interface RemoteControlEmptyEventType {}
-
-export interface RemoteControlEventType {
+interface RemoteControlEventType {
   value: number;
 }
 
-export interface OnInterruptionEventType {
+interface OnInterruptionEventType {
   type: 'ended' | 'began';
   shouldResume: boolean;
 }
 
-export interface OnRouteChangeEventType {
+interface OnRouteChangeEventType {
   reason: string;
 }
+
+interface RemoteEvents {
+  play: RemoteControlEmptyEventType;
+  pause: RemoteControlEmptyEventType;
+  stop: RemoteControlEmptyEventType;
+  togglePlayPause: RemoteControlEmptyEventType;
+  changePlaybackRate: RemoteControlEmptyEventType;
+  nextTrack: RemoteControlEmptyEventType;
+  previousTrack: RemoteControlEmptyEventType;
+  skipForward: RemoteControlEmptyEventType;
+  skipBackward: RemoteControlEmptyEventType;
+  seekForward: RemoteControlEmptyEventType;
+  seekBackward: RemoteControlEmptyEventType;
+  changePlaybackPosition: RemoteControlEmptyEventType;
+  volumeChange: RemoteControlEventType;
+  interruption: OnInterruptionEventType;
+  routeChange: OnRouteChangeEventType;
+}
+
+export type RemoteEventName = keyof RemoteEvents;
+export type RemoteEventCallback<Name extends RemoteEventName> = (
+  event: RemoteEvents[Name]
+) => void;

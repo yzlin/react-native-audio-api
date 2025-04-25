@@ -1,21 +1,11 @@
 import {
   SessionOptions,
   LockScreenInfo,
-  RemoteControlEventName,
-  InterruptionEventName,
-  RemoteControlEmptyEventType,
-  RemoteControlEventType,
-  OnInterruptionEventType,
-  OnRouteChangeEventType,
+  RemoteEventName,
+  RemoteEventCallback,
 } from './types';
 import { AudioManagerModule, eventEmitter } from '../specs';
 import { EmitterSubscription } from 'react-native';
-
-type AudioManagerEventType =
-  | RemoteControlEmptyEventType
-  | RemoteControlEventType
-  | OnInterruptionEventType
-  | OnRouteChangeEventType;
 
 class AudioManager {
   setLockScreenInfo(info: LockScreenInfo) {
@@ -42,10 +32,14 @@ class AudioManager {
     AudioManagerModule.observeAudioInterruptions(enabled);
   }
 
-  enableRemoteCommand(
-    name: RemoteControlEventName | InterruptionEventName,
+  observeVolumeChanges(enabled: boolean) {
+    AudioManagerModule.observeVolumeChanges(enabled);
+  }
+
+  enableRemoteCommand<Name extends RemoteEventName>(
+    name: Name,
     enabled: boolean,
-    callback?: (event: AudioManagerEventType) => void
+    callback?: RemoteEventCallback<Name>
   ): EmitterSubscription | null {
     AudioManagerModule.enableRemoteCommand(name, enabled);
 
@@ -134,6 +128,10 @@ class AudioManager {
 
         case 'routeChange':
           subscription = eventEmitter.addListener('onRouteChange', callback);
+          break;
+
+        case 'volumeChange':
+          subscription = eventEmitter.addListener('onVolumeChange', callback);
           break;
 
         default:
