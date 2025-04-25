@@ -1,6 +1,10 @@
 <img src="./assets/react-native-audio-api-gh-cover.png?v0.0.1" alt="React Native Audio API" width="100%">
 
-### React Native Audio API
+### High-performance audio engine for React Native based on web audio api specification
+
+[![NPM latest](https://img.shields.io/npm/v/react-native-audio-api/latest)](https://www.npmjs.com/package/react-native-audio-api)
+[![NPM next](https://img.shields.io/npm/v/react-native-audio-api/next)](https://www.npmjs.com/package/react-native-audio-api?activeTab=versions)
+[![github ci](https://img.shields.io/github/actions/workflow/status/software-mansion/react-native-audio-api/ci.yml)](https://github.com/software-mansion/react-native-audio-api/actions)
 
 `react-native-audio-api` provides system for controlling audio in React Native environment compatible with Web Audio API specification,
 allowing developers to generate and modify audio in exact same way it is possible in browsers.
@@ -21,12 +25,12 @@ allowing developers to generate and modify audio in exact same way it is possibl
 
 `react-native-audio-api` contains native custom code and isn't part of the Expo Go application. In order to be available in expo managed builds, you have to use Expo development build. Simplest way on starting local expo dev builds, is to use:
 
-  ```bash
-    # Build native iOS project
-    npx expo run:ios
-    # Build native Android project
-    npx expo run:android
-  ```
+```bash
+  # Build native iOS project
+  npx expo run:ios
+  # Build native Android project
+  npx expo run:android
+```
 
 To learn more about expo development builds, please check out [Development Builds Documentation](https://docs.expo.dev/develop/development-builds/introduction/).
 
