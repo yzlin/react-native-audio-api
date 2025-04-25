@@ -11,37 +11,17 @@ allowing developers to generate and modify audio in exact same way it is possibl
 
 ## Installation
 
-1. Install `react-native-audio-api` library
+check out the [Getting Started](https://docs.swmansion.com/react-native-audio-api/fundamentals/getting-started) section of our documentation for detailed instructions!
 
-   ```bash
-   # using npm
-   npm install react-native-audio-api
+## Roadmap
 
-   # or using yarn
-   yarn add react-native-audio-api
-   ```
+### Sound synthesis and system audio [![Released in 0.1.0](https://img.shields.io/badge/Released_in-0.1.0-blue
 
-## Usage with expo
+)](https://github.com/software-mansion/react-native-audio-api/releases/tag/0.1.0)
 
-`react-native-audio-api` contains native custom code and isn't part of the Expo Go application. In order to be available in expo managed builds, you have to use Expo development build. Simplest way on starting local expo dev builds, is to use:
+Access to devices audio engines and threads, basic nodes for sound synthesis, simple effects and audio graph implementation
 
-```bash
-  # Build native iOS project
-  npx expo run:ios
-  # Build native Android project
-  npx expo run:android
-```
-
-To learn more about expo development builds, please check out [Development Builds Documentation](https://docs.expo.dev/develop/development-builds/introduction/).
-
-## Documentation
-
-Check out our dedicated documentation page for info about this library, API reference and more:
-[https://software-mansion.github.io/react-native-audio-api/](https://software-mansion.github.io/react-native-audio-api/)
-
-You can also check out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) for fully detailed description of the audio api.
-
-## Coverage
+## Web Audio API Specification Coverage
 
 Our current coverage of Web Audio API specification can be found here: [Web Audio API coverage](https://software-mansion.github.io/react-native-audio-api/other/web-audio-api-coverage).
 
