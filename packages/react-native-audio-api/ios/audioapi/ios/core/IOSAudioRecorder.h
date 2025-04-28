@@ -1,36 +1,36 @@
 #pragma once
 
 #ifdef __OBJC__ // when compiled as Objective-C++
-#import <NativeIOSAudioRecorder.h>
+#import <NativeAudioRecorder.h>
 #else // when compiled as C++
-typedef struct objc_object NativeIOSAudioRecorder;
+typedef struct objc_object NativeAudioRecorder;
 #endif // __OBJC__
 
+#include <audioapi/core/inputs/AudioRecorder.h>
 #include <functional>
 
 namespace audioapi {
 
 class AudioBus;
 
-class IOSAudioRecorder {
- protected:
-  NativeIOSAudioRecorder *audioRecorder_;
-
-  std::function<void(std::shared_ptr<AudioBus>, int, double)> onAudioReady_;
-
+class IOSAudioRecorder : public AudioRecorder {
  public:
   IOSAudioRecorder(
       float sampleRate,
-      int numberOfChannels,
       int bufferLength,
-      bool enableVoiceProcessing,
+      const std::function<void(void)> &onError,
+      const std::function<void(void)> &onStatusChange,
       const std::function<void(std::shared_ptr<AudioBus>, int, double)>
           &onAudioReady);
 
-  ~IOSAudioRecorder();
+  ~IOSAudioRecorder() override;
 
-  void start();
-  void stop();
+  void start() override;
+  void stop() override;
+
+ private:
+  NativeAudioRecorder *audioRecorder_;
+  std::atomic<bool> isRunning_;
 };
 
 } // namespace audioapi

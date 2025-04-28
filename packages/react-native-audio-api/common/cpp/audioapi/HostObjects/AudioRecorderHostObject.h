@@ -6,6 +6,12 @@
 #include <audioapi/HostObjects/AudioBufferHostObject.h>
 #include <audioapi/core/inputs/AudioRecorder.h>
 
+#ifdef ANDROID
+#include <audioapi/android/core/AndroidAudioRecorder.h>
+#else
+#include <audioapi/ios/core/IOSAudioRecorder.h>
+#endif
+
 #include <memory>
 #include <utility>
 #include <vector>
@@ -20,21 +26,27 @@ class AudioRecorderHostObject : public JsiHostObject {
       jsi::Runtime *runtime,
       const std::shared_ptr<react::CallInvoker> &callInvoker,
       float sampleRate,
-      int numberOfChannels,
-      int bufferLength,
-      bool enableVoiceProcessing)
+      int bufferLength)
       : callInvoker_(callInvoker) {
     promiseVendor_ = std::make_shared<PromiseVendor>(runtime, callInvoker);
 
-    audioRecorder_ = std::make_shared<AudioRecorder>(
+#ifdef ANDROID
+    audioRecorder_ = std::make_shared<AndroidAudioRecorder>(
       sampleRate,
-      numberOfChannels,
       bufferLength,
-      enableVoiceProcessing,
       this->getOnError(),
       this->getOnStatusChange(),
       this->getOnAudioReady()
     );
+#else
+  audioRecorder_ = std::make_shared<IOSAudioRecorder>(
+      sampleRate,
+      bufferLength,
+      this->getOnError(),
+      this->getOnStatusChange(),
+      this->getOnAudioReady()
+    );
+#endif
 
     addFunctions(
       JSI_EXPORT_FUNCTION(AudioRecorderHostObject, start),
@@ -85,13 +97,10 @@ class AudioRecorderHostObject : public JsiHostObject {
   std::shared_ptr<PromiseVendor> promiseVendor_;
   std::shared_ptr<react::CallInvoker> callInvoker_;
 
-  // TODO: can we really assume those are unique ptrs? 🤔
-  // JS also has a ref for them
   std::unique_ptr<jsi::Function> errorCallback_;
   std::unique_ptr<jsi::Function> audioReadyCallback_;
   std::unique_ptr<jsi::Function> statusChangeCallback_;
 
-  // this is ugly as duck
   std::function<void(std::shared_ptr<AudioBus>, int, double)> getOnAudioReady() {
     return [this](const std::shared_ptr<AudioBus> &bus, int numFrames, double when) {
       if (audioReadyCallback_ == nullptr) {
