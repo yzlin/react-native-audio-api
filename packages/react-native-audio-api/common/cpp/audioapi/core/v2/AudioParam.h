@@ -1,0 +1,70 @@
+#pragma once
+
+#include <audioapi/core/utils/ParamChangeEvent.h>
+#include <audioapi/core/types/ParamChangeEventType.h>
+#include <audioapi/utils/AudioBus.h>
+#include <audioapi/core/AudioNode.h>
+
+#include <deque>
+#include <memory>
+#include <vector>
+#include <unordered_set>
+#include <cstddef>
+
+namespace audioapi::v2 {
+
+class AudioParam {
+ public:
+  explicit AudioParam(float defaultValue, float minValue, float maxValue);
+
+  [[nodiscard]] float getValue() const;
+  float getValueAtTime(double time);
+  [[nodiscard]] float getDefaultValue() const;
+  [[nodiscard]] float getMinValue() const;
+  [[nodiscard]] float getMaxValue() const;
+
+  void setValue(float value);
+
+  void setValueAtTime(float value, double startTime);
+  void linearRampToValueAtTime(float value, double endTime);
+  void exponentialRampToValueAtTime(float value, double endTime);
+  void setTargetAtTime(float target, double startTime, double timeConstant);
+  void setValueCurveAtTime(
+      const float *values,
+      size_t length,
+      double startTime,
+      double duration);
+  void cancelScheduledValues(double cancelTime);
+  void cancelAndHoldAtTime(double cancelTime);
+  void addInputNode(audioapi::AudioNode* node);
+  void removeInputNode(audioapi::AudioNode* node);
+  void processParam(const std::shared_ptr<audioapi::AudioBus>& outputBus, int framesToProcess, double time, float sampleRate);
+
+ private:
+  float value_;
+  float defaultValue_;
+  float minValue_;
+  float maxValue_;
+  std::deque<audioapi::ParamChangeEvent> eventsQueue_;
+  std::unordered_set<audioapi::AudioNode *> inputNodes_;
+  int channelCount_ = 2;
+  ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
+  ChannelInterpretation channelInterpretation_ =
+          ChannelInterpretation::SPEAKERS;
+
+  double startTime_;
+  double endTime_;
+  float startValue_;
+  float endValue_;
+  std::function<float(double, double, float, float, double)> calculateValue_;
+  std::vector<std::shared_ptr<audioapi::AudioBus>> inputBuses_ = {};
+
+  double getQueueEndTime();
+  float getQueueEndValue();
+  void updateQueue(audioapi::ParamChangeEvent &event);
+  std::shared_ptr<audioapi::AudioBus> processInputs(const std::shared_ptr<audioapi::AudioBus>& outputBus, int framesToProcess, bool checkIsAlreadyProcessed);
+  void mixInputsBuses(const std::shared_ptr<audioapi::AudioBus>& processingBus);
+  void processParamNoInput(const std::shared_ptr<audioapi::AudioBus>& outputBus, int framesToProcess, double time, float sampleRate);
+};
+
+} // namespace audioapi::v2
