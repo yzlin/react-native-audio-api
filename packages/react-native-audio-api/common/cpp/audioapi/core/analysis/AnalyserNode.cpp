@@ -154,9 +154,10 @@ void AnalyserNode::processNode(
   // Down mix the input bus to mono
   downMixBus_->copy(processingBus.get());
 
+  auto framesToCopy = 0;
+
   if (vWriteIndex_ + framesToProcess > inputBuffer_->getSize()) {
-    auto framesToCopy =
-        static_cast<int>(inputBuffer_->getSize()) - vWriteIndex_;
+    framesToCopy = static_cast<int>(inputBuffer_->getSize()) - vWriteIndex_;
     memcpy(
         inputBuffer_->getData() + vWriteIndex_,
         downMixBus_->getChannel(0)->getData(),
@@ -168,7 +169,7 @@ void AnalyserNode::processNode(
 
   memcpy(
       inputBuffer_->getData() + vWriteIndex_,
-      downMixBus_->getChannel(0)->getData(),
+      downMixBus_->getChannel(0)->getData() + framesToCopy,
       framesToProcess * sizeof(float));
 
   vWriteIndex_ += framesToProcess;
