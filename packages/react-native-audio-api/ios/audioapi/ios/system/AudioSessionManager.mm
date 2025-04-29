@@ -23,6 +23,7 @@ static AudioSessionManager *_sharedInstance = nil;
 {
   if (self = [super init]) {
     self.audioSession = [AVAudioSession sharedInstance];
+    self.audioApplication = [AVAudioApplication sharedInstance];
 
     self.sessionCategory = AVAudioSessionCategoryPlayback;
     self.sessionMode = AVAudioSessionModeDefault;
@@ -39,6 +40,7 @@ static AudioSessionManager *_sharedInstance = nil;
   NSLog(@"[AudioSessionManager] cleanup");
 
   self.audioSession = nil;
+  self.audioApplication = nil;
 }
 
 - (NSNumber *)getDevicePreferredSampleRate
@@ -190,6 +192,34 @@ static AudioSessionManager *_sharedInstance = nil;
 
   self.hasDirtySettings = false;
   return true;
+}
+
+- (NSString *)requestRecordingPermissions
+{
+  [self.audioSession requestRecordPermission:^(BOOL granted) {}];
+  return [self checkRecordingPermissions];
+}
+
+- (NSString *)checkRecordingPermissions
+{
+  NSOperatingSystemVersion ios17_0 = (NSOperatingSystemVersion){17, 0, 0};
+  NSInteger res;
+  if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios17_0] ) {
+    res = [self.audioApplication recordPermission];
+  } else {
+    NSLog(@"stary ios");
+    res = [self.audioSession recordPermission];
+  }
+  switch (res) {
+    case AVAudioApplicationRecordPermissionUndetermined:
+      return @"Undetermined";
+    case AVAudioApplicationRecordPermissionGranted:
+      return @"Granted";
+    case AVAudioApplicationRecordPermissionDenied:
+      return @"Denied";
+    default:
+      return @"Undetermined";
+    }
 }
 
 @end

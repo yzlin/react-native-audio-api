@@ -4,6 +4,7 @@ import {
   RemoteEventName,
   RemoteEventCallback,
   RemoteCommandName,
+  PermissionStatus,
 } from './types';
 import { AudioManagerModule, eventEmitter } from '../specs';
 import { EmitterSubscription } from 'react-native';
@@ -66,6 +67,14 @@ class AudioManager {
         console.error('Unsupported RemoteControl action:', name);
     }
     return subscription;
+  }
+
+  async requestRecordingPermissions(): Promise<PermissionStatus> {
+    return AudioManagerModule.requestRecordingPermissions();
+  }
+
+  async checkRecordingPermissions(): Promise<PermissionStatus> {
+    return AudioManagerModule.checkRecordingPermissions();
   }
 }
 

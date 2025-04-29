@@ -6,6 +6,7 @@
 @interface AudioSessionManager : NSObject
 
 @property (nonatomic, weak) AVAudioSession *audioSession;
+@property (nonatomic, weak) AVAudioApplication *audioApplication;
 
 @property (nonatomic, assign) bool isActive;
 @property (nonatomic, assign) bool hasDirtySettings;
@@ -20,5 +21,7 @@
 - (NSNumber *)getDevicePreferredSampleRate;
 - (void)setAudioSessionOptions:(NSString *)category mode:(NSString *)mode options:(NSArray *)options;
 - (bool)setActive:(bool)active;
+- (NSString *)requestRecordingPermissions;
+- (NSString *)checkRecordingPermissions;
 
 @end
