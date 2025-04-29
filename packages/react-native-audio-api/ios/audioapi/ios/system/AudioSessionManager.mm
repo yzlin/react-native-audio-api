@@ -200,22 +200,31 @@ static AudioSessionManager *_sharedInstance = nil;
 
 - (NSString *)checkRecordingPermissions
 {
-  NSInteger res;
   if (@available(iOS 17, *)) {
-    res = [[AVAudioApplication sharedInstance] recordPermission];
-  } else {
-    res = [self.audioSession recordPermission];
-  }
-  switch (res) {
-    case AVAudioApplicationRecordPermissionUndetermined:
-      return @"Undetermined";
-    case AVAudioApplicationRecordPermissionGranted:
-      return @"Granted";
-    case AVAudioApplicationRecordPermissionDenied:
-      return @"Denied";
-    default:
-      return @"Undetermined";
+    NSInteger res = [[AVAudioApplication sharedInstance] recordPermission];
+    switch (res) {
+      case AVAudioApplicationRecordPermissionUndetermined:
+        return @"Undetermined";
+      case AVAudioApplicationRecordPermissionGranted:
+        return @"Granted";
+      case AVAudioApplicationRecordPermissionDenied:
+        return @"Denied";
+      default:
+        return @"Undetermined";
     }
+  } else {
+    NSInteger res = [self.audioSession recordPermission];
+    switch (res) {
+      case AVAudioSessionRecordPermissionUndetermined:
+        return @"Undetermined";
+      case AVAudioSessionRecordPermissionGranted:
+        return @"Granted";
+      case AVAudioSessionRecordPermissionDenied:
+        return @"Denied";
+      default:
+        return @"Undetermined";
+    }
+  }
 }
 
 @end
