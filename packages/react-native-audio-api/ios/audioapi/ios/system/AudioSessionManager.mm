@@ -23,7 +23,6 @@ static AudioSessionManager *_sharedInstance = nil;
 {
   if (self = [super init]) {
     self.audioSession = [AVAudioSession sharedInstance];
-    self.audioApplication = [AVAudioApplication sharedInstance];
 
     self.sessionCategory = AVAudioSessionCategoryPlayback;
     self.sessionMode = AVAudioSessionModeDefault;
@@ -40,7 +39,6 @@ static AudioSessionManager *_sharedInstance = nil;
   NSLog(@"[AudioSessionManager] cleanup");
 
   self.audioSession = nil;
-  self.audioApplication = nil;
 }
 
 - (NSNumber *)getDevicePreferredSampleRate
@@ -202,12 +200,10 @@ static AudioSessionManager *_sharedInstance = nil;
 
 - (NSString *)checkRecordingPermissions
 {
-  NSOperatingSystemVersion ios17_0 = (NSOperatingSystemVersion){17, 0, 0};
   NSInteger res;
-  if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios17_0] ) {
-    res = [self.audioApplication recordPermission];
+  if (@available(iOS 17, *)) {
+    res = [[AVAudioApplication sharedInstance] recordPermission];
   } else {
-    NSLog(@"stary ios");
     res = [self.audioSession recordPermission];
   }
   switch (res) {

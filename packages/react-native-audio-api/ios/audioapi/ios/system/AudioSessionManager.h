@@ -6,7 +6,6 @@
 @interface AudioSessionManager : NSObject
 
 @property (nonatomic, weak) AVAudioSession *audioSession;
-@property (nonatomic, weak) AVAudioApplication *audioApplication;
 
 @property (nonatomic, assign) bool isActive;
 @property (nonatomic, assign) bool hasDirtySettings;
