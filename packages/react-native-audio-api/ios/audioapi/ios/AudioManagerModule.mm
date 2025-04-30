@@ -69,6 +69,21 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getDevicePreferredSampleRate)
   return [self.audioSessionManager getDevicePreferredSampleRate];
 }
 
+RCT_EXPORT_METHOD(requestRecordingPermissions : (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  
+  NSString* res = [self.audioSessionManager requestRecordingPermissions];
+  resolve(res);
+}
+
+RCT_EXPORT_METHOD(checkRecordingPermissions : (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  NSString* res = [self.audioSessionManager checkRecordingPermissions];
+  resolve(res);
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[

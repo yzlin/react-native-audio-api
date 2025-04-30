@@ -1,5 +1,6 @@
 package com.swmansion.audioapi
 
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
@@ -59,6 +60,18 @@ class AudioManagerModule(
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   fun observeVolumeChanges(enable: Boolean) = MediaSessionManager.observeVolumeChanges(enable)
+
+  @ReactMethod
+  fun requestRecordingPermissions(promise: Promise) {
+    val res = MediaSessionManager.requestRecordingPermissions(currentActivity)
+    promise.resolve(res)
+  }
+
+  @ReactMethod
+  fun checkRecordingPermissions(promise: Promise) {
+    val res = MediaSessionManager.checkRecordingPermissions()
+    promise.resolve(res)
+  }
 
   override fun getName(): String = NAME
 }

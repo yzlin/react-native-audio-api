@@ -92,3 +92,5 @@ export type RemoteEventName = keyof RemoteEvents;
 export type RemoteEventCallback<Name extends RemoteEventName> = (
   event: RemoteEvents[Name]
 ) => void;
+
+export type PermissionStatus = 'Undetermined' | 'Denied' | 'Granted';

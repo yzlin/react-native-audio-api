@@ -1,4 +1,5 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import { PermissionStatus } from '../system/types';
 
 const NativeAudioManagerModule = NativeModules.AudioManagerModule;
 const eventEmitter =
@@ -39,6 +40,13 @@ const AudioManagerModule = {
   },
   observeVolumeChanges(enabled: boolean): void {
     NativeAudioManagerModule.observeVolumeChanges(enabled);
+  },
+  requestRecordingPermissions(): Promise<PermissionStatus> {
+    return NativeAudioManagerModule.requestRecordingPermissions();
+  },
+
+  checkRecordingPermissions(): Promise<PermissionStatus> {
+    return NativeAudioManagerModule.checkRecordingPermissions();
   },
 };
 
