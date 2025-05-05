@@ -257,14 +257,14 @@ void AudioParam::cancelAndHoldAtTime(double cancelTime) {
   }
 }
 
-void AudioParam::addInputNode(audioapi::AudioNode *node) {
+void AudioParam::addInputNode(audioapi::v2::AudioNode *node) {
   auto position = inputNodes_.find(node);
   if (position == inputNodes_.end()) {
     inputNodes_.insert(node);
   }
 }
 
-void AudioParam::removeInputNode(audioapi::AudioNode *node) {
+void AudioParam::removeInputNode(audioapi::v2::AudioNode *node) {
   auto position = inputNodes_.find(node);
 
   if (position != inputNodes_.end()) {

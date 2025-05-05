@@ -3,7 +3,7 @@
 #include <audioapi/core/utils/ParamChangeEvent.h>
 #include <audioapi/core/types/ParamChangeEventType.h>
 #include <audioapi/utils/AudioBus.h>
-#include <audioapi/core/AudioNode.h>
+#include <audioapi/core/v2/AudioNode.h>
 
 #include <deque>
 #include <memory>
@@ -36,8 +36,8 @@ class AudioParam {
       double duration);
   void cancelScheduledValues(double cancelTime);
   void cancelAndHoldAtTime(double cancelTime);
-  void addInputNode(audioapi::AudioNode* node);
-  void removeInputNode(audioapi::AudioNode* node);
+  void addInputNode(audioapi::v2::AudioNode* node);
+  void removeInputNode(audioapi::v2::AudioNode* node);
   void processParam(const std::shared_ptr<audioapi::AudioBus>& outputBus, int framesToProcess, double time, float sampleRate);
 
  private:
@@ -46,7 +46,7 @@ class AudioParam {
   float minValue_;
   float maxValue_;
   std::deque<audioapi::ParamChangeEvent> eventsQueue_;
-  std::unordered_set<audioapi::AudioNode *> inputNodes_;
+  std::unordered_set<audioapi::v2::AudioNode *> inputNodes_;
   int channelCount_ = 2;
   ChannelCountMode channelCountMode_ = ChannelCountMode::MAX;
   ChannelInterpretation channelInterpretation_ =
