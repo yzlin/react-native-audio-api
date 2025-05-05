@@ -290,25 +290,23 @@ void AudioParam::processParamNoInput(
   for (size_t i = 0; i < framesToProcess; i++) {
     auto sample = getValueAtTime(
         dsp::timeToSampleFrame(time, sampleRate) + i / sampleRate);
-    for (int j = 0; j < outputBus->getNumberOfChannels(); j++) {
-      (*outputBus->getChannel(j))[i] = sample;
-    }
+    // outputBus is a mono bus
+    (*outputBus->getChannel(0))[i] = sample;
   }
 }
 
-void AudioParam::processParam(
-    const std::shared_ptr<AudioBus> &outputBus,
-    int framesToProcess,
-    double time,
-    float sampleRate) {
+std::shared_ptr<AudioArray>
+AudioParam::processParam(int framesToProcess, double time, float sampleRate) {
+  auto processingBus = audioBus_;
+  processingBus->zero();
   if (inputNodes_.empty()) {
-    processParamNoInput(outputBus, framesToProcess, time, sampleRate);
-    return;
+    processParamNoInput(processingBus, framesToProcess, time, sampleRate);
   } else {
-    auto processingBus = processInputs(outputBus, framesToProcess, true);
+    processInputs(processingBus, framesToProcess, true);
     mixInputsBuses(processingBus);
-    outputBus->copy(processingBus.get());
   }
+  // processingBus is a mono bus
+  return std::make_shared<AudioArray>(processingBus->getChannel(0));
 }
 
 double AudioParam::getQueueEndTime() {
@@ -347,7 +345,7 @@ void AudioParam::updateQueue(ParamChangeEvent &event) {
   eventsQueue_.push_back(event);
 }
 
-std::shared_ptr<AudioBus> AudioParam::processInputs(
+void AudioParam::processInputs(
     const std::shared_ptr<AudioBus> &outputBus,
     int framesToProcess,
     bool checkIsAlreadyProcessed) {
@@ -364,7 +362,6 @@ std::shared_ptr<AudioBus> AudioParam::processInputs(
         outputBus, framesToProcess, checkIsAlreadyProcessed);
     inputBuses_.push_back(inputBus);
   }
-  return audioBus_;
 }
 
 void AudioParam::mixInputsBuses(
