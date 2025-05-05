@@ -56,15 +56,18 @@ void OscillatorNode::processNode(
     return;
   }
 
-  auto deltaTime = 1.0 / context_->getSampleRate();
-  auto time =
-      context_->getCurrentTime() + static_cast<double>(startOffset) * deltaTime;
+  auto time = context_->getCurrentTime() +
+      static_cast<double>(startOffset) * 1.0 / context_->getSampleRate();
+  auto detuneParamValues = detuneParam_->processParam(
+      framesToProcess, time, context_->getSampleRate());
+  auto frequencyParamValues = frequencyParam_->processParam(
+      framesToProcess, time, context_->getSampleRate());
 
   for (size_t i = startOffset; i < offsetLength; i += 1) {
     auto detuneRatio =
-        std::pow(2.0f, detuneParam_->getValueAtTime(time) / 1200.0f);
+        std::pow(2.0f, detuneParamValues.get()->getData()[i] / 1200.0f);
     auto detunedFrequency =
-        round(frequencyParam_->getValueAtTime(time) * detuneRatio);
+        round(frequencyParamValues.get()->getData()[i] * detuneRatio);
     auto phaseIncrement = detunedFrequency * periodicWave_->getScale();
 
     float sample =
@@ -79,8 +82,6 @@ void OscillatorNode::processNode(
         floor(
             phase_ / static_cast<float>(periodicWave_->getPeriodicWaveSize())) *
         static_cast<float>(periodicWave_->getPeriodicWaveSize());
-
-    time += deltaTime;
   }
 
   handleStopScheduled();
