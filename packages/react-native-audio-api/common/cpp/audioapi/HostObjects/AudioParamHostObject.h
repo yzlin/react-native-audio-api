@@ -105,7 +105,7 @@ class AudioParamHostObject : public JsiHostObject {
     param_->setValue(static_cast<float>(value.getNumber()));
   }
 
- private:
+ public:
   std::shared_ptr<AudioParam> param_;
 };
 } // namespace audioapi
