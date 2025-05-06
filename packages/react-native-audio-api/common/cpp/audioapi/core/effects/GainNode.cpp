@@ -19,7 +19,7 @@ void GainNode::processNode(
     const std::shared_ptr<AudioBus> &processingBus,
     int framesToProcess) {
   double time = context_->getCurrentTime();
-  auto gainParamValues = gainParam_->processParam(
+  auto gainParamValues = gainParam_->processARateParam(
       framesToProcess, time, context_->getSampleRate());
   for (int i = 0; i < framesToProcess; i += 1) {
     for (int j = 0; j < processingBus->getNumberOfChannels(); j += 1) {

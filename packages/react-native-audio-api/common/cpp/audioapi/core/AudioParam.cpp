@@ -295,8 +295,10 @@ void AudioParam::processParamNoInput(
   }
 }
 
-std::shared_ptr<AudioArray>
-AudioParam::processParam(int framesToProcess, double time, float sampleRate) {
+std::shared_ptr<AudioArray> AudioParam::processARateParam(
+    int framesToProcess,
+    double time,
+    float sampleRate) {
   auto processingBus = audioBus_;
   processingBus->zero();
   if (inputNodes_.empty()) {
@@ -307,6 +309,20 @@ AudioParam::processParam(int framesToProcess, double time, float sampleRate) {
   }
   // processingBus is a mono bus
   return std::make_shared<AudioArray>(*processingBus->getChannel(0));
+}
+
+float AudioParam::processKRateParam(double time, float sampleRate) {
+  auto processingBus = audioBus_;
+  processingBus->zero();
+  if (inputNodes_.empty()) {
+    return getValueAtTime(
+        dsp::timeToSampleFrame(time, sampleRate) / sampleRate);
+  } else {
+    processInputs(processingBus, 1, true);
+    mixInputsBuses(processingBus);
+  }
+  // processingBus is a mono bus
+  return processingBus->getChannel(0)->getData()[0];
 }
 
 double AudioParam::getQueueEndTime() {
