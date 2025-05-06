@@ -52,14 +52,13 @@ class AudioNodeHostObject : public JsiHostObject {
         obj.isHostObject<AudioNodeHostObject>(runtime)) {
       auto node = obj.getHostObject<AudioNodeHostObject>(runtime);
       node_->connect(std::shared_ptr<AudioNodeHostObject>(node)->node_);
-      return jsi::Value::undefined();
     }
     if (auto obj = args[0].getObject(runtime);
         obj.isHostObject<AudioParamHostObject>(runtime)) {
       auto param = obj.getHostObject<AudioParamHostObject>(runtime);
       node_->connect(std::shared_ptr<AudioParamHostObject>(param)->param_);
-      return jsi::Value::undefined();
     }
+    return jsi::Value::undefined();
   }
 
   JSI_HOST_FUNCTION(disconnect) {
@@ -72,15 +71,14 @@ class AudioNodeHostObject : public JsiHostObject {
         obj.isHostObject<AudioNodeHostObject>(runtime)) {
       auto node = obj.getHostObject<AudioNodeHostObject>(runtime);
       node_->disconnect(std::shared_ptr<AudioNodeHostObject>(node)->node_);
-      return jsi::Value::undefined();
     }
 
     if (auto obj = args[0].getObject(runtime);
         obj.isHostObject<AudioParamHostObject>(runtime)) {
       auto param = obj.getHostObject<AudioParamHostObject>(runtime);
       node_->disconnect(std::shared_ptr<AudioParamHostObject>(param)->param_);
-      return jsi::Value::undefined();
     }
+    return jsi::Value::undefined();
   }
 
  protected:

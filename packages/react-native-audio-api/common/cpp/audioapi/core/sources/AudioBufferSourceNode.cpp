@@ -22,9 +22,9 @@ AudioBufferSourceNode::AudioBufferSourceNode(
   alignedBus_ = std::shared_ptr<AudioBus>(nullptr);
 
   detuneParam_ = std::make_shared<AudioParam>(
-      0.0, MOST_NEGATIVE_SINGLE_FLOAT, MOST_POSITIVE_SINGLE_FLOAT);
+      0.0, MOST_NEGATIVE_SINGLE_FLOAT, MOST_POSITIVE_SINGLE_FLOAT, context);
   playbackRateParam_ = std::make_shared<AudioParam>(
-      1.0, MOST_NEGATIVE_SINGLE_FLOAT, MOST_POSITIVE_SINGLE_FLOAT);
+      1.0, MOST_NEGATIVE_SINGLE_FLOAT, MOST_POSITIVE_SINGLE_FLOAT, context);
 
   playbackRateBus_ = std::make_shared<AudioBus>(
       RENDER_QUANTUM_SIZE * 3, channelCount_, context_->getSampleRate());

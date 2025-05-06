@@ -306,7 +306,7 @@ AudioParam::processParam(int framesToProcess, double time, float sampleRate) {
     mixInputsBuses(processingBus);
   }
   // processingBus is a mono bus
-  return std::make_shared<AudioArray>(processingBus->getChannel(0));
+  return std::make_shared<AudioArray>(*processingBus->getChannel(0));
 }
 
 double AudioParam::getQueueEndTime() {
