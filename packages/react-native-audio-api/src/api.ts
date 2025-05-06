@@ -1,4 +1,4 @@
-import NativeAudioAPIModule from './specs/NativeAudioAPIModule';
+import { NativeAudioAPIModule } from './specs';
 import { AudioRecorderOptions } from './types';
 import type {
   IAudioContext,
