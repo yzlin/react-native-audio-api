@@ -2,6 +2,7 @@
 #include <audioapi/core/BaseAudioContext.h>
 #include <audioapi/dsp/AudioUtils.h>
 #include <audioapi/utils/AudioArray.h>
+#include <iostream>
 
 namespace audioapi {
 
@@ -288,8 +289,7 @@ void AudioParam::processParamNoInput(
     double time,
     float sampleRate) {
   for (size_t i = 0; i < framesToProcess; i++) {
-    auto sample = getValueAtTime(
-        dsp::timeToSampleFrame(time, sampleRate) + i / sampleRate);
+    auto sample = getValueAtTime(time + i / sampleRate);
     // outputBus is a mono bus
     (*outputBus->getChannel(0))[i] = sample;
   }
@@ -315,8 +315,7 @@ float AudioParam::processKRateParam(double time, float sampleRate) {
   auto processingBus = audioBus_;
   processingBus->zero();
   if (inputNodes_.empty()) {
-    return getValueAtTime(
-        dsp::timeToSampleFrame(time, sampleRate) / sampleRate);
+    return getValueAtTime(time);
   } else {
     processInputs(processingBus, 1, true);
     mixInputsBuses(processingBus);
