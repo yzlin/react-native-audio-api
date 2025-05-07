@@ -26,7 +26,7 @@ export default class AudioNode {
   public connect(destination: AudioNode | AudioParam): AudioNode | AudioParam {
     if (this.context !== destination.context) {
       throw new InvalidAccessError(
-        'The AudioNodes are from different BaseAudioContexts'
+        'Source and destination are from different BaseAudioContexts'
       );
     }
 

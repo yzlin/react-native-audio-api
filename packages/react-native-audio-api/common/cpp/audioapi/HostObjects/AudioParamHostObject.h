@@ -32,6 +32,7 @@ class AudioParamHostObject : public JsiHostObject {
 
     addSetters(JSI_EXPORT_PROPERTY_SETTER(AudioParamHostObject, value));
   }
+  friend class AudioNodeHostObject;
 
   JSI_PROPERTY_GETTER(value) {
     return {param_->getValue()};
@@ -105,7 +106,7 @@ class AudioParamHostObject : public JsiHostObject {
     param_->setValue(static_cast<float>(value.getNumber()));
   }
 
- public:
+ private:
   std::shared_ptr<AudioParam> param_;
 };
 } // namespace audioapi

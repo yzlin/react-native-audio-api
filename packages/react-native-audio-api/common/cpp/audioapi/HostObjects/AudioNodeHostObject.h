@@ -48,13 +48,12 @@ class AudioNodeHostObject : public JsiHostObject {
   }
 
   JSI_HOST_FUNCTION(connect) {
-    if (auto obj = args[0].getObject(runtime);
-        obj.isHostObject<AudioNodeHostObject>(runtime)) {
+    auto obj = args[0].getObject(runtime);
+    if (obj.isHostObject<AudioNodeHostObject>(runtime)) {
       auto node = obj.getHostObject<AudioNodeHostObject>(runtime);
       node_->connect(std::shared_ptr<AudioNodeHostObject>(node)->node_);
     }
-    if (auto obj = args[0].getObject(runtime);
-        obj.isHostObject<AudioParamHostObject>(runtime)) {
+    if (obj.isHostObject<AudioParamHostObject>(runtime)) {
       auto param = obj.getHostObject<AudioParamHostObject>(runtime);
       node_->connect(std::shared_ptr<AudioParamHostObject>(param)->param_);
     }
@@ -66,15 +65,13 @@ class AudioNodeHostObject : public JsiHostObject {
       node_->disconnect();
       return jsi::Value::undefined();
     }
-
-    if (auto obj = args[0].getObject(runtime);
-        obj.isHostObject<AudioNodeHostObject>(runtime)) {
+    auto obj = args[0].getObject(runtime);
+    if (obj.isHostObject<AudioNodeHostObject>(runtime)) {
       auto node = obj.getHostObject<AudioNodeHostObject>(runtime);
       node_->disconnect(std::shared_ptr<AudioNodeHostObject>(node)->node_);
     }
 
-    if (auto obj = args[0].getObject(runtime);
-        obj.isHostObject<AudioParamHostObject>(runtime)) {
+    if (obj.isHostObject<AudioParamHostObject>(runtime)) {
       auto param = obj.getHostObject<AudioParamHostObject>(runtime);
       node_->disconnect(std::shared_ptr<AudioParamHostObject>(param)->param_);
     }
