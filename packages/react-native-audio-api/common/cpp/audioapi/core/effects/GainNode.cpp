@@ -25,7 +25,7 @@ void GainNode::processNode(
   for (int i = 0; i < processingBus->getNumberOfChannels(); i += 1) {
     dsp::multiply(
         processingBus->getChannel(i)->getData(),
-        gainParamValues->getData(),
+        gainParamValues->getChannel(0)->getData(),
         processingBus->getChannel(i)->getData(),
         framesToProcess);
   }

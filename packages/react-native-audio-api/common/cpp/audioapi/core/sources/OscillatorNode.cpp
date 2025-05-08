@@ -68,10 +68,10 @@ void OscillatorNode::processNode(
       framesToProcess, time, context_->getSampleRate());
 
   for (size_t i = startOffset; i < offsetLength; i += 1) {
-    auto detuneRatio =
-        std::pow(2.0f, detuneParamValues->getData()[i] / 1200.0f);
+    auto detuneRatio = std::pow(
+        2.0f, detuneParamValues->getChannel(0)->getData()[i] / 1200.0f);
     auto detunedFrequency =
-        round(frequencyParamValues->getData()[i] * detuneRatio);
+        round(frequencyParamValues->getChannel(0)->getData()[i] * detuneRatio);
     auto phaseIncrement = detunedFrequency * periodicWave_->getScale();
 
     float sample =

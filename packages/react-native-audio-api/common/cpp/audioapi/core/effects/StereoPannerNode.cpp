@@ -30,6 +30,7 @@ void StereoPannerNode::processNode(
   auto panParamValues =
       panParam_
           ->processARateParam(framesToProcess, time, context_->getSampleRate())
+          ->getChannel(0)
           ->getData();
 
   for (int i = 0; i < framesToProcess; i += 1) {
