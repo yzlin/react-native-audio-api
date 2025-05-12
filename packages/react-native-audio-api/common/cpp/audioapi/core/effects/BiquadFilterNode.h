@@ -30,7 +30,6 @@ class BiquadFilterNode : public AudioNode {
       const float *frequencyArray,
       float *magResponseOutput,
       float *phaseResponseOutput,
-      int framesToProcess,
       int length);
 
  protected:
@@ -120,7 +119,7 @@ class BiquadFilterNode : public AudioNode {
   void setPeakingCoefficients(float frequency, float Q, float gain);
   void setNotchCoefficients(float frequency, float Q);
   void setAllpassCoefficients(float frequency, float Q);
-  void applyFilter(int framesToProcess);
+  void applyFilter();
 };
 
 } // namespace audioapi

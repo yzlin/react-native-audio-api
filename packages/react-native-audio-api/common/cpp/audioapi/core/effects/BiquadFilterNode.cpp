@@ -64,9 +64,8 @@ void BiquadFilterNode::getFrequencyResponse(
     const float *frequencyArray,
     float *magResponseOutput,
     float *phaseResponseOutput,
-    int framesToProcess,
     const int length) {
-  applyFilter(framesToProcess);
+  applyFilter();
 
   float b0 = b0_;
   float b1 = b1_;
@@ -306,16 +305,16 @@ void BiquadFilterNode::setAllpassCoefficients(float frequency, float Q) {
       1 - alpha, -2 * k, 1 + alpha, 1 + alpha, -2 * k, 1 - alpha);
 }
 
-void BiquadFilterNode::applyFilter(int framesToProcess) {
+void BiquadFilterNode::applyFilter() {
   double currentTime = context_->getCurrentTime();
 
   float frequencyParamValue = frequencyParam_->processKRateParam(
-      framesToProcess, currentTime, context_->getSampleRate());
+      RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate());
   float normalizedFrequency =
       frequencyParamValue / context_->getNyquistFrequency();
 
   float detuneValue = detuneParam_->processKRateParam(
-      framesToProcess, currentTime, context_->getSampleRate());
+      RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate());
 
   if (detuneValue != 0.0) {
     normalizedFrequency *= std::pow(2.0f, detuneValue / 1200.0f);
@@ -326,51 +325,51 @@ void BiquadFilterNode::applyFilter(int framesToProcess) {
       setLowpassCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::HIGHPASS:
       setHighpassCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::BANDPASS:
       setBandpassCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::LOWSHELF:
       setLowshelfCoefficients(
           normalizedFrequency,
           gainParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::HIGHSHELF:
       setHighshelfCoefficients(
           normalizedFrequency,
           gainParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::PEAKING:
       setPeakingCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()),
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()),
           gainParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::NOTCH:
       setNotchCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     case BiquadFilterType::ALLPASS:
       setAllpassCoefficients(
           normalizedFrequency,
           QParam_->processKRateParam(
-              framesToProcess, currentTime, context_->getSampleRate()));
+              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
       break;
     default:
       break;
@@ -381,7 +380,7 @@ void BiquadFilterNode::processNode(
     const std::shared_ptr<AudioBus> &processingBus,
     int framesToProcess) {
   resetCoefficients();
-  applyFilter(framesToProcess);
+  applyFilter();
 
   for (int c = 0; c < processingBus->getNumberOfChannels(); c += 1) {
     float x1 = x1_;
