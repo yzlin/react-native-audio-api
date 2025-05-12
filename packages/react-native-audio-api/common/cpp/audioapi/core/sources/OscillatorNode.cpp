@@ -62,10 +62,10 @@ void OscillatorNode::processNode(
 
   auto time = context_->getCurrentTime() +
       static_cast<double>(startOffset) * 1.0 / context_->getSampleRate();
-  auto detuneParamValues = detuneParam_->processARateParam(
-      framesToProcess, time, context_->getSampleRate());
-  auto frequencyParamValues = frequencyParam_->processARateParam(
-      framesToProcess, time, context_->getSampleRate());
+  auto detuneParamValues =
+      detuneParam_->processARateParam(framesToProcess, time);
+  auto frequencyParamValues =
+      frequencyParam_->processARateParam(framesToProcess, time);
 
   for (size_t i = startOffset; i < offsetLength; i += 1) {
     auto detuneRatio = std::pow(

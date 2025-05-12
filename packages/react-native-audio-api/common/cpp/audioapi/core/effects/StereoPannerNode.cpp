@@ -27,11 +27,9 @@ void StereoPannerNode::processNode(
 
   AudioArray *left = processingBus->getChannelByType(AudioBus::ChannelLeft);
   AudioArray *right = processingBus->getChannelByType(AudioBus::ChannelRight);
-  auto panParamValues =
-      panParam_
-          ->processARateParam(framesToProcess, time, context_->getSampleRate())
-          ->getChannel(0)
-          ->getData();
+  auto panParamValues = panParam_->processARateParam(framesToProcess, time)
+                            ->getChannel(0)
+                            ->getData();
 
   for (int i = 0; i < framesToProcess; i += 1) {
     auto pan = panParamValues[i];

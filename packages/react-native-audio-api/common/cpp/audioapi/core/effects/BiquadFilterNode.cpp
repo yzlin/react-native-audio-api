@@ -308,68 +308,46 @@ void BiquadFilterNode::setAllpassCoefficients(float frequency, float Q) {
 void BiquadFilterNode::applyFilter() {
   double currentTime = context_->getCurrentTime();
 
-  float frequencyParamValue = frequencyParam_->processKRateParam(
-      RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate());
+  float frequencyParamValue =
+      frequencyParam_->processKRateParam(RENDER_QUANTUM_SIZE, currentTime);
   float normalizedFrequency =
       frequencyParamValue / context_->getNyquistFrequency();
 
-  float detuneValue = detuneParam_->processKRateParam(
-      RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate());
+  float detuneValue =
+      detuneParam_->processKRateParam(RENDER_QUANTUM_SIZE, currentTime);
 
   if (detuneValue != 0.0) {
     normalizedFrequency *= std::pow(2.0f, detuneValue / 1200.0f);
   }
 
+  auto qparamValue =
+      QParam_->processKRateParam(RENDER_QUANTUM_SIZE, currentTime);
+  auto gainParamValue =
+      gainParam_->processKRateParam(RENDER_QUANTUM_SIZE, currentTime);
   switch (type_) {
     case BiquadFilterType::LOWPASS:
-      setLowpassCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setLowpassCoefficients(normalizedFrequency, qparamValue);
       break;
     case BiquadFilterType::HIGHPASS:
-      setHighpassCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setHighpassCoefficients(normalizedFrequency, qparamValue);
       break;
     case BiquadFilterType::BANDPASS:
-      setBandpassCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setBandpassCoefficients(normalizedFrequency, qparamValue);
       break;
     case BiquadFilterType::LOWSHELF:
-      setLowshelfCoefficients(
-          normalizedFrequency,
-          gainParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setLowshelfCoefficients(normalizedFrequency, gainParamValue);
       break;
     case BiquadFilterType::HIGHSHELF:
-      setHighshelfCoefficients(
-          normalizedFrequency,
-          gainParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setHighshelfCoefficients(normalizedFrequency, gainParamValue);
       break;
     case BiquadFilterType::PEAKING:
-      setPeakingCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()),
-          gainParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setPeakingCoefficients(normalizedFrequency, qparamValue, gainParamValue);
       break;
     case BiquadFilterType::NOTCH:
-      setNotchCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setNotchCoefficients(normalizedFrequency, qparamValue);
       break;
     case BiquadFilterType::ALLPASS:
-      setAllpassCoefficients(
-          normalizedFrequency,
-          QParam_->processKRateParam(
-              RENDER_QUANTUM_SIZE, currentTime, context_->getSampleRate()));
+      setAllpassCoefficients(normalizedFrequency, qparamValue);
       break;
     default:
       break;

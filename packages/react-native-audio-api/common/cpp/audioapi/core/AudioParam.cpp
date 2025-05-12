@@ -286,8 +286,7 @@ void AudioParam::removeInputNode(AudioNode *node) {
 
 std::shared_ptr<AudioBus> AudioParam::processARateParam(
     int framesToProcess,
-    double time,
-    float sampleRate) {
+    double time) {
   auto processingBus = audioBus_;
   processingBus->zero();
   if (!inputNodes_.empty()) {
@@ -295,18 +294,15 @@ std::shared_ptr<AudioBus> AudioParam::processARateParam(
     mixInputsBuses(processingBus);
   }
   for (size_t i = 0; i < framesToProcess; i++) {
-    auto sample = getValueAtTime(time + i / sampleRate);
+    auto sample = getValueAtTime(time + i / context_->getSampleRate());
     processingBus->getChannel(0)->getData()[i] += sample;
   }
   // processingBus is a mono bus
   return processingBus;
 }
 
-float AudioParam::processKRateParam(
-    int framesToProcess,
-    double time,
-    float sampleRate) {
-  auto processingBus = processARateParam(framesToProcess, time, sampleRate);
+float AudioParam::processKRateParam(int framesToProcess, double time) {
+  auto processingBus = processARateParam(framesToProcess, time);
   // processingBus is a mono bus
   return processingBus->getChannel(0)->getData()[0];
 }
