@@ -39,7 +39,7 @@ class AudioParam {
   void addInputNode(AudioNode* node);
   void removeInputNode(AudioNode* node);
   std::shared_ptr<AudioBus> processARateParam(int framesToProcess, double time, float sampleRate);
-  float processKRateParam(double time, float sampleRate);
+  float processKRateParam(int framesToProcess, double time, float sampleRate);
 
  private:
   float value_;

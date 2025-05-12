@@ -302,13 +302,11 @@ std::shared_ptr<AudioBus> AudioParam::processARateParam(
   return processingBus;
 }
 
-float AudioParam::processKRateParam(double time, float sampleRate) {
-  auto processingBus = audioBus_;
-  processingBus->zero();
-  if (!inputNodes_.empty()) {
-    processInputs(processingBus, 1, true);
-    mixInputsBuses(processingBus);
-  }
+float AudioParam::processKRateParam(
+    int framesToProcess,
+    double time,
+    float sampleRate) {
+  auto processingBus = processARateParam(framesToProcess, time, sampleRate);
   // processingBus is a mono bus
   return processingBus->getChannel(0)->getData()[0] + getValueAtTime(time);
 }

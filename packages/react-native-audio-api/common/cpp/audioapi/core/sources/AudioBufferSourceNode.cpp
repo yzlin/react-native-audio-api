@@ -173,7 +173,7 @@ void AudioBufferSourceNode::processWithoutPitchCorrection(
   size_t startOffset = 0;
   size_t offsetLength = 0;
 
-  auto computedPlaybackRate = getComputedPlaybackRateValue();
+  auto computedPlaybackRate = getComputedPlaybackRateValue(framesToProcess);
   updatePlaybackInfo(processingBus, framesToProcess, startOffset, offsetLength);
 
   if (computedPlaybackRate == 0.0f || (!isPlaying() && !isStopScheduled())) {
@@ -198,11 +198,14 @@ void AudioBufferSourceNode::processWithPitchCorrection(
 
   auto time = context_->getCurrentTime();
   auto playbackRate = std::clamp(
-      playbackRateParam_->processKRateParam(time, context_->getSampleRate()),
+      playbackRateParam_->processKRateParam(
+          framesToProcess, time, context_->getSampleRate()),
       0.0f,
       3.0f);
   auto detune = std::clamp(
-      detuneParam_->processKRateParam(time, context_->getSampleRate()) / 100.0f,
+      detuneParam_->processKRateParam(
+          framesToProcess, time, context_->getSampleRate()) /
+          100.0f,
       -12.0f,
       12.0f);
 
@@ -353,16 +356,17 @@ void AudioBufferSourceNode::processWithInterpolation(
   }
 }
 
-float AudioBufferSourceNode::getComputedPlaybackRateValue() {
+float AudioBufferSourceNode::getComputedPlaybackRateValue(int framesToProcess) {
   auto time = context_->getCurrentTime();
 
   auto sampleRateFactor =
       alignedBus_->getSampleRate() / context_->getSampleRate();
-  auto playbackRate =
-      playbackRateParam_->processKRateParam(time, context_->getSampleRate());
+  auto playbackRate = playbackRateParam_->processKRateParam(
+      framesToProcess, time, context_->getSampleRate());
   auto detune = std::pow(
       2.0f,
-      detuneParam_->processKRateParam(time, context_->getSampleRate()) /
+      detuneParam_->processKRateParam(
+          framesToProcess, time, context_->getSampleRate()) /
           1200.0f);
 
   return playbackRate * sampleRateFactor * detune;
