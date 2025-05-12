@@ -308,7 +308,7 @@ float AudioParam::processKRateParam(
     float sampleRate) {
   auto processingBus = processARateParam(framesToProcess, time, sampleRate);
   // processingBus is a mono bus
-  return processingBus->getChannel(0)->getData()[0] + getValueAtTime(time);
+  return processingBus->getChannel(0)->getData()[0];
 }
 
 double AudioParam::getQueueEndTime() {
