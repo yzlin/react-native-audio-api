@@ -6,18 +6,6 @@ sidebar_position: 6
 
 `OscillatorType` is a string that specifies shape of an oscillator wave
 
-## `sine`
-
-## `square`
-
-## `sawtooth`
-
-## `triangle`
-
-## `custom`
-
-This value can't be set explicitly, but it allows user to set any shape. See [`setPeriodicWave`](/sources/oscillator-node#setperiodicwave) for reference.
-
 ```jsx
 type OscillatorType =
   | 'sine'
@@ -26,3 +14,11 @@ type OscillatorType =
   | 'triangle'
   | 'custom';
 ```
+
+Below you can see possible names with shapes corresponding to them.
+![](/img/oscillator-waves.png)
+
+## `custom`
+
+This value can't be set explicitly, but it allows user to set any shape. See [`setPeriodicWave`](/sources/oscillator-node#setperiodicwave) for reference.
+
