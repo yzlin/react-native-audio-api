@@ -63,10 +63,10 @@ const config = {
 
   stylesheets: [
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.css',
       type: 'text/css',
       integrity:
-        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+        'sha384-o3WH+1yEhq+grOgz1BVYTZPyTlMXrDxnjN1By9/ba94JqJhva6wFm2Hb+URQX53v',
       crossorigin: 'anonymous',
     },
   ],
@@ -127,26 +127,26 @@ const config = {
 
           const raf = require('raf');
           raf.polyfill();
-
+        
           return {
             mergeStrategy: {
               'resolve.extensions': 'prepend',
             },
             plugins: [
               new webpack.DefinePlugin({
-                ...processMock,
-                __DEV__: 'false',
-                setImmediate: () => {},
+              ...processMock,
+              __DEV__: 'false',
               }),
             ],
             module: {
               rules: [
                 {
-                  test: /\.txt/,
+                  test: /\.txt$/,
                   type: 'asset/source',
                 },
                 {
                   test: /\.tsx?$/,
+                  use: 'babel-loader',
                 },
               ],
             },
