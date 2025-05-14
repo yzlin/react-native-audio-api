@@ -29,7 +29,7 @@
     "@emotion/styled": "^11.14.0",
     "@mdx-js/react": "^3.0.0",
     "@mui/material": "^7.1.0",
-    "@swmansion/t-rex-ui": "^0.0.13",
+    "@swmansion/t-rex-ui": "1.0.0",
     "@shopify/react-native-skia": "1.10.2",
     "@vercel/og": "^0.6.2",
     "babel-polyfill": "^6.26.0",
