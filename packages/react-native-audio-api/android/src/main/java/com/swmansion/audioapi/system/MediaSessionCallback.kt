@@ -13,6 +13,8 @@ class MediaSessionCallback(
   private val audioAPIModule: WeakReference<AudioAPIModule>,
   private val lockScreenManager: WeakReference<LockScreenManager>,
 ) : MediaSessionCompat.Callback() {
+  private val audioAPIModule: WeakReference<AudioAPIModule> = WeakReference(audioAPIModule)
+
   override fun onPlay() {
     lockScreenManager.get()?.updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
     audioAPIModule.get()?.invokeHandlerWithEventNameAndEventBody("remotePlay", mapOf())
