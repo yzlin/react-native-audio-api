@@ -115,15 +115,16 @@ RCT_EXPORT_METHOD(observeVolumeChanges : (BOOL)enabled)
   [self.notificationManager observeVolumeChanges:(BOOL)enabled];
 }
 
-RCT_EXPORT_METHOD(requestRecordingPermissions : (nonnull RCTPromiseResolveBlock)
-                      resolve reject : (nonnull RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(
+    requestRecordingPermissions : (nonnull RCTPromiseResolveBlock)resolve reject : (nonnull RCTPromiseRejectBlock)
+        reject)
 {
   NSString *res = [self.audioSessionManager requestRecordingPermissions];
   resolve(res);
 }
 
-RCT_EXPORT_METHOD(checkRecordingPermissions : (nonnull RCTPromiseResolveBlock)
-                      resolve reject : (nonnull RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(
+    checkRecordingPermissions : (nonnull RCTPromiseResolveBlock)resolve reject : (nonnull RCTPromiseRejectBlock)reject)
 {
   NSString *res = [self.audioSessionManager checkRecordingPermissions];
   resolve(res);
