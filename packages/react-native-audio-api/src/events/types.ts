@@ -26,7 +26,7 @@ interface OnRouteChangeEventType {
   reason: string;
 }
 
-interface SystemEvents {
+interface RemoteCommandEvents {
   remotePlay: EventEmptyType;
   remotePause: EventEmptyType;
   remoteStop: EventEmptyType;
@@ -34,15 +34,18 @@ interface SystemEvents {
   remoteChangePlaybackRate: EventTypeWithValue;
   remoteNextTrack: EventEmptyType;
   remotePreviousTrack: EventEmptyType;
-  remoteSkipForward: EventEmptyType;
-  remoteSkipBackward: EventEmptyType;
-  remoteSeekForward: EventTypeWithValue;
-  remoteSeekBackward: EventTypeWithValue;
+  remoteSkipForward: EventTypeWithValue;
+  remoteSkipBackward: EventTypeWithValue;
+  remoteSeekForward: EventEmptyType;
+  remoteSeekBackward: EventEmptyType;
   remoteChangePlaybackPosition: EventTypeWithValue;
+}
+
+type SystemEvents = RemoteCommandEvents & {
   volumeChange: EventTypeWithValue;
   interruption: OnInterruptionEventType;
   routeChange: OnRouteChangeEventType;
-}
+};
 
 export interface OnAudioReadyEventType {
   buffer: AudioBuffer;
@@ -59,6 +62,8 @@ interface AudioAPIEvents {
 }
 
 type AudioEvents = SystemEvents & AudioAPIEvents;
+
+export type RemoteCommandEventName = keyof RemoteCommandEvents;
 
 export type SystemEventName = keyof SystemEvents;
 export type SystemEventCallback<Name extends SystemEventName> = (
