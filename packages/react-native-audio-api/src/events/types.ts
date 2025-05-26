@@ -31,8 +31,7 @@ interface OnRouteChangeEventType {
     | 'NewDeviceAvailable'
     | 'OldDeviceUnavailable'
     | 'ConfigurationChange'
-    | 'NoSuitableRouteForCategory'
-    | 'DoubleUnknown';
+    | 'NoSuitableRouteForCategory';
 }
 
 interface RemoteCommandEvents {
