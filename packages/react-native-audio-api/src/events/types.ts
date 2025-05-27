@@ -23,7 +23,15 @@ interface OnInterruptionEventType {
 }
 
 interface OnRouteChangeEventType {
-  reason: string;
+  reason:
+    | 'Unknown'
+    | 'Override'
+    | 'CategoryChange'
+    | 'WakeFromSleep'
+    | 'NewDeviceAvailable'
+    | 'OldDeviceUnavailable'
+    | 'ConfigurationChange'
+    | 'NoSuitableRouteForCategory';
 }
 
 interface RemoteCommandEvents {
