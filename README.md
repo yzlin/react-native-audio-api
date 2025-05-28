@@ -34,7 +34,7 @@ check out the [Getting Started](https://docs.swmansion.com/react-native-audio-ap
   Ability to modify playback speed without affecting pitch of the sound
   <br />
 
-- <sub>![Realeased in 0.6.0](https://img.shields.io/badge/Released_in-0.6.0-green)</sub> <br/> **System configuration** 🛠️ <br />
+- <sub>[![Realeased in 0.6.0](https://img.shields.io/badge/Released_in-0.6.0-green)](https://github.com/software-mansion/react-native-audio-api/releases/tag/0.6.0)</sub> <br/> **System configuration** 🛠️ <br />
   Full control of system audio settings, remote controls, lock screen integration and most importantly configurable background modes
   <br /> **Microphone support** 🎙️ <br />
   Grab audio data from device microphone or connected device, connect it to the audio graph or stream through the internet
