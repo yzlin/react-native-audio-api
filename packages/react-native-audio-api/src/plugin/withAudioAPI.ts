@@ -5,8 +5,27 @@ import {
   withInfoPlist,
   withAndroidManifest,
 } from '@expo/config-plugins';
-
 const pkg = require('react-native-audio-api/package.json');
+
+interface Options {
+  iosBackgroundMode: boolean;
+  androidForegroundService: boolean;
+  androidFSPermissions: string[];
+  androidFSTypes: string[];
+}
+
+const withDefaultOptions = (options: Partial<Options>): Options => {
+  return {
+    iosBackgroundMode: true,
+    androidForegroundService: true,
+    androidFSPermissions: [
+      'android.permission.FOREGROUND_SERVICE',
+      'android.permission.WAKE_LOCK',
+    ],
+    androidFSTypes: ['mediaPlayback'],
+    ...options,
+  };
+};
 
 const withBackgroundAudio: ConfigPlugin = (config) => {
   return withInfoPlist(config, (iosConfig) => {
@@ -20,18 +39,20 @@ const withBackgroundAudio: ConfigPlugin = (config) => {
   });
 };
 
-const withAndroidPermissions: ConfigPlugin<{
-  androidFSPermissions: string[];
-}> = (config, { androidFSPermissions }) => {
+const withAndroidPermissions: ConfigPlugin<Options> = (
+  config,
+  { androidFSPermissions }: Options
+) => {
   return AndroidConfig.Permissions.withPermissions(
     config,
     androidFSPermissions
   );
 };
 
-const withForegroundService: ConfigPlugin<{
-  androidFSTypes: string[];
-}> = (config, { androidFSTypes }) => {
+const withForegroundService: ConfigPlugin<Options> = (
+  config,
+  { androidFSTypes }: Options
+) => {
   return withAndroidManifest(config, (mod) => {
     const manifest = mod.modResults;
     const mainApplication =
@@ -59,30 +80,16 @@ const withForegroundService: ConfigPlugin<{
   });
 };
 
-const withAudioAPI: ConfigPlugin<{
-  iosBackgroundMode?: boolean;
-  androidForegroundService?: boolean;
-  androidFSPermissions?: string[];
-  androidFSTypes?: string[];
-}> = (
-  config,
-  {
-    iosBackgroundMode = true,
-    androidForegroundService = true,
-    androidFSPermissions = [],
-    androidFSTypes = [],
-  } = {}
-) => {
-  if (iosBackgroundMode) {
+const withAudioAPI: ConfigPlugin<Options> = (config, optionsIn) => {
+  const options = withDefaultOptions(optionsIn ?? {});
+
+  if (options.iosBackgroundMode) {
     config = withBackgroundAudio(config);
   }
-  if (androidForegroundService) {
-    config = withAndroidPermissions(config, {
-      androidFSPermissions,
-    });
-    config = withForegroundService(config, {
-      androidFSTypes,
-    });
+
+  if (options.androidForegroundService) {
+    config = withAndroidPermissions(config, options);
+    config = withForegroundService(config, options);
   }
 
   return config;
