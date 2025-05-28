@@ -35,12 +35,11 @@ check out the [Getting Started](https://docs.swmansion.com/react-native-audio-ap
   <br />
 
 - <sub>[![Released in 0.6.0](https://img.shields.io/badge/Released_in-0.6.0-green)](https://github.com/software-mansion/react-native-audio-api/releases/tag/0.6.0)</sub> <br/> **System configuration** 🛠️ <br />
-  Full control of system audio settings, remote controls, lock screen integration and most importantly configurable background modes
+  Full control of system audio settings, remote controls, lock screen integration and most importantly configurable background modes <br />
   <br /> **Microphone support** 🎙️ <br />
-  Grab audio data from device microphone or connected device, connect it to the audio graph or stream through the internet
+  Grab audio data from device microphone or connected device, connect it to the audio graph or stream through the internet <br />
   <br /> **Connect audio param** 🤞 <br />
-  Ability to connect Audio nodes to audio params, which will allow for powerful and efficient modulation of audio parameters, creating effects like tremolo, vibrato or complex envelope followers.
-  <br />
+  Ability to connect Audio nodes to audio params, which will allow for powerful and efficient modulation of audio parameters, creating effects like tremolo, vibrato or complex envelope followers. <br />
 
 - **JS Audio Worklets** 🐎 <br />
   Ability to run JS functions connected to the audio graph running on audio thread allowing for full customization of what happens to the audio signal.
