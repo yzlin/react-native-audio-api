@@ -80,12 +80,7 @@ const withForegroundService: ConfigPlugin<Options> = (
   });
 };
 
-const withAudioAPI: ConfigPlugin<{
-  iosBackgroundMode?: boolean;
-  androidForegroundService?: boolean;
-  androidFSPermissions?: string[];
-  androidFSTypes?: string[];
-}> = (config, optionsIn?: Partial<Options>) => {
+const withAudioAPI: ConfigPlugin<Options> = (config, optionsIn) => {
   const options = withDefaultOptions(optionsIn ?? {});
 
   if (options.iosBackgroundMode) {
