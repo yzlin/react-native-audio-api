@@ -9,19 +9,19 @@ const pkg = require('react-native-audio-api/package.json');
 
 interface Options {
   iosBackgroundMode: boolean;
+  androidPermissions: string[];
   androidForegroundService: boolean;
-  androidFSPermissions: string[];
   androidFSTypes: string[];
 }
 
 const withDefaultOptions = (options: Partial<Options>): Options => {
   return {
     iosBackgroundMode: true,
-    androidForegroundService: true,
-    androidFSPermissions: [
+    androidPermissions: [
       'android.permission.FOREGROUND_SERVICE',
       'android.permission.WAKE_LOCK',
     ],
+    androidForegroundService: true,
     androidFSTypes: ['mediaPlayback'],
     ...options,
   };
@@ -41,12 +41,9 @@ const withBackgroundAudio: ConfigPlugin = (config) => {
 
 const withAndroidPermissions: ConfigPlugin<Options> = (
   config,
-  { androidFSPermissions }: Options
+  { androidPermissions }: Options
 ) => {
-  return AndroidConfig.Permissions.withPermissions(
-    config,
-    androidFSPermissions
-  );
+  return AndroidConfig.Permissions.withPermissions(config, androidPermissions);
 };
 
 const withForegroundService: ConfigPlugin<Options> = (
@@ -87,8 +84,9 @@ const withAudioAPI: ConfigPlugin<Options> = (config, optionsIn) => {
     config = withBackgroundAudio(config);
   }
 
+  config = withAndroidPermissions(config, options);
+
   if (options.androidForegroundService) {
-    config = withAndroidPermissions(config, options);
     config = withForegroundService(config, options);
   }
 
