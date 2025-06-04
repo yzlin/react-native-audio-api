@@ -25,7 +25,8 @@ export type IOSOption =
   | 'defaultToSpeaker'
   | 'allowBluetoothA2DP'
   | 'overrideMutedMicrophoneInterruption'
-  | 'interruptSpokenAudioAndMixWithOthers';
+  | 'interruptSpokenAudioAndMixWithOthers'
+  | 'allowHapticsAndSystemSoundsDuringRecording';
 
 export interface SessionOptions {
   iosMode?: IOSMode;

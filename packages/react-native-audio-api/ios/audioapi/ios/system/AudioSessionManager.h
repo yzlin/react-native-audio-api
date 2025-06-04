@@ -13,6 +13,7 @@
 @property (nonatomic, assign) AVAudioSessionMode sessionMode;
 @property (nonatomic, assign) AVAudioSessionCategory sessionCategory;
 @property (nonatomic, assign) AVAudioSessionCategoryOptions sessionOptions;
+@property (nonatomic, assign) bool allowHapticsAndSystemSoundsDuringRecording;
 
 - (instancetype)init;
 - (void)cleanup;
