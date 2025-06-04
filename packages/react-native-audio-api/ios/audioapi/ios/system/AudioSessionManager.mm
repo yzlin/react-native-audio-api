@@ -30,12 +30,12 @@
   return [NSNumber numberWithFloat:[self.audioSession sampleRate]];
 }
 
-- (void)setAudioSessionOptions:(NSString *)category mode:(NSString *)mode options:(NSArray *)options
+- (void)setAudioSessionOptions:(NSString *)category mode:(NSString *)mode options:(NSArray *)options allowHaptics:(BOOL)allowHaptics
 {
   AVAudioSessionCategory sessionCategory = self.sessionCategory;
   AVAudioSessionMode sessionMode = self.sessionMode;
   AVAudioSessionCategoryOptions sessionOptions = 0;
-  bool allowHapticsAndSystemSoundsDuringRecording = false;
+  bool allowHapticsAndSystemSoundsDuringRecording = allowHaptics;
 
   if ([category isEqualToString:@"record"]) {
     sessionCategory = AVAudioSessionCategoryRecord;
@@ -102,10 +102,6 @@
 
     if ([option isEqualToString:@"interruptSpokenAudioAndMixWithOthers"]) {
       sessionOptions |= AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers;
-    }
-
-    if ([option isEqualToString:@"allowHapticsAndSystemSoundsDuringRecording"]) {
-      allowHapticsAndSystemSoundsDuringRecording = true;
     }
   }
 

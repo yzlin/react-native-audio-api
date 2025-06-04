@@ -25,13 +25,13 @@ export type IOSOption =
   | 'defaultToSpeaker'
   | 'allowBluetoothA2DP'
   | 'overrideMutedMicrophoneInterruption'
-  | 'interruptSpokenAudioAndMixWithOthers'
-  | 'allowHapticsAndSystemSoundsDuringRecording';
+  | 'interruptSpokenAudioAndMixWithOthers';
 
 export interface SessionOptions {
   iosMode?: IOSMode;
   iosOptions?: IOSOption[];
   iosCategory?: IOSCategory;
+  iosAllowHaptics?: boolean;
 }
 
 export type MediaState = 'state_playing' | 'state_paused';
