@@ -4,6 +4,7 @@
 #include <audioapi/core/sources/AudioBufferSourceNode.h>
 #include <audioapi/core/utils/Locker.h>
 #include <audioapi/dsp/AudioUtils.h>
+#include <audioapi/events/AudioEventHandlerRegistry.h>
 #include <audioapi/utils/AudioArray.h>
 #include <audioapi/utils/AudioBus.h>
 
@@ -136,6 +137,30 @@ std::mutex &AudioBufferSourceNode::getBufferLock() {
   return bufferLock_;
 }
 
+void AudioBufferSourceNode::sendOnPositionChangedEvent() {
+  if (onPositionChangedTime_ > onPositionChangedInterval_) {
+    std::unordered_map<std::string, EventValue> body = {
+        {"value", getStopTime()}};
+
+    context_->audioEventHandlerRegistry_->invokeHandlerWithEventBody(
+        "positionChanged", onPositionChangedCallbackId_, body);
+
+    onPositionChangedTime_ = 0;
+  }
+
+  onPositionChangedTime_ += RENDER_QUANTUM_SIZE;
+}
+
+void AudioBufferSourceNode::setOnPositionChangedInterval(int interval) {
+  onPositionChangedInterval_ = static_cast<int>(
+      context_->getSampleRate() * static_cast<float>(interval) / 1000);
+}
+
+void AudioBufferSourceNode::setOnPositionChangedCallbackId(
+    uint64_t callbackId) {
+  onPositionChangedCallbackId_ = callbackId;
+}
+
 void AudioBufferSourceNode::processNode(
     const std::shared_ptr<AudioBus> &processingBus,
     int framesToProcess) {
@@ -153,6 +178,7 @@ void AudioBufferSourceNode::processNode(
     }
 
     handleStopScheduled();
+    sendOnPositionChangedEvent();
   } else {
     processingBus->zero();
   }
@@ -160,7 +186,7 @@ void AudioBufferSourceNode::processNode(
 
 double AudioBufferSourceNode::getStopTime() const {
   return dsp::sampleFrameToTime(
-      static_cast<int>(vReadIndex_), alignedBus_->getSampleRate());
+      static_cast<int>(vReadIndex_), buffer_->getSampleRate());
 }
 
 /**

@@ -4,6 +4,7 @@ import BaseAudioContext from './BaseAudioContext';
 import AudioBuffer from './AudioBuffer';
 import AudioParam from './AudioParam';
 import { InvalidStateError, RangeError } from '../errors';
+import { EventTypeWithValue } from '../events/types';
 
 export default class AudioBufferSourceNode extends AudioScheduledSourceNode {
   readonly playbackRate: AudioParam;
@@ -82,5 +83,21 @@ export default class AudioBufferSourceNode extends AudioScheduledSourceNode {
 
     this.hasBeenStarted = true;
     (this.node as IAudioBufferSourceNode).start(when, offset, duration);
+  }
+
+  // eslint-disable-next-line accessor-pairs
+  public set onPositionChanged(callback: (event: EventTypeWithValue) => void) {
+    const subscription = this.audioEventEmitter.addAudioEventListener(
+      'positionChanged',
+      callback
+    );
+
+    (this.node as IAudioBufferSourceNode).onPositionChanged =
+      subscription.subscriptionId;
+  }
+
+  // eslint-disable-next-line accessor-pairs
+  public set onPositionChangedInterval(value: number) {
+    (this.node as IAudioBufferSourceNode).onPositionChangedInterval = value;
   }
 }

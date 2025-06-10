@@ -108,7 +108,12 @@ export interface IAudioBufferSourceNode extends IAudioScheduledSourceNode {
   detune: IAudioParam;
   playbackRate: IAudioParam;
 
-  start: (when: number, offset?: number, duration?: number) => void;
+  start: (when?: number, offset?: number, duration?: number) => void;
+
+  // passing subscriptionId(uint_64 in cpp, string in js) to the cpp
+  onPositionChanged: string;
+  // set how often the onPositionChanged event is called
+  onPositionChangedInterval: number;
 }
 
 export interface IAudioBufferQueueSourceNode extends IAudioScheduledSourceNode {
