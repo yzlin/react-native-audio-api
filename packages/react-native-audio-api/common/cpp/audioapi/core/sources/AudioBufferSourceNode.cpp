@@ -247,7 +247,7 @@ void AudioBufferSourceNode::processWithoutInterpolation(
 
   size_t framesLeft = offsetLength;
 
-  // if we are moving towards loop, we do nothing becuase we will achieve it
+  // if we are moving towards loop, we do nothing because we will achieve it
   // otherwise, we wrap to the start of the loop if necessary
   if (loop_ &&
       ((readIndex >= frameEnd && direction == 1) ||
@@ -283,7 +283,7 @@ void AudioBufferSourceNode::processWithoutInterpolation(
     readIndex += framesToCopy * direction;
     framesLeft -= framesToCopy;
 
-    // if we are moving towards loop, we do nothing becuase we will achieve it
+    // if we are moving towards loop, we do nothing because we will achieve it
     // otherwise, we wrap to the start of the loop if necessary
     if ((readIndex >= frameEnd && direction == 1) ||
         (readIndex < frameStart && direction == -1)) {
