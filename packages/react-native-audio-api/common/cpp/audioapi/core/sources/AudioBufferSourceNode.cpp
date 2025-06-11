@@ -46,6 +46,10 @@ bool AudioBufferSourceNode::getLoop() const {
   return loop_;
 }
 
+bool AudioBufferSourceNode::getLoopSkip() const {
+  return loopSkip_;
+}
+
 double AudioBufferSourceNode::getLoopStart() const {
   return loopStart_;
 }
@@ -71,7 +75,14 @@ void AudioBufferSourceNode::setLoop(bool loop) {
   loop_ = loop;
 }
 
+void AudioBufferSourceNode::setLoopSkip(bool loopSkip) {
+  loopSkip_ = loopSkip;
+}
+
 void AudioBufferSourceNode::setLoopStart(double loopStart) {
+  if (loopSkip_) {
+    vReadIndex_ = loopStart * context_->getSampleRate();
+  }
   loopStart_ = loopStart;
 }
 

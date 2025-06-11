@@ -33,6 +33,14 @@ export default class AudioBufferSourceNode extends AudioScheduledSourceNode {
     (this.node as IAudioBufferSourceNode).buffer = buffer.buffer;
   }
 
+  public get loopSkip(): boolean {
+    return (this.node as IAudioBufferSourceNode).loopSkip;
+  }
+  
+  public set loopSkip(value: boolean) {
+    (this.node as IAudioBufferSourceNode).loopSkip = value;
+  }
+
   public get loop(): boolean {
     return (this.node as IAudioBufferSourceNode).loop;
   }
