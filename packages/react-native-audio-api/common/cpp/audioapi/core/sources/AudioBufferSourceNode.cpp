@@ -47,6 +47,10 @@ bool AudioBufferSourceNode::getLoop() const {
   return loop_;
 }
 
+bool AudioBufferSourceNode::getLoopSkip() const {
+  return loopSkip_;
+}
+
 double AudioBufferSourceNode::getLoopStart() const {
   return loopStart_;
 }
@@ -72,7 +76,14 @@ void AudioBufferSourceNode::setLoop(bool loop) {
   loop_ = loop;
 }
 
+void AudioBufferSourceNode::setLoopSkip(bool loopSkip) {
+  loopSkip_ = loopSkip;
+}
+
 void AudioBufferSourceNode::setLoopStart(double loopStart) {
+  if (loopSkip_) {
+    vReadIndex_ = loopStart * context_->getSampleRate();
+  }
   loopStart_ = loopStart;
 }
 
@@ -273,8 +284,13 @@ void AudioBufferSourceNode::processWithoutInterpolation(
 
   size_t framesLeft = offsetLength;
 
-  if (loop_ && (readIndex >= frameEnd || readIndex < frameStart)) {
-    readIndex = frameStart + (readIndex - frameStart) % frameDelta;
+  // if we are moving towards loop, we do nothing because we will achieve it
+  // otherwise, we wrap to the start of the loop if necessary
+  if (loop_ &&
+      ((readIndex >= frameEnd && direction == 1) ||
+       (readIndex < frameStart && direction == -1))) {
+    readIndex = frameStart +
+        ((long long int)readIndex - (long long int)frameStart) % frameDelta;
   }
 
   while (framesLeft > 0) {
@@ -304,7 +320,10 @@ void AudioBufferSourceNode::processWithoutInterpolation(
     readIndex += framesToCopy * direction;
     framesLeft -= framesToCopy;
 
-    if (readIndex >= frameEnd || readIndex < frameStart) {
+    // if we are moving towards loop, we do nothing because we will achieve it
+    // otherwise, we wrap to the start of the loop if necessary
+    if ((readIndex >= frameEnd && direction == 1) ||
+        (readIndex < frameStart && direction == -1)) {
       readIndex -= direction * frameDelta;
 
       if (!loop_) {

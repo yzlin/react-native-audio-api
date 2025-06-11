@@ -20,6 +20,7 @@ class AudioBufferSourceNode : public AudioScheduledSourceNode {
   ~AudioBufferSourceNode() override;
 
   [[nodiscard]] bool getLoop() const;
+  [[nodiscard]] bool getLoopSkip() const;
   [[nodiscard]] double getLoopStart() const;
   [[nodiscard]] double getLoopEnd() const;
   [[nodiscard]] std::shared_ptr<AudioParam> getDetuneParam() const;
@@ -27,6 +28,7 @@ class AudioBufferSourceNode : public AudioScheduledSourceNode {
   [[nodiscard]] std::shared_ptr<AudioBuffer> getBuffer() const;
 
   void setLoop(bool loop);
+  void setLoopSkip(bool loopSkip);
   void setLoopStart(double loopStart);
   void setLoopEnd(double loopEnd);
   void setBuffer(const std::shared_ptr<AudioBuffer> &buffer);
@@ -46,6 +48,7 @@ class AudioBufferSourceNode : public AudioScheduledSourceNode {
  private:
   // Looping related properties
   bool loop_;
+  bool loopSkip_;
   double loopStart_;
   double loopEnd_;
   std::mutex bufferLock_;
