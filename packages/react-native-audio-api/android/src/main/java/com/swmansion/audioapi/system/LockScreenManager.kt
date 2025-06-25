@@ -12,7 +12,7 @@ import androidx.media.app.NotificationCompat.MediaStyle
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
-import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper.Companion.instance
+import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper.instance
 import com.swmansion.audioapi.R
 import java.io.IOException
 import java.lang.ref.WeakReference
