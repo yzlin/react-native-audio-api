@@ -18,6 +18,8 @@ const AudioFile: FC = () => {
       await AudioPlayer.play();
 
       AudioManager.observeAudioInterruptions(true);
+
+      AudioManager.getDevicesInfo().then(console.log);
     }
 
     setIsPlaying((prev) => !prev);
