@@ -1,11 +1,12 @@
 #pragma once
 
 #include <audioapi/core/inputs/AudioRecorder.h>
-#include <audioapi/android/core/NativeAudioRecorder.hpp>
 
 #include <oboe/Oboe.h>
 #include <functional>
 #include <memory>
+
+#include <audioapi/android/core/NativeAudioRecorder.hpp>
 
 namespace audioapi {
 
