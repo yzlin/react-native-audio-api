@@ -5,19 +5,19 @@ import com.swmansion.audioapi.system.MediaSessionManager
 
 @DoNotStrip
 class NativeAudioRecorder {
-  private var sourceNodeId: String? = null
+  private var inputNodeId: String? = null
 
   @DoNotStrip
   fun start() {
-    this.sourceNodeId = MediaSessionManager.attachAudioRecorder(this)
+    this.inputNodeId = MediaSessionManager.attachAudioRecorder(this)
     MediaSessionManager.startForegroundServiceIfNecessary()
   }
 
   @DoNotStrip
   fun stop() {
-    this.sourceNodeId?.let {
+    this.inputNodeId?.let {
       MediaSessionManager.detachAudioRecorder(it)
-      this.sourceNodeId = null
+      this.inputNodeId = null
     }
     MediaSessionManager.stopForegroundServiceIfNecessary()
   }
