@@ -1,6 +1,7 @@
 #pragma once
 
 #include <audioapi/core/inputs/AudioRecorder.h>
+#include <audioapi/android/core/NativeAudioRecorder.hpp>
 
 #include <oboe/Oboe.h>
 #include <functional>
@@ -30,6 +31,8 @@ class AndroidAudioRecorder : public AudioStreamDataCallback, public AudioRecorde
 
  private:
     std::shared_ptr<AudioStream> mStream_;
+
+    facebook::jni::global_ref<NativeAudioRecorder> nativeAudioRecorder_;
 };
 
 } // namespace audioapi
